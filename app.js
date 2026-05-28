@@ -15,7 +15,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
-const ADMIN_EMAIL = "josemwena098@gmail.com";
+const ADMIN_EMAIL = "josemwena098@gmail.com".toLowerCase(); // FIX: lowerCase
 
 let isLoginMode = true;
 let currentPage = "home";
@@ -32,7 +32,7 @@ document.getElementById('switchMode').onclick = () => {
 };
 
 document.getElementById('authBtn').onclick = async () => {
-  const email = document.getElementById('email').value.trim();
+  const email = document.getElementById('email').value.trim().toLowerCase(); // FIX
   const password = document.getElementById('password').value;
   if(!email ||!password) return alert("Jaza email na password");
   try {
@@ -58,8 +58,10 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('appScreen').classList.remove('hidden');
     document.getElementById('userEmail').textContent = user.email;
     
-    if(user.email === ADMIN_EMAIL){
+    // FIX: check admin na lowerCase
+    if(user.email.toLowerCase() === ADMIN_EMAIL){
       document.querySelector('.admin-only').classList.remove('hidden');
+      console.log("Admin mode ON");
     }
     
     renderPage(currentPage);
@@ -70,7 +72,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Navigation
 function setupNav(){
   document.querySelectorAll('.nav-link').forEach(link => {
     link.onclick = (e) => {
@@ -83,7 +84,6 @@ function setupNav(){
   });
 }
 
-// Page Renderer
 function renderPage(page){
   const content = document.getElementById('pageContent');
   
@@ -113,7 +113,11 @@ function renderPage(page){
     loadGames('ps2');
   }
   
-  if(page === 'admin' && currentUser?.email === ADMIN_EMAIL){
+  if(page === 'admin'){
+    if(!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL){
+      content.innerHTML = `<div class="empty">Huna ruhusa. Ingia na admin email.</div>`;
+      return;
+    }
     content.innerHTML = `
       <div class="admin-form">
         <h2>Upload Game</h2>
@@ -147,15 +151,12 @@ function renderPage(page){
   }
 }
 
-// Load games from Firestore
 function loadGames(category){
   const containerId = category === 'all' ? 'homeGames' : category + 'Games';
   const container = document.getElementById(containerId);
   if(!container) return;
   
-  const q = category === 'all' 
-    ? query(collection(db, "games"), orderBy("createdAt", "desc"))
-    : query(collection(db, "games"), orderBy("createdAt", "desc"));
+  const q = query(collection(db, "games"), orderBy("createdAt", "desc"));
   
   onSnapshot(q, (snapshot) => {
     let games = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
@@ -178,5 +179,8 @@ function loadGames(category){
         </div>
       </div>
     `).join('');
+  }, (error) => {
+    container.innerHTML = `<div class="empty">Error: ${error.message}</div>`;
+    console.log(error);
   });
 }
