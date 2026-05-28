@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -14,43 +14,35 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-const ADMIN_EMAIL = "josemwena098@gmail.com".toLowerCase(); // FIX: lowerCase
+const ADMIN_EMAIL = "josemwena098@gmail.com".toLowerCase();
 
-let isLoginMode = true;
 let currentPage = "home";
 let currentUser = null;
 
 setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
 
-// Auth logic
-document.getElementById('switchMode').onclick = () => {
-  isLoginMode =!isLoginMode;
-  document.getElementById('authSub').textContent = isLoginMode? 'Ingia kuendelea' : 'Jisajili sasa';
-  document.getElementById('authBtn').textContent = isLoginMode? 'Login' : 'Sign Up';
-  document.getElementById('switchMode').textContent = isLoginMode? 'Huna akaunti? Jisajili' : 'Una akaunti? Ingia';
-};
-
-document.getElementById('authBtn').onclick = async () => {
-  const email = document.getElementById('email').value.trim().toLowerCase(); // FIX
+// Login / Register
+document.getElementById('loginBtn').onclick = async () => {
+  const email = document.getElementById('email').value.trim().toLowerCase();
   const password = document.getElementById('password').value;
   if(!email ||!password) return alert("Jaza email na password");
   try {
-    if(isLoginMode){
-      await signInWithEmailAndPassword(auth, email, password);
-    } else {
-      await createUserWithEmailAndPassword(auth, email, password);
-    }
+    await signInWithEmailAndPassword(auth, email, password);
   } catch(e){ alert(e.message) }
 };
 
-document.getElementById('googleBtn').onclick = async () => {
-  try { await signInWithPopup(auth, provider); }
-  catch(e){ alert(e.message) }
+document.getElementById('registerBtn').onclick = async () => {
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+  if(!email ||!password) return alert("Jaza email na password");
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+  } catch(e){ alert(e.message) }
 };
 
 document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
+// Angalia kama mtu ame-login
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
   if(user){
@@ -58,10 +50,9 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('appScreen').classList.remove('hidden');
     document.getElementById('userEmail').textContent = user.email;
     
-    // FIX: check admin na lowerCase
+    // Onyesha Admin Upload tu kwa admin email
     if(user.email.toLowerCase() === ADMIN_EMAIL){
       document.querySelector('.admin-only').classList.remove('hidden');
-      console.log("Admin mode ON");
     }
     
     renderPage(currentPage);
@@ -88,34 +79,28 @@ function renderPage(page){
   const content = document.getElementById('pageContent');
   
   if(page === 'home'){
-    content.innerHTML = `
-      <div class="hero">
-        <h1>Karibu ENJOY GAMES</h1>
-        <p>Pakua games bora za APK, PPSSPP Gold, na PS2 bure</p>
-      </div>
-      <div class="games-grid" id="homeGames"></div>
-    `;
+    content.innerHTML = `<div class="hero"><h1>Karibu ENJOY GAMES</h1><p>Pakua games bora za APK, PPSSPP Gold, na PS2 bure</p></div><div class="games-grid" id="homeGames"></div>`;
     loadGames('all');
   }
   
   if(page === 'apk'){
-    content.innerHTML = `<div class="hero"><h1>APK Games</h1><p>Android games za bure</p></div><div class="games-grid" id="apkGames"></div>`;
+    content.innerHTML = `<div class="hero"><h1>APK Games</h1></div><div class="games-grid" id="apkGames"></div>`;
     loadGames('apk');
   }
   
   if(page === 'ppsspp'){
-    content.innerHTML = `<div class="hero"><h1>PPSSPP Gold Games</h1><p>PSP games kwa simu yako</p></div><div class="games-grid" id="ppssppGames"></div>`;
+    content.innerHTML = `<div class="hero"><h1>PPSSPP Gold Games</h1></div><div class="games-grid" id="ppssppGames"></div>`;
     loadGames('ppsspp');
   }
   
   if(page === 'ps2'){
-    content.innerHTML = `<div class="hero"><h1>PS2 Games</h1><p>PlayStation 2 games</p></div><div class="games-grid" id="ps2Games"></div>`;
+    content.innerHTML = `<div class="hero"><h1>PS2 Games</h1></div><div class="games-grid" id="ps2Games"></div>`;
     loadGames('ps2');
   }
   
   if(page === 'admin'){
     if(!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL){
-      content.innerHTML = `<div class="empty">Huna ruhusa. Ingia na admin email.</div>`;
+      content.innerHTML = `<div class="empty">Huna ruhusa ya kuingia hapa.</div>`;
       return;
     }
     content.innerHTML = `
@@ -156,6 +141,8 @@ function loadGames(category){
   const container = document.getElementById(containerId);
   if(!container) return;
   
+  container.innerHTML = '<div class="empty">Inaload games...</div>';
+  
   const q = query(collection(db, "games"), orderBy("createdAt", "desc"));
   
   onSnapshot(q, (snapshot) => {
@@ -165,7 +152,7 @@ function loadGames(category){
     }
     
     if(games.length === 0){
-      container.innerHTML = '<div class="empty">Hakuna games bado. Ingia admin u-upload.</div>';
+      container.innerHTML = '<div class="empty">Hakuna games bado.</div>';
       return;
     }
     
@@ -180,7 +167,6 @@ function loadGames(category){
       </div>
     `).join('');
   }, (error) => {
-    container.innerHTML = `<div class="empty">Error: ${error.message}</div>`;
-    console.log(error);
+    container.innerHTML = `<div class="empty" style="color:red;">ERROR: ${error.message}</div>`;
   });
-}
+    }
