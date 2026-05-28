@@ -4,22 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ENJOY GAMES</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-<div id="loader"><div class="spinner"></div><p>Loading ENJOY GAMES...</p></div>
+<div id="loader">
+  <div class="spinner"></div>
+  <p>Loading ENJOY GAMES...</p>
+</div>
 
 <!-- Login Screen -->
 <div id="authScreen" class="hidden">
-  <div class="glow"></div>
   <div class="auth-box">
-    <h1>ENJOY GAMES</h1>
-    <p>Ingia ili kuona games</p>
-    <input type="email" id="email" placeholder="Email" autocomplete="email">
-    <input type="password" id="password" placeholder="Password">
-    <button class="btn-primary" id="loginBtn">Login</button>
-    <button class="btn-ghost" id="registerBtn">Jisajili</button>
+    <h1>ENJOY<span>GAMES</span></h1>
+    <p id="authSub">Ingia kuendelea</p>
+    
+    <div id="emailAuth">
+      <input type="email" id="email" placeholder="Email" autocomplete="email">
+      <input type="password" id="password" placeholder="Password">
+      <button class="btn-primary" id="authBtn">Login</button>
+      <button class="btn-ghost" id="switchMode">Huna akaunti? Jisajili</button>
+    </div>
+
+    <div class="divider">AU</div>
+    
+    <button class="btn-phone" id="phoneBtn">Ingia na Namba ya Simu</button>
+    
+    <div id="phoneAuth" class="hidden">
+      <input type="tel" id="phone" placeholder="+2557XXXXXXXX">
+      <div id="recaptcha-container"></div>
+      <button class="btn-primary" id="sendOtpBtn">Tuma OTP</button>
+      
+      <div id="otpSection" class="hidden">
+        <input type="text" id="otp" placeholder="Weka OTP">
+        <button class="btn-primary" id="verifyOtpBtn">Thibitisha</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -43,6 +63,6 @@
   <main id="pageContent"></main>
 </div>
 
-<script type="module" src="app.js"></script>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
