@@ -1,6 +1,22 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged,
+  RecaptchaVerifier,
+  signInWithPhoneNumber
+} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  onSnapshot, 
+  query, 
+  orderBy, 
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
@@ -16,42 +32,88 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const ADMIN_EMAIL = "josemwena098@gmail.com".toLowerCase();
 
+let isLoginMode = true;
 let currentPage = "home";
 let currentUser = null;
+let confirmationResult = null;
 
-setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
+setTimeout(() => {
+  document.getElementById('loader').style.display = 'none';
+}, 1200);
 
-// Login / Register
-document.getElementById('loginBtn').onclick = async () => {
-  const email = document.getElementById('email').value.trim().toLowerCase();
-  const password = document.getElementById('password').value;
-  if(!email ||!password) return alert("Jaza email na password");
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch(e){ alert(e.message) }
+// Email Auth Mode Switch
+document.getElementById('switchMode').onclick = () => {
+  isLoginMode = !isLoginMode;
+  document.getElementById('authSub').textContent = isLoginMode ? 'Ingia kuendelea' : 'Jisajili sasa';
+  document.getElementById('authBtn').textContent = isLoginMode ? 'Login' : 'Sign Up';
+  document.getElementById('switchMode').textContent = isLoginMode ? 'Huna akaunti? Jisajili' : 'Una akaunti? Ingia';
 };
 
-document.getElementById('registerBtn').onclick = async () => {
+// Email Login/Register
+document.getElementById('authBtn').onclick = async () => {
   const email = document.getElementById('email').value.trim().toLowerCase();
   const password = document.getElementById('password').value;
-  if(!email ||!password) return alert("Jaza email na password");
+  if(!email || !password) return alert("Jaza email na password");
+  
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
-  } catch(e){ alert(e.message) }
+    if(isLoginMode){
+      await signInWithEmailAndPassword(auth, email, password);
+    } else {
+      await createUserWithEmailAndPassword(auth, email, password);
+    }
+  } catch(e){ 
+    alert(e.message);
+  }
+};
+
+// Phone Auth UI
+document.getElementById('phoneBtn').onclick = () => {
+  document.getElementById('emailAuth').classList.add('hidden');
+  document.getElementById('phoneAuth').classList.remove('hidden');
+};
+
+// Send OTP
+document.getElementById('sendOtpBtn').onclick = async () => {
+  const phone = document.getElementById('phone').value;
+  if(!phone) return alert("Weka namba ya simu");
+  
+  window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+    size: 'normal',
+    callback: () => {}
+  });
+  
+  try {
+    confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+    document.getElementById('otpSection').classList.remove('hidden');
+    alert("OTP imetumwa!");
+  } catch(e) {
+    alert("Error: " + e.message);
+  }
+};
+
+// Verify OTP
+document.getElementById('verifyOtpBtn').onclick = async () => {
+  const otp = document.getElementById('otp').value;
+  if(!otp) return alert("Weka OTP");
+  
+  try {
+    await confirmationResult.confirm(otp);
+  } catch(e) {
+    alert("OTP sio sahihi");
+  }
 };
 
 document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-// Angalia kama mtu ame-login
+// Auth State
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
   if(user){
     document.getElementById('authScreen').classList.add('hidden');
     document.getElementById('appScreen').classList.remove('hidden');
-    document.getElementById('userEmail').textContent = user.email;
+    document.getElementById('userEmail').textContent = user.email || user.phoneNumber;
     
-    // Onyesha Admin Upload tu kwa admin email
-    if(user.email.toLowerCase() === ADMIN_EMAIL){
+    if(user.email && user.email.toLowerCase() === ADMIN_EMAIL){
       document.querySelector('.admin-only').classList.remove('hidden');
     }
     
@@ -99,7 +161,7 @@ function renderPage(page){
   }
   
   if(page === 'admin'){
-    if(!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL){
+    if(!currentUser || (currentUser.email && currentUser.email.toLowerCase() !== ADMIN_EMAIL)){
       content.innerHTML = `<div class="empty">Huna ruhusa ya kuingia hapa.</div>`;
       return;
     }
@@ -169,4 +231,4 @@ function loadGames(category){
   }, (error) => {
     container.innerHTML = `<div class="empty" style="color:red;">ERROR: ${error.message}</div>`;
   });
-    }
+      }
