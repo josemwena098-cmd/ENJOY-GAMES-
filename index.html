@@ -3,308 +3,275 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nova Auth</title>
+  <title>Nova Games Hub</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .card {
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 400px;
-      animation: slideUp 0.4s ease;
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .logo h1 {
-      color: #667eea;
-      font-size: 32px;
-      font-weight: 700;
-    }
-
-    .logo p {
-      color: #666;
-      font-size: 14px;
-      margin-top: 5px;
-    }
-
-    .input-group {
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 15px;
-      transition: 0.3s;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 10px;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-secondary {
-      background: white;
-      color: #667eea;
-      border: 2px solid #667eea;
-    }
-
-    .btn-secondary:hover {
-      background: #667eea;
-      color: white;
-      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
-    }
-
-    .divider {
-      text-align: center;
-      margin: 20px 0;
-      color: #999;
-      position: relative;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 40%;
-      height: 1px;
-      background: #e0e0e0;
-    }
-
-    .divider::before { left: 0; }
-    .divider::after { right: 0; }
-
-    .toggle-text {
-      text-align: center;
-      margin-top: 20px;
-      color: #666;
-      font-size: 14px;
-    }
-
-    .toggle-text span {
-      color: #667eea;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .toggle-text span:hover {
-      text-decoration: underline;
-    }
-
-    .message {
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 15px;
-      font-size: 14px;
-      text-align: center;
-      display: none;
-    }
-
-    .message.error {
-      background: #fee;
-      color: #d93025;
-      display: block;
-    }
-
-    .message.success {
-      background: #e6f4ea;
-      color: #34a853;
-      display: block;
-    }
-
-    .dashboard {
-      text-align: center;
-    }
-
-    .avatar {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 50%;
-      margin: 0 auto 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 36px;
-      font-weight: 700;
-    }
-
-    .user-email {
-      color: #333;
-      font-size: 18px;
-      margin-bottom: 30px;
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+    body{background:#0f172a;color:#e2e8f0;min-height:100vh}
+    
+    /* Navbar */
+    nav{background:#1e293b;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 6px rgba(0,0,0,0.3);position:sticky;top:0;z-index:100}
+    nav h2{background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:24px}
+    .nav-links{display:flex;gap:20px;align-items:center}
+    .nav-links a{color:#cbd5e1;text-decoration:none;padding:8px 16px;border-radius:8px;transition:0.3s;cursor:pointer}
+    .nav-links a:hover,.nav-links a.active{background:#334155;color:#fff}
+    .logout-btn{background:#ef4444;border:none;color:white;padding:8px 16px;border-radius:8px;cursor:pointer}
+    
+    /* Container */
+    .container{max-width:1200px;margin:30px auto;padding:0 20px}
+    .page{display:none;animation:fadeIn 0.4s}
+    .page.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    
+    /* Hero */
+    .hero{text-align:center;padding:60px 20px;background:linear-gradient(135deg,#667eea22,#764ba222);border-radius:20px;margin-bottom:40px}
+    .hero h1{font-size:48px;margin-bottom:20px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero p{font-size:18px;color:#94a3b8;line-height:1.6}
+    
+    /* Grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:25px;margin-top:30px}
+    .card{background:#1e293b;border-radius:15px;overflow:hidden;transition:0.3s;border:1px solid #334155}
+    .card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(102,126,234,0.3);border-color:#667eea}
+    .card img{width:100%;height:200px;object-fit:cover;background:#334155}
+    .card-body{padding:20px}
+    .card h3{margin-bottom:10px;color:#f1f5f9}
+    .card p{color:#94a3b8;font-size:14px;margin-bottom:15px}
+    .download-btn{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;transition:0.3s}
+    .download-btn:hover{transform:scale(1.05)}
+    
+    /* Admin Form */
+    .admin-form{background:#1e293b;padding:30px;border-radius:15px;margin-bottom:30px}
+    .admin-form input,.admin-form textarea,.admin-form select{width:100%;padding:12px;margin-bottom:15px;background:#0f172a;border:2px solid #334155;border-radius:8px;color:#e2e8f0;font-size:15px}
+    .admin-form input:focus,.admin-form textarea:focus{outline:none;border-color:#667eea}
+    .admin-form button{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:12px 30px;border:none;border-radius:8px;font-weight:600;cursor:pointer}
+    .admin-badge{background:#f59e0b;color:#000;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-left:10px}
+    
+    /* Login */
+    .login-wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#667eea,#764ba2)}
+    .login-card{background:white;padding:40px;border-radius:20px;width:90%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+    .login-card input{width:100%;padding:14px;margin-bottom:15px;border:2px solid #e0e0e0;border-radius:10px;font-size:15px}
+    .login-card button{width:100%;padding:14px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer}
+    
+    /* Loading */
+    .loader{text-align:center;padding:40px;color:#94a3b8}
+    .empty{text-align:center;padding:60px;color:#64748b;font-size:18px}
+    
+    @media(max-width:768px){
+      .nav-links{flex-wrap:wrap;font-size:14px}
+      .hero h1{font-size:32px}
+      .grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-  <div class="card" id="auth-card">
-    <div class="logo">
-      <h1>Nova</h1>
-      <p id="subtitle">Karibu tena</p>
-    </div>
 
-    <div class="input-group">
-      <input type="email" id="email" placeholder="Weka email yako">
-    </div>
-
-    <div class="input-group">
-      <input type="password" id="password" placeholder="Weka password">
-    </div>
-
-    <button class="btn" id="main-btn" onclick="handleAuth()">Ingia</button>
-    
-    <div class="divider">au</div>
-    
-    <button class="btn btn-secondary" onclick="toggleMode()">
-      <span id="toggle-btn">Huna account? Jisajili</span>
-    </button>
-
-    <div class="message" id="message"></div>
-
-    <div class="toggle-text">
-      <span id="toggle-text" onclick="toggleMode()">Jisajili hapa</span>
-    </div>
+<!-- LOGIN PAGE -->
+<div id="login-page" class="login-wrap">
+  <div class="login-card">
+    <h2 style="text-align:center;margin-bottom:20px;color:#333">Ingia kwenye Nova Hub</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Ingia</button>
+    <p id="login-msg" style="text-align:center;margin-top:15px;color:#d93025"></p>
   </div>
+</div>
 
-  <div class="card dashboard" id="dashboard" style="display:none;">
-    <div class="avatar" id="avatar"></div>
-    <div class="user-email" id="user-email"></div>
-    <button class="btn" onclick="logout()">Toka</button>
+<!-- MAIN APP -->
+<div id="app" style="display:none">
+  <nav>
+    <h2>Nova Hub</h2>
+    <div class="nav-links">
+      <a onclick="showPage('home')" class="active">Home</a>
+      <a onclick="showPage('ps2')">PS2 Games</a>
+      <a onclick="showPage('ppsspp')">PPSSPP Games</a>
+      <a onclick="showPage('apk')">APK Apps</a>
+      <a onclick="showPage('admin')" id="admin-link" style="display:none">Admin <span class="admin-badge">ADMIN</span></a>
+      <button class="logout-btn" onclick="logout()">Toka</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+      <div class="hero">
+        <h1>Karibu Nova Games Hub</h1>
+        <p>Pakua michezo bora ya PS2, PPSSPP na apps za Android bure. Website hii inasasishwa kila siku na admin. Furahia michezo yako bila stress!</p>
+      </div>
+      <h2 style="margin-bottom:20px">Michezo ya Hivi Karibuni</h2>
+      <div id="recent-games" class="grid"><div class="loader">Inapakia...</div></div>
+    </div>
+
+    <!-- PS2 PAGE -->
+    <div id="ps2" class="page">
+      <h1>PS2 Games</h1>
+      <p style="color:#94a3b8;margin-top:10px">Pakua michezo ya PlayStation 2 kwa haraka</p>
+      <div id="ps2-games" class="grid"><div class="loader">Inapakia...</div></div>
+    </div>
+
+    <!-- PPSSPP PAGE -->
+    <div id="ppsspp" class="page">
+      <h1>PPSSPP Games</h1>
+      <p style="color:#94a3b8;margin-top:10px">Michezo ya PSP kwa simu yako</p>
+      <div id="ppsspp-games" class="grid"><div class="loader">Inapakia...</div></div>
+    </div>
+
+    <!-- APK PAGE -->
+    <div id="apk" class="page">
+      <h1>APK Apps & Games</h1>
+      <p style="color:#94a3b8;margin-top:10px">Apps na michezo ya Android</p>
+      <div id="apk-apps" class="grid"><div class="loader">Inapakia...</div></div>
+    </div>
+
+    <!-- ADMIN PAGE -->
+    <div id="admin" class="page">
+      <h1>Admin Panel</h1>
+      <div class="admin-form">
+        <h3 style="margin-bottom:20px">Upload Game/App Mpya</h3>
+        <select id="category">
+          <option value="ps2">PS2 Games</option>
+          <option value="ppsspp">PPSSPP Games</option>
+          <option value="apk">APK Apps</option>
+        </select>
+        <input type="text" id="title" placeholder="Jina la Game/App">
+        <textarea id="desc" rows="3" placeholder="Maelezo mafupi"></textarea>
+        <input type="text" id="imageUrl" placeholder="Link ya Picha - weka URL ya picha">
+        <input type="text" id="downloadUrl" placeholder="Link ya Download">
+        <button onclick="uploadItem()">Upload Sasa</button>
+        <p id="upload-msg" style="margin-top:15px"></p>
+      </div>
+    </div>
+
   </div>
+</div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
-      authDomain: "nova-ec213.firebaseapp.com",
-      projectId: "nova-ec213",
-      storageBucket: "nova-ec213.firebasestorage.app",
-      messagingSenderId: "978338235926",
-      appId: "1:978338235926:web:6193ea73d8fcc8ded89737",
-      measurementId: "G-211R5KP10J"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
+  authDomain: "nova-ec213.firebaseapp.com",
+  projectId: "nova-ec213",
+  storageBucket: "nova-ec213.firebasestorage.app",
+  messagingSenderId: "978338235926",
+  appId: "1:978338235926:web:6193ea73d8fcc8ded89737"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    let isLoginMode = true;
+// ADMIN EMAIL - BADILISHA HAPA NA EMAIL YAKO
+const ADMIN_EMAIL = "josemwena098@gmail.com";
 
-    window.toggleMode = () => {
-      isLoginMode = !isLoginMode;
-      document.getElementById('subtitle').textContent = isLoginMode ? 'Karibu tena' : 'Tengeneza akaunti mpya';
-      document.getElementById('main-btn').textContent = isLoginMode ? 'Ingia' : 'Jisajili';
-      document.getElementById('toggle-btn').textContent = isLoginMode ? 'Huna account? Jisajili' : 'Una account? Ingia';
-      document.getElementById('toggle-text').textContent = isLoginMode ? 'Jisajili hapa' : 'Ingia hapa';
-      hideMessage();
-    };
+let currentUser = null;
 
-    window.handleAuth = () => {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
+// Auth State
+onAuthStateChanged(auth, (user) => {
+  if(user){
+    currentUser = user;
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    if(user.email === ADMIN_EMAIL){
+      document.getElementById('admin-link').style.display = 'inline-block';
+    }
+    loadAllGames();
+  }else{
+    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+});
 
-      if (!email || !password) {
-        showMessage('Tafadhali jaza sehemu zote', 'error');
-        return;
-      }
+// Login
+window.login = async () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  try{
+    await signInWithEmailAndPassword(auth,email,password);
+  }catch(e){
+    document.getElementById('login-msg').textContent = 'Email au password si sahihi';
+  }
+};
 
-      if (isLoginMode) {
-        signInWithEmailAndPassword(auth, email, password)
-          .then(() => showMessage('Umeingia kwa mafanikio!', 'success'))
-          .catch(() => showMessage('Email au password si sahihi', 'error'));
-      } else {
-        if (password.length < 6) {
-          showMessage('Password iwe na herufi 6 au zaidi', 'error');
-          return;
-        }
-        createUserWithEmailAndPassword(auth, email, password)
-          .then(() => showMessage('Akaunti imetengenezwa!', 'success'))
-          .catch((error) => showMessage(error.message, 'error'));
-      }
-    };
+// Logout
+window.logout = () => signOut(auth);
 
-    window.logout = () => {
-      signOut(auth);
-    };
+// Show Page
+window.showPage = (page) => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+  event.target.classList.add('active');
+};
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById('auth-card').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('user-email').textContent = user.email;
-        document.getElementById('avatar').textContent = user.email.charAt(0).toUpperCase();
-      } else {
-        document.getElementById('auth-card').style.display = 'block';
-        document.getElementById('dashboard').style.display = 'none';
-      }
+// Upload Item - Admin only
+window.uploadItem = async () => {
+  if(currentUser.email !== ADMIN_EMAIL){
+    alert('Huna ruhusa!');
+    return;
+  }
+  
+  const category = document.getElementById('category').value;
+  const title = document.getElementById('title').value;
+  const desc = document.getElementById('desc').value;
+  const imageUrl = document.getElementById('imageUrl').value;
+  const downloadUrl = document.getElementById('downloadUrl').value;
+  
+  if(!title || !downloadUrl){
+    document.getElementById('upload-msg').textContent = 'Jaza jina na link ya download';
+    document.getElementById('upload-msg').style.color = '#ef4444';
+    return;
+  }
+  
+  try{
+    await addDoc(collection(db,"games"),{
+      category,title,desc,imageUrl,downloadUrl,
+      createdAt:Date.now()
     });
+    document.getElementById('upload-msg').textContent = 'Imeupload kwa mafanikio!';
+    document.getElementById('upload-msg').style.color = '#34a853';
+    document.getElementById('title').value='';
+    document.getElementById('desc').value='';
+    document.getElementById('imageUrl').value='';
+    document.getElementById('downloadUrl').value='';
+    loadAllGames();
+  }catch(e){
+    document.getElementById('upload-msg').textContent = 'Hitilafu imetokea';
+  }
+};
 
-    function showMessage(msg, type) {
-      const el = document.getElementById('message');
-      el.textContent = msg;
-      el.className = 'message ' + type;
-    }
+// Load Games
+async function loadAllGames(){
+  const q = query(collection(db,"games"),orderBy("createdAt","desc"));
+  const snapshot = await getDocs(q);
+  const games = [];
+  snapshot.forEach(doc=>games.push(doc.data()));
+  
+  renderGames(games.filter(g=>g.category==='ps2'), 'ps2-games');
+  renderGames(games.filter(g=>g.category==='ppsspp'), 'ppsspp-games');
+  renderGames(games.filter(g=>g.category==='apk'), 'apk-apps');
+  renderGames(games.slice(0,6), 'recent-games');
+}
 
-    function hideMessage() {
-      document.getElementById('message').style.display = 'none';
-    }
-  </script>
+function renderGames(games, containerId){
+  const container = document.getElementById(containerId);
+  if(games.length===0){
+    container.innerHTML = '<div class="empty">Hakuna vitu bado. Admin atapakia hivi karibuni.</div>';
+    return;
+  }
+  
+  container.innerHTML = games.map(g=>`
+    <div class="card">
+      <img src="${g.imageUrl || 'https://via.placeholder.com/300x200/334155/94a3b8?text=No+Image'}" alt="${g.title}">
+      <div class="card-body">
+        <h3>${g.title}</h3>
+        <p>${g.desc || 'Hakuna maelezo'}</p>
+        <a href="${g.downloadUrl}" target="_blank" class="download-btn">Pakua Sasa</a>
+      </div>
+    </div>
+  `).join('');
+}
+</script>
 </body>
 </html>
