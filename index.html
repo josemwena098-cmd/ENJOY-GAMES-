@@ -8,11 +8,20 @@
 <style>
 html,body{height:100%;margin:0;padding:0}
 body{
+  font-family:'Roboto',sans-serif;min-height:100vh;position:relative;color:#fff
+}
+body.home-bg{
   background-image:url('https://i.postimg.cc/8zzwp3bp/IMG-20260415-WA0114.jpg');
   background-size:cover;background-position:center;background-attachment:fixed;
-  color:#fff;font-family:'Roboto',sans-serif;min-height:100vh;position:relative
 }
-body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:-1}
+body.home-bg::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:-1}
+body.video-bg{overflow:hidden}
+
+#video-bg{
+  position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2
+}
+.video-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1}
+
 *{box-sizing:border-box}
 
 nav{background:rgba(20,20,20,0.95);padding:12px 16px;border-bottom:1px solid #333;position:sticky;top:0;z-index:100}
@@ -52,7 +61,8 @@ nav h2{color:#8ab4f8;font-size:22px;font-weight:700}
 .admin-form{background:rgba(30,30,30,0.95);backdrop-filter:blur(10px);padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #444}
 .admin-form h3{margin-bottom:12px;color:#8ab4f8;font-size:16px}
 .admin-form input,.admin-form textarea,.admin-form select{width:100%;padding:10px;margin-bottom:10px;background:#2d2d2d;border:1px solid #555;border-radius:8px;color:#e0e0e0;font-size:13px}
-.admin-form button{background:#1a73e8;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:500;cursor:pointer;margin-right:8px}
+.admin-form button{background:#1a73e8;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:500;cursor:pointer;margin-right:8px;margin-bottom:8px}
+.btn-danger{background:#d93025!important;font-size:12px;padding:6px 12px!important}
 
 .hero{background:rgba(20,20,20,0.8);padding:30px;border-radius:12px;margin-bottom:20px;border:1px solid #333;text-align:center}
 .hero img{width:100%;max-height:250px;object-fit:cover;border-radius:8px;margin-bottom:15px}
@@ -68,13 +78,19 @@ nav h2{color:#8ab4f8;font-size:22px;font-weight:700}
 .link-card p{font-size:12px;color:#aaa;line-height:1.4}
 .link-card a{display:block;background:#1a73e8;color:white;text-align:center;padding:6px;border-radius:6px;text-decoration:none;font-size:12px;margin-top:8px}
 
-.link-input-box{background:rgba(40,40,40,0.8);padding:15px;border-radius:10px;margin-bottom:15px;border:1px solid #555}
+.link-input-box{background:rgba(40,40,40,0.8);padding:15px;border-radius:10px;margin-bottom:15px;border:1px solid #555;position:relative}
 .link-input-box h4{color:#fbbc04;margin-bottom:10px;font-size:14px}
+.clear-btn{position:absolute;top:10px;right:10px;background:#d93025;color:white;border:none;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer}
 
 @media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}.links-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
-<body>
+<body class="home-bg">
+
+<video id="video-bg" autoplay muted loop playsinline style="display:none">
+  <source src="https://i.imgur.com/4cDNpGL.mp4" type="video/mp4">
+</video>
+<div class="video-overlay" style="display:none"></div>
 
 <div id="auth-page">
   <div class="login-wrap">
@@ -108,8 +124,8 @@ nav h2{color:#8ab4f8;font-size:22px;font-weight:700}
   <div class="container">
     <div id="home" class="page active">
       <div class="hero" id="hero-section">
-        <h1 id="home-title">Karibu Nova Hub</h1>
-        <p id="home-desc">Michezo na apps bora kwa simu yako</p>
+        <h1 id="home-title"></h1>
+        <p id="home-desc"></p>
       </div>
       
       <h2 style="font-size:18px;margin:25px 0 10px">Vitu Vipya 🔥</h2>
@@ -142,14 +158,32 @@ nav h2{color:#8ab4f8;font-size:22px;font-weight:700}
       
       <div class="admin-form">
         <h3>Edit Home Page</h3>
-        <input id="siteName" placeholder="Jina la Website - mf: Nova Hub">
-        <textarea id="about" rows="3" placeholder="Kuhusu website yetu - maelezo mafupi"></textarea>
-        <input id="homeTitle" placeholder="Title ya Hero Section">
-        <input id="homeDesc" placeholder="Maelezo ya Hero Section">
-        <input id="homeImg" placeholder="Link ya picha kubwa ya Hero">
+        <div style="display:flex;gap:10px;margin-bottom:10px">
+          <input id="siteName" placeholder="Jina la Website" style="flex:1">
+          <button class="btn-danger" onclick="clearField('siteName')">Futa</button>
+        </div>
         
-        <h3 style="margin-top:20px;color:#fbbc04">Visehemu 5 vya Link - Si Lazima Vyote</h3>
+        <div style="display:flex;gap:10px;margin-bottom:10px">
+          <textarea id="about" rows="3" placeholder="Kuhusu website yetu" style="flex:1"></textarea>
+          <button class="btn-danger" onclick="clearField('about')">Futa</button>
+        </div>
         
+        <div style="display:flex;gap:10px;margin-bottom:10px">
+          <input id="homeTitle" placeholder="Title ya Hero Section" style="flex:1">
+          <button class="btn-danger" onclick="clearField('homeTitle')">Futa</button>
+        </div>
+        
+        <div style="display:flex;gap:10px;margin-bottom:10px">
+          <input id="homeDesc" placeholder="Maelezo ya Hero Section" style="flex:1">
+          <button class="btn-danger" onclick="clearField('homeDesc')">Futa</button>
+        </div>
+        
+        <div style="display:flex;gap:10px;margin-bottom:20px">
+          <input id="homeImg" placeholder="Link ya picha kubwa ya Hero" style="flex:1">
+          <button class="btn-danger" onclick="clearField('homeImg')">Futa</button>
+        </div>
+        
+        <h3 style="margin-top:20px;color:#fbbc04">Visehemu 5 vya Link</h3>
         <div id="links-inputs"></div>
         
         <button onclick="saveHome()">Hifadhi Mabadiliko Yote</button>
@@ -179,7 +213,7 @@ nav h2{color:#8ab4f8;font-size:22px;font-weight:700}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
@@ -198,13 +232,13 @@ let isLogin = true;
 let userEmail = "";
 let allGames = [];
 
-// Tengeneza input boxes 5 kwa links
 function createLinkInputs(){
   const box = document.getElementById('links-inputs');
   box.innerHTML = '';
   for(let i=1; i<=5; i++){
     box.innerHTML += `
       <div class="link-input-box">
+        <button class="clear-btn" onclick="clearLink(${i})">Futa Link ${i}</button>
         <h4>Link ${i} - Acha tupu kama hutaki</h4>
         <input id="link${i}Title" placeholder="Jina la link - mf: PPSSPP Gold">
         <input id="link${i}Url" placeholder="Link https://...">
@@ -216,12 +250,34 @@ function createLinkInputs(){
 }
 createLinkInputs();
 
+window.clearField = async (fieldId)=>{
+  if(!confirm('Una uhakika kufuta hiki?')) return;
+  document.getElementById(fieldId).value = '';
+  const update = {};
+  update[fieldId === 'siteName' ? 'siteName' : 
+         fieldId === 'about' ? 'about' :
+         fieldId === 'homeTitle' ? 'title' :
+         fieldId === 'homeDesc' ? 'desc' : 'img'] = '';
+  await updateDoc(doc(db,'settings','home'), update);
+  loadHome();
+}
+
+window.clearLink = async (num)=>{
+  if(!confirm('Futa link hii yote?')) return;
+  document.getElementById(`link${num}Title`).value = '';
+  document.getElementById(`link${num}Url`).value = '';
+  document.getElementById(`link${num}Desc`).value = '';
+  document.getElementById(`link${num}Img`).value = '';
+  saveHome();
+}
+
 onAuthStateChanged(auth, async u=>{
   if(u){
     userEmail = u.email;
     document.getElementById('auth-page').style.display='none';
     document.getElementById('app').style.display='block';
     if(u.email===ADMIN) document.getElementById('admin-link').style.display='block';
+    showPage('home', document.querySelector('.tab'));
     await loadHome();
     await load();
   }else{
@@ -251,11 +307,30 @@ window.handleAuth = async ()=>{
 }
 
 window.logout = ()=>signOut(auth);
+
 window.showPage = (id,el)=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   el.classList.add('active');
+  
+  // Badili background kulingana na page
+  const body = document.body;
+  const video = document.getElementById('video-bg');
+  const overlay = document.querySelector('.video-overlay');
+  
+  if(id === 'home'){
+    body.className = 'home-bg';
+    video.style.display = 'none';
+    overlay.style.display = 'none';
+    video.pause();
+  }else{
+    body.className = 'video-bg';
+    video.style.display = 'block';
+    overlay.style.display = 'block';
+    video.play();
+    video.muted = false; // Sauti ON
+  }
 }
 
 window.saveHome = async ()=>{
@@ -293,18 +368,13 @@ async function loadHome(){
   const snap = await getDoc(doc(db,'settings','home'));
   if(snap.exists()){
     const d = snap.data();
-    
-    // Update site name navbar
     document.getElementById('site-name').textContent = d.siteName || 'Nova Hub';
-    
-    // Update hero
-    document.getElementById('home-title').textContent = d.title || 'Karibu Nova Hub';
-    document.getElementById('home-desc').textContent = d.about || d.desc || 'Michezo na apps bora';
+    document.getElementById('home-title').textContent = d.title || '';
+    document.getElementById('home-desc').textContent = d.about || d.desc || '';
     if(d.img) {
-      document.getElementById('hero-section').innerHTML = `<img src="${d.img}"><h1>${d.title}</h1><p>${d.about || d.desc}</p>`;
+      document.getElementById('hero-section').innerHTML = `<img src="${d.img}"><h1>${d.title || ''}</h1><p>${d.about || d.desc || ''}</p>`;
     }
     
-    // Render links 5
     const linksBox = document.getElementById('links-section');
     if(d.links && d.links.length > 0){
       linksBox.innerHTML = d.links.map(l=>`
@@ -321,9 +391,8 @@ async function loadHome(){
       linksBox.innerHTML = '<p style="color:#666;text-align:center;width:100%">Hakuna links bado</p>';
     }
     
-    // Load form for admin
     if(userEmail===ADMIN){
-      document.getElementById('siteName').value = d.siteName || 'Nova Hub';
+      document.getElementById('siteName').value = d.siteName || '';
       document.getElementById('about').value = d.about || '';
       document.getElementById('homeTitle').value = d.title || '';
       document.getElementById('homeDesc').value = d.desc || '';
@@ -384,32 +453,4 @@ async function load(){
     const delBox = document.getElementById('all-games');
     delBox.innerHTML = allGames.map(g=>`
       <div class="card">
-        <img src="${g.img||'https://via.placeholder.com/160x140/333/666'}" onerror="this.src='https://via.placeholder.com/160x140/333/666'">
-        <div class="card-body">
-          <h3>${g.title}</h3>
-          <div class="size">${g.size||'N/A'} - ${g.cat.toUpperCase()}</div>
-          <button class="del-btn" onclick="deleteGame('${g.id}')">Futa</button>
-        </div>
-      </div>
-    `).join('');
-  }
-}
-
-function render(arr,id){
-  const box = document.getElementById(id);
-  if(arr.length==0){box.innerHTML='<div style="padding:40px;text-align:center;color:#999">Hakuna vitu bado</div>';return}
-  box.innerHTML = arr.map(x=>`
-    <div class="card">
-      <img src="${x.img||'https://via.placeholder.com/160x140/333/666'}" onerror="this.src='https://via.placeholder.com/160x140/333/666'">
-      <div class="card-body">
-        <h3>${x.title}</h3>
-        <div class="size">${x.size||'Size N/A'}</div>
-        <p>${x.desc||''}</p>
-        <a href="${x.link}" target="_blank" class="download-btn">Pakua</a>
-      </div>
-    </div>
-  `).join('');
-}
-</script>
-</body>
-</html>
+        <img src="${g.img||'https://via.placeholder.com/160x140/333/666'}" onerror="this.
