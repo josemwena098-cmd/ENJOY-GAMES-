@@ -3,95 +3,229 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nova - Login</title>
+  <title>Nova Auth</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      background: #f5f5f5;
-      margin: 0;
+      padding: 20px;
     }
-    .container {
+
+    .card {
       background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      width: 320px;
-    }
-    input {
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      box-sizing: border-box;
-      font-size: 15px;
+      max-width: 400px;
+      animation: slideUp 0.4s ease;
     }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #4285f4;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    button:hover {
-      background: #3367d6;
-    }
-    button.secondary {
-      background: #34a853;
-    }
-    button.secondary:hover {
-      background: #2d8f47;
-    }
-    h3 {
+
+    .logo {
       text-align: center;
-      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .logo h1 {
+      color: #667eea;
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .logo p {
+      color: #666;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .input-group {
       margin-bottom: 20px;
     }
-    .toggle {
-      text-align: center;
-      margin-top: 15px;
-      color: #4285f4;
-      cursor: pointer;
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: 0.3s;
+      outline: none;
     }
-    .message {
-      text-align: center;
+
+    input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
       margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+      background: #667eea;
+      color: white;
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+    }
+
+    .divider {
+      text-align: center;
+      margin: 20px 0;
+      color: #999;
+      position: relative;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+
+    .toggle-text {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
       font-size: 14px;
     }
-    .error {
-      color: #d93025;
+
+    .toggle-text span {
+      color: #667eea;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .success {
+
+    .toggle-text span:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+
+    .message.error {
+      background: #fee;
+      color: #d93025;
+      display: block;
+    }
+
+    .message.success {
+      background: #e6f4ea;
       color: #34a853;
+      display: block;
+    }
+
+    .dashboard {
+      text-align: center;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .user-email {
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 30px;
     }
   </style>
 </head>
 <body>
-  <div class="container" id="auth-container">
-    <h3 id="form-title">Ingia</h3>
+  <div class="card" id="auth-card">
+    <div class="logo">
+      <h1>Nova</h1>
+      <p id="subtitle">Karibu tena</p>
+    </div>
+
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Weka email yako">
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Weka password">
+    </div>
+
+    <button class="btn" id="main-btn" onclick="handleAuth()">Ingia</button>
     
-    <input type="email" id="email" placeholder="Email yako" />
-    <input type="password" id="password" placeholder="Password" />
+    <div class="divider">au</div>
     
-    <button onclick="login()">Ingia</button>
-    <button class="secondary" onclick="signup()">Jisajili</button>
-    
-    <div class="toggle" onclick="toggleForm()">Huna account? Jisajili hapa</div>
+    <button class="btn btn-secondary" onclick="toggleMode()">
+      <span id="toggle-btn">Huna account? Jisajili</span>
+    </button>
+
     <div class="message" id="message"></div>
+
+    <div class="toggle-text">
+      <span id="toggle-text" onclick="toggleMode()">Jisajili hapa</span>
+    </div>
   </div>
 
-  <div class="container" id="dashboard" style="display:none;">
-    <h3>Karibu!</h3>
-    <p id="user-email"></p>
-    <button onclick="logout()">Toka</button>
+  <div class="card dashboard" id="dashboard" style="display:none;">
+    <div class="avatar" id="avatar"></div>
+    <div class="user-email" id="user-email"></div>
+    <button class="btn" onclick="logout()">Toka</button>
   </div>
 
   <script type="module">
@@ -113,51 +247,52 @@
 
     let isLoginMode = true;
 
-    window.toggleForm = () => {
+    window.toggleMode = () => {
       isLoginMode = !isLoginMode;
-      document.getElementById('form-title').textContent = isLoginMode ? 'Ingia' : 'Jisajili';
-      document.querySelector('.toggle').textContent = isLoginMode ? 'Huna account? Jisajili hapa' : 'Una account? Ingia hapa';
-      document.getElementById('message').textContent = '';
+      document.getElementById('subtitle').textContent = isLoginMode ? 'Karibu tena' : 'Tengeneza akaunti mpya';
+      document.getElementById('main-btn').textContent = isLoginMode ? 'Ingia' : 'Jisajili';
+      document.getElementById('toggle-btn').textContent = isLoginMode ? 'Huna account? Jisajili' : 'Una account? Ingia';
+      document.getElementById('toggle-text').textContent = isLoginMode ? 'Jisajili hapa' : 'Ingia hapa';
+      hideMessage();
     };
 
-    window.signup = () => {
-      const email = document.getElementById('email').value;
+    window.handleAuth = () => {
+      const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
-      
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          showMessage('Akaunti imetengenezwa kwa mafanikio!', 'success');
-        })
-        .catch((error) => {
-          showMessage(error.message, 'error');
-        });
-    };
 
-    window.login = () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          showMessage('Umeingia kwa mafanikio!', 'success');
-        })
-        .catch((error) => {
-          showMessage('Email au password si sahihi', 'error');
-        });
+      if (!email || !password) {
+        showMessage('Tafadhali jaza sehemu zote', 'error');
+        return;
+      }
+
+      if (isLoginMode) {
+        signInWithEmailAndPassword(auth, email, password)
+          .then(() => showMessage('Umeingia kwa mafanikio!', 'success'))
+          .catch(() => showMessage('Email au password si sahihi', 'error'));
+      } else {
+        if (password.length < 6) {
+          showMessage('Password iwe na herufi 6 au zaidi', 'error');
+          return;
+        }
+        createUserWithEmailAndPassword(auth, email, password)
+          .then(() => showMessage('Akaunti imetengenezwa!', 'success'))
+          .catch((error) => showMessage(error.message, 'error'));
+      }
     };
 
     window.logout = () => {
-      signOut(auth).then(() => {
-        document.getElementById('auth-container').style.display = 'block';
-        document.getElementById('dashboard').style.display = 'none';
-      });
+      signOut(auth);
     };
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('auth-card').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         document.getElementById('user-email').textContent = user.email;
+        document.getElementById('avatar').textContent = user.email.charAt(0).toUpperCase();
+      } else {
+        document.getElementById('auth-card').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
       }
     });
 
@@ -165,6 +300,10 @@
       const el = document.getElementById('message');
       el.textContent = msg;
       el.className = 'message ' + type;
+    }
+
+    function hideMessage() {
+      document.getElementById('message').style.display = 'none';
     }
   </script>
 </body>
