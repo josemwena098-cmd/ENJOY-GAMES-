@@ -5,149 +5,197 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nova Games Hub</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-    body{background:#0f172a;color:#e2e8f0;min-height:100vh}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
     
-    /* Navbar */
-    nav{background:#1e293b;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 6px rgba(0,0,0,0.3);position:sticky;top:0;z-index:100}
-    nav h2{background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:24px}
-    .nav-links{display:flex;gap:20px;align-items:center}
-    .nav-links a{color:#cbd5e1;text-decoration:none;padding:8px 16px;border-radius:8px;transition:0.3s;cursor:pointer}
-    .nav-links a:hover,.nav-links a.active{background:#334155;color:#fff}
-    .logout-btn{background:#ef4444;border:none;color:white;padding:8px 16px;border-radius:8px;cursor:pointer}
+    body{background:#0a0e27;color:#e2e8f0;min-height:100vh}
+    
+    /* Glass Navbar */
+    nav{
+      background:rgba(15,23,42,0.8);backdrop-filter:blur(10px);
+      padding:20px;border-bottom:1px solid rgba(102,126,234,0.2);
+      position:sticky;top:0;z-index:100
+    }
+    .nav-wrap{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+    nav h2{
+      background:linear-gradient(135deg,#667eea,#c084fc);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      font-size:28px;font-weight:700
+    }
+    .nav-links{display:flex;gap:8px;flex-wrap:wrap}
+    .nav-links a{
+      color:#94a3b8;text-decoration:none;padding:10px 18px;
+      border-radius:12px;transition:0.3s;font-weight:500;cursor:pointer
+    }
+    .nav-links a:hover{background:rgba(102,126,234,0.2);color:#fff}
+    .nav-links a.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 8px 20px rgba(102,126,234,0.4)}
+    .logout-btn{
+      background:linear-gradient(135deg,#ef4444,#dc2626);border:none;
+      color:white;padding:10px 20px;border-radius:12px;cursor:pointer;font-weight:600;
+      transition:0.3s;box-shadow:0 4px 15px rgba(239,68,68,0.3)
+    }
+    .logout-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(239,68,68,0.5)}
+    .admin-badge{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;margin-left:6px}
     
     /* Container */
-    .container{max-width:1200px;margin:30px auto;padding:0 20px}
-    .page{display:none;animation:fadeIn 0.4s}
+    .container{max-width:1200px;margin:40px auto;padding:0 20px}
+    .page{display:none;animation:fadeIn 0.5s}
     .page.active{display:block}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
     
-    /* Hero */
-    .hero{text-align:center;padding:60px 20px;background:linear-gradient(135deg,#667eea22,#764ba222);border-radius:20px;margin-bottom:40px}
-    .hero h1{font-size:48px;margin-bottom:20px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .hero p{font-size:18px;color:#94a3b8;line-height:1.6}
+    /* Hero Glass */
+    .hero{
+      text-align:center;padding:80px 30px;
+      background:linear-gradient(135deg,rgba(102,126,234,0.1),rgba(192,132,252,0.1));
+      border:1px solid rgba(102,126,234,0.2);
+      border-radius:30px;margin-bottom:50px;backdrop-filter:blur(10px)
+    }
+    .hero h1{
+      font-size:56px;margin-bottom:20px;
+      background:linear-gradient(135deg,#667eea,#c084fc,#f472b6);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      font-weight:700
+    }
+    .hero p{font-size:18px;color:#94a3b8;line-height:1.8;max-width:700px;margin:auto}
     
-    /* Grid */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:25px;margin-top:30px}
-    .card{background:#1e293b;border-radius:15px;overflow:hidden;transition:0.3s;border:1px solid #334155}
-    .card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(102,126,234,0.3);border-color:#667eea}
-    .card img{width:100%;height:200px;object-fit:cover;background:#334155}
-    .card-body{padding:20px}
-    .card h3{margin-bottom:10px;color:#f1f5f9}
-    .card p{color:#94a3b8;font-size:14px;margin-bottom:15px}
-    .download-btn{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;transition:0.3s}
-    .download-btn:hover{transform:scale(1.05)}
+    /* Grid Cards */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:30px;margin-top:40px}
+    .card{
+      background:linear-gradient(135deg,rgba(30,41,59,0.8),rgba(15,23,42,0.8));
+      border-radius:20px;overflow:hidden;transition:0.4s;
+      border:1px solid rgba(102,126,234,0.1);backdrop-filter:blur(10px)
+    }
+    .card:hover{
+      transform:translateY(-12px) scale(1.02);
+      box-shadow:0 25px 50px rgba(102,126,234,0.3);
+      border-color:rgba(102,126,234,0.5)
+    }
+    .card img{width:100%;height:220px;object-fit:cover}
+    .card-body{padding:25px}
+    .card h3{margin-bottom:12px;color:#f1f5f9;font-size:20px}
+    .card p{color:#94a3b8;font-size:14px;margin-bottom:20px;line-height:1.6}
+    .download-btn{
+      display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+      color:white;padding:12px 25px;border-radius:12px;text-decoration:none;
+      font-weight:600;transition:0.3s;box-shadow:0 8px 20px rgba(102,126,234,0.3)
+    }
+    .download-btn:hover{transform:scale(1.05);box-shadow:0 12px 30px rgba(102,126,234,0.5)}
     
-    /* Admin Form */
-    .admin-form{background:#1e293b;padding:30px;border-radius:15px;margin-bottom:30px}
-    .admin-form input,.admin-form textarea,.admin-form select{width:100%;padding:12px;margin-bottom:15px;background:#0f172a;border:2px solid #334155;border-radius:8px;color:#e2e8f0;font-size:15px}
-    .admin-form input:focus,.admin-form textarea:focus{outline:none;border-color:#667eea}
-    .admin-form button{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:12px 30px;border:none;border-radius:8px;font-weight:600;cursor:pointer}
-    .admin-badge{background:#f59e0b;color:#000;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-left:10px}
+    /* Admin Form Glass */
+    .admin-form{
+      background:linear-gradient(135deg,rgba(30,41,59,0.9),rgba(15,23,42,0.9));
+      padding:40px;border-radius:25px;margin-bottom:40px;
+      border:1px solid rgba(102,126,234,0.2);backdrop-filter:blur(10px)
+    }
+    .admin-form h3{margin-bottom:25px;font-size:24px;color:#f1f5f9}
+    .admin-form input,.admin-form textarea,.admin-form select{
+      width:100%;padding:15px;margin-bottom:18px;
+      background:rgba(15,23,42,0.6);border:2px solid rgba(102,126,234,0.2);
+      border-radius:12px;color:#e2e8f0;font-size:15px;transition:0.3s
+    }
+    .admin-form input:focus,.admin-form textarea:focus{
+      outline:none;border-color:#667eea;box-shadow:0 0 0 4px rgba(102,126,234,0.1)
+    }
+    .admin-form button{
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      color:white;padding:15px 35px;border:none;border-radius:12px;
+      font-weight:700;cursor:pointer;font-size:16px;
+      box-shadow:0 8px 25px rgba(102,126,234,0.4);transition:0.3s
+    }
+    .admin-form button:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(102,126,234,0.6)}
     
-    /* Login */
-    .login-wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#667eea,#764ba2)}
-    .login-card{background:white;padding:40px;border-radius:20px;width:90%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-    .login-card input{width:100%;padding:14px;margin-bottom:15px;border:2px solid #e0e0e0;border-radius:10px;font-size:15px}
-    .login-card button{width:100%;padding:14px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer}
+    /* Login Glass */
+    .login-wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#667eea,#764ba2,#c084fc)}
+    .login-card{
+      background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);
+      padding:50px;border-radius:30px;width:90%;max-width:420px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.4)
+    }
+    .login-card h2{text-align:center;margin-bottom:30px;color:#1e293b;font-size:28px}
+    .login-card input{
+      width:100%;padding:16px;margin-bottom:18px;
+      border:2px solid #e2e8f0;border-radius:12px;font-size:15px;transition:0.3s
+    }
+    .login-card input:focus{border-color:#667eea;outline:none}
+    .login-card button{
+      width:100%;padding:16px;background:linear-gradient(135deg,#667eea,#764ba2);
+      color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;
+      font-size:16px;box-shadow:0 8px 25px rgba(102,126,234,0.4)
+    }
     
-    /* Loading */
-    .loader{text-align:center;padding:40px;color:#94a3b8}
-    .empty{text-align:center;padding:60px;color:#64748b;font-size:18px}
+    .loader{text-align:center;padding:60px;color:#94a3b8;font-size:18px}
+    .empty{text-align:center;padding:80px;color:#64748b;font-size:18px}
     
     @media(max-width:768px){
-      .nav-links{flex-wrap:wrap;font-size:14px}
-      .hero h1{font-size:32px}
+      .hero h1{font-size:36px}
+      .nav-wrap{justify-content:center}
       .grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
 <div id="login-page" class="login-wrap">
   <div class="login-card">
-    <h2 style="text-align:center;margin-bottom:20px;color:#333">Ingia kwenye Nova Hub</h2>
-    <input type="email" id="email" placeholder="Email">
+    <h2>Ingia Nova Hub</h2>
+    <input type="email" id="email" placeholder="Email yako">
     <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Ingia</button>
+    <button onclick="login()">Ingia Sasa</button>
     <p id="login-msg" style="text-align:center;margin-top:15px;color:#d93025"></p>
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="app" style="display:none">
   <nav>
-    <h2>Nova Hub</h2>
-    <div class="nav-links">
-      <a onclick="showPage('home')" class="active">Home</a>
-      <a onclick="showPage('ps2')">PS2 Games</a>
-      <a onclick="showPage('ppsspp')">PPSSPP Games</a>
-      <a onclick="showPage('apk')">APK Apps</a>
-      <a onclick="showPage('admin')" id="admin-link" style="display:none">Admin <span class="admin-badge">ADMIN</span></a>
-      <button class="logout-btn" onclick="logout()">Toka</button>
+    <div class="nav-wrap">
+      <h2>Nova Hub</h2>
+      <div class="nav-links">
+        <a onclick="showPage('home')" class="active">Home</a>
+        <a onclick="showPage('ps2')">PS2 Games</a>
+        <a onclick="showPage('ppsspp')">PPSSPP</a>
+        <a onclick="showPage('apk')">APK</a>
+        <a onclick="showPage('admin')" id="admin-link" style="display:none">Admin <span class="admin-badge">ADMIN</span></a>
+        <button class="logout-btn" onclick="logout()">Toka</button>
+      </div>
     </div>
   </nav>
 
   <div class="container">
-    
-    <!-- HOME PAGE -->
     <div id="home" class="page active">
       <div class="hero">
         <h1>Karibu Nova Games Hub</h1>
         <p>Pakua michezo bora ya PS2, PPSSPP na apps za Android bure. Website hii inasasishwa kila siku na admin. Furahia michezo yako bila stress!</p>
       </div>
-      <h2 style="margin-bottom:20px">Michezo ya Hivi Karibuni</h2>
+      <h2 style="margin-bottom:25px;font-size:32px">🔥 Michezo ya Hivi Karibuni</h2>
       <div id="recent-games" class="grid"><div class="loader">Inapakia...</div></div>
     </div>
 
-    <!-- PS2 PAGE -->
-    <div id="ps2" class="page">
-      <h1>PS2 Games</h1>
-      <p style="color:#94a3b8;margin-top:10px">Pakua michezo ya PlayStation 2 kwa haraka</p>
-      <div id="ps2-games" class="grid"><div class="loader">Inapakia...</div></div>
-    </div>
+    <div id="ps2" class="page"><h1 style="font-size:36px;margin-bottom:15px">🎮 PS2 Games</h1><p style="color:#94a3b8;margin-bottom:30px">Michezo ya PlayStation 2 kwa haraka</p><div id="ps2-games" class="grid"><div class="loader">Inapakia...</div></div></div>
 
-    <!-- PPSSPP PAGE -->
-    <div id="ppsspp" class="page">
-      <h1>PPSSPP Games</h1>
-      <p style="color:#94a3b8;margin-top:10px">Michezo ya PSP kwa simu yako</p>
-      <div id="ppsspp-games" class="grid"><div class="loader">Inapakia...</div></div>
-    </div>
+    <div id="ppsspp" class="page"><h1 style="font-size:36px;margin-bottom:15px">🎯 PPSSPP Games</h1><p style="color:#94a3b8;margin-bottom:30px">Michezo ya PSP kwa simu yako</p><div id="ppsspp-games" class="grid"><div class="loader">Inapakia...</div></div></div>
 
-    <!-- APK PAGE -->
-    <div id="apk" class="page">
-      <h1>APK Apps & Games</h1>
-      <p style="color:#94a3b8;margin-top:10px">Apps na michezo ya Android</p>
-      <div id="apk-apps" class="grid"><div class="loader">Inapakia...</div></div>
-    </div>
+    <div id="apk" class="page"><h1 style="font-size:36px;margin-bottom:15px">📱 APK Apps & Games</h1><p style="color:#94a3b8;margin-bottom:30px">Apps na michezo ya Android</p><div id="apk-apps" class="grid"><div class="loader">Inapakia...</div></div></div>
 
-    <!-- ADMIN PAGE -->
     <div id="admin" class="page">
-      <h1>Admin Panel</h1>
+      <h1 style="font-size:36px;margin-bottom:25px">⚙️ Admin Panel</h1>
       <div class="admin-form">
-        <h3 style="margin-bottom:20px">Upload Game/App Mpya</h3>
-        <select id="category">
-          <option value="ps2">PS2 Games</option>
-          <option value="ppsspp">PPSSPP Games</option>
-          <option value="apk">APK Apps</option>
-        </select>
+        <h3>Upload Game/App Mpya</h3>
+        <select id="category"><option value="ps2">PS2 Games</option><option value="ppsspp">PPSSPP Games</option><option value="apk">APK Apps</option></select>
         <input type="text" id="title" placeholder="Jina la Game/App">
         <textarea id="desc" rows="3" placeholder="Maelezo mafupi"></textarea>
-        <input type="text" id="imageUrl" placeholder="Link ya Picha - weka URL ya picha">
-        <input type="text" id="downloadUrl" placeholder="Link ya Download">
-        <button onclick="uploadItem()">Upload Sasa</button>
-        <p id="upload-msg" style="margin-top:15px"></p>
+        <input type="text" id="imageUrl" placeholder="Link ya Picha - Imgur.com">
+        <input type="text" id="downloadUrl" placeholder="Link ya Download - Google Drive">
+        <button onclick="uploadItem()">🚀 Upload Sasa</button>
+        <p id="upload-msg" style="margin-top:15px;font-weight:600"></p>
       </div>
     </div>
-
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
@@ -161,21 +209,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-// ADMIN EMAIL - BADILISHA HAPA NA EMAIL YAKO
 const ADMIN_EMAIL = "josemwena098@gmail.com";
-
 let currentUser = null;
 
-// Auth State
 onAuthStateChanged(auth, (user) => {
   if(user){
     currentUser = user;
     document.getElementById('login-page').style.display = 'none';
     document.getElementById('app').style.display = 'block';
-    if(user.email === ADMIN_EMAIL){
-      document.getElementById('admin-link').style.display = 'inline-block';
-    }
+    if(user.email === ADMIN_EMAIL) document.getElementById('admin-link').style.display = 'inline-block';
     loadAllGames();
   }else{
     document.getElementById('login-page').style.display = 'flex';
@@ -183,21 +225,14 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Login
 window.login = async () => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
-  try{
-    await signInWithEmailAndPassword(auth,email,password);
-  }catch(e){
-    document.getElementById('login-msg').textContent = 'Email au password si sahihi';
-  }
+  try{ await signInWithEmailAndPassword(auth,email,password); }
+  catch(e){ document.getElementById('login-msg').textContent = 'Email au password si sahihi'; }
 };
 
-// Logout
 window.logout = () => signOut(auth);
-
-// Show Page
 window.showPage = (page) => {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
@@ -205,49 +240,37 @@ window.showPage = (page) => {
   event.target.classList.add('active');
 };
 
-// Upload Item - Admin only
 window.uploadItem = async () => {
-  if(currentUser.email !== ADMIN_EMAIL){
-    alert('Huna ruhusa!');
-    return;
-  }
-  
-  const category = document.getElementById('category').value;
-  const title = document.getElementById('title').value;
-  const desc = document.getElementById('desc').value;
-  const imageUrl = document.getElementById('imageUrl').value;
-  const downloadUrl = document.getElementById('downloadUrl').value;
-  
-  if(!title || !downloadUrl){
+  if(currentUser.email !== ADMIN_EMAIL) return alert('Huna ruhusa!');
+  const data = {
+    category: document.getElementById('category').value,
+    title: document.getElementById('title').value,
+    desc: document.getElementById('desc').value,
+    imageUrl: document.getElementById('imageUrl').value,
+    downloadUrl: document.getElementById('downloadUrl').value,
+    createdAt: Date.now()
+  };
+  if(!data.title || !data.downloadUrl){
     document.getElementById('upload-msg').textContent = 'Jaza jina na link ya download';
     document.getElementById('upload-msg').style.color = '#ef4444';
     return;
   }
-  
   try{
-    await addDoc(collection(db,"games"),{
-      category,title,desc,imageUrl,downloadUrl,
-      createdAt:Date.now()
-    });
-    document.getElementById('upload-msg').textContent = 'Imeupload kwa mafanikio!';
+    await addDoc(collection(db,"games"),data);
+    document.getElementById('upload-msg').textContent = '✅ Imeupload kwa mafanikio!';
     document.getElementById('upload-msg').style.color = '#34a853';
-    document.getElementById('title').value='';
-    document.getElementById('desc').value='';
-    document.getElementById('imageUrl').value='';
-    document.getElementById('downloadUrl').value='';
+    ['title','desc','imageUrl','downloadUrl'].forEach(id=>document.getElementById(id).value='');
     loadAllGames();
   }catch(e){
-    document.getElementById('upload-msg').textContent = 'Hitilafu imetokea';
+    document.getElementById('upload-msg').textContent = '❌ Hitilafu imetokea';
   }
 };
 
-// Load Games
 async function loadAllGames(){
   const q = query(collection(db,"games"),orderBy("createdAt","desc"));
   const snapshot = await getDocs(q);
   const games = [];
   snapshot.forEach(doc=>games.push(doc.data()));
-  
   renderGames(games.filter(g=>g.category==='ps2'), 'ps2-games');
   renderGames(games.filter(g=>g.category==='ppsspp'), 'ppsspp-games');
   renderGames(games.filter(g=>g.category==='apk'), 'apk-apps');
@@ -257,17 +280,16 @@ async function loadAllGames(){
 function renderGames(games, containerId){
   const container = document.getElementById(containerId);
   if(games.length===0){
-    container.innerHTML = '<div class="empty">Hakuna vitu bado. Admin atapakia hivi karibuni.</div>';
+    container.innerHTML = '<div class="empty">😔 Hakuna vitu bado. Admin atapakia hivi karibuni.</div>';
     return;
   }
-  
   container.innerHTML = games.map(g=>`
     <div class="card">
-      <img src="${g.imageUrl || 'https://via.placeholder.com/300x200/334155/94a3b8?text=No+Image'}" alt="${g.title}">
+      <img src="${g.imageUrl || 'https://via.placeholder.com/300x220/1e293b/94a3b8?text=No+Image'}" alt="${g.title}">
       <div class="card-body">
         <h3>${g.title}</h3>
         <p>${g.desc || 'Hakuna maelezo'}</p>
-        <a href="${g.downloadUrl}" target="_blank" class="download-btn">Pakua Sasa</a>
+        <a href="${g.downloadUrl}" target="_blank" class="download-btn">⬇️ Pakua Sasa</a>
       </div>
     </div>
   `).join('');
