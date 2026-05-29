@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nova - Login kwa Simu</title>
+  <title>Nova - Login</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -44,41 +44,59 @@
     button:hover {
       background: #3367d6;
     }
+    button.secondary {
+      background: #34a853;
+    }
+    button.secondary:hover {
+      background: #2d8f47;
+    }
     h3 {
       text-align: center;
       color: #333;
       margin-bottom: 20px;
     }
-    #recaptcha-container {
-      margin: 15px 0;
+    .toggle {
+      text-align: center;
+      margin-top: 15px;
+      color: #4285f4;
+      cursor: pointer;
     }
-    .note {
-      font-size: 12px;
-      color: #666;
+    .message {
       text-align: center;
       margin-top: 10px;
+      font-size: 14px;
+    }
+    .error {
+      color: #d93025;
+    }
+    .success {
+      color: #34a853;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h3>Ingia kwa Namba ya Simu</h3>
+  <div class="container" id="auth-container">
+    <h3 id="form-title">Ingia</h3>
     
-    <input type="tel" id="phone" placeholder="+255712345678" />
-    <div id="recaptcha-container"></div>
-    <button onclick="sendOTP()">Tuma OTP</button>
+    <input type="email" id="email" placeholder="Email yako" />
+    <input type="password" id="password" placeholder="Password" />
+    
+    <button onclick="login()">Ingia</button>
+    <button class="secondary" onclick="signup()">Jisajili</button>
+    
+    <div class="toggle" onclick="toggleForm()">Huna account? Jisajili hapa</div>
+    <div class="message" id="message"></div>
+  </div>
 
-    <div id="otp-section" style="display:none;">
-      <input type="text" id="otp" placeholder="Weka OTP hapa" maxlength="6" />
-      <button onclick="verifyOTP()">Thibitisha</button>
-    </div>
-    
-    <p class="note">Weka namba kwa format: +255...</p>
+  <div class="container" id="dashboard" style="display:none;">
+    <h3>Karibu!</h3>
+    <p id="user-email"></p>
+    <button onclick="logout()">Toka</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
@@ -93,48 +111,61 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-      'size': 'normal',
-      'callback': () => {
-        console.log('Recaptcha verified');
+    let isLoginMode = true;
+
+    window.toggleForm = () => {
+      isLoginMode = !isLoginMode;
+      document.getElementById('form-title').textContent = isLoginMode ? 'Ingia' : 'Jisajili';
+      document.querySelector('.toggle').textContent = isLoginMode ? 'Huna account? Jisajili hapa' : 'Una account? Ingia hapa';
+      document.getElementById('message').textContent = '';
+    };
+
+    window.signup = () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          showMessage('Akaunti imetengenezwa kwa mafanikio!', 'success');
+        })
+        .catch((error) => {
+          showMessage(error.message, 'error');
+        });
+    };
+
+    window.login = () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          showMessage('Umeingia kwa mafanikio!', 'success');
+        })
+        .catch((error) => {
+          showMessage('Email au password si sahihi', 'error');
+        });
+    };
+
+    window.logout = () => {
+      signOut(auth).then(() => {
+        document.getElementById('auth-container').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
+      });
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('user-email').textContent = user.email;
       }
     });
 
-    window.sendOTP = () => {
-      const phoneNumber = document.getElementById('phone').value.trim();
-      
-      if (!phoneNumber.startsWith('+')) {
-        alert('Weka namba kwa format: +255712345678');
-        return;
-      }
-
-      signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          alert('OTP imetumwa kwa namba yako');
-          document.getElementById('otp-section').style.display = 'block';
-        }).catch((error) => {
-          alert('Error: ' + error.message);
-          console.log(error);
-        });
-    };
-
-    window.verifyOTP = () => {
-      const otp = document.getElementById('otp').value.trim();
-      if (otp.length !== 6) {
-        alert('Weka OTP yenye tarakimu 6');
-        return;
-      }
-
-      window.confirmationResult.confirm(otp)
-        .then((result) => {
-          alert('Umeingia kwa mafanikio! Karibu ' + result.user.phoneNumber);
-          console.log(result.user);
-        }).catch((error) => {
-          alert('OTP si sahihi. Jaribu tena.');
-          console.log(error);
-        });
-    };
+    function showMessage(msg, type) {
+      const el = document.getElementById('message');
+      el.textContent = msg;
+      el.className = 'message ' + type;
+    }
   </script>
 </body>
 </html>
