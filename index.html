@@ -3,299 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nova Hub</title>
+<title>ENJOY GAMES</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
-body{font-family:Arial,sans-serif;color:#fff;min-height:100vh}
-body.home-bg{background:url('https://i.postimg.cc/8zzwp3bp/IMG-20260415-WA0114.jpg') center/cover fixed}
-body.home-bg::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:-1}
-body.video-bg{overflow:hidden}
-#video-bg{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.video-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);z-index:-1}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-nav{background:rgba(15,15,15,0.98);padding:15px;border-bottom:2px solid #4da3ff;position:sticky;top:0;z-index:100}
-.nav-wrap{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-nav h2{color:#4da3ff;font-size:24px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap}
-.tab{padding:10px 18px;border-radius:25px;cursor:pointer;color:#ccc;font-size:15px;font-weight:500;background:#2a2a2a}
-.tab.active{background:#4da3ff;color:#000;font-weight:bold}
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
 
-.container{max-width:1200px;margin:25px auto;padding:0 15px;position:relative;z-index:1}
-.page{display:none}.page.active{display:block}
-.page h1{font-size:28px;margin-bottom:8px;text-shadow:3px 3px 6px #000}
-.page p{color:#ddd;font-size:15px;margin-bottom:20px;text-shadow:2px 2px 4px #000}
+.container{
+    width:90%;
+    max-width:400px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,.4);
+}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:15px;margin-top:25px}
-.card{background:rgba(35,35,35,0.95);border-radius:14px;overflow:hidden;border:2px solid #333}
-.card:hover{transform:translateY(-5px);border-color:#4da3ff}
-.card img{width:100%;height:150px;object-fit:cover}
-.card-body{padding:12px}
-.card h3{font-size:14px;font-weight:600;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.size{font-size:12px;color:#51cf66;font-weight:bold;margin-bottom:5px}
-.card p{font-size:12px;color:#aaa;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4;margin-bottom:10px;min-height:32px}
-.download-btn{display:block;background:#1a73e8;color:white;padding:8px;border-radius:8px;text-decoration:none;font-size:13px;text-align:center;font-weight:bold}
+h1{
+    color:#00e5ff;
+    margin-bottom:10px;
+}
 
-.hero{background:rgba(20,20,20,0.85);padding:35px;border-radius:16px;margin-bottom:25px;border:2px solid #4da3ff;text-align:center}
-.hero img{width:100%;max-height:280px;object-fit:cover;border-radius:12px;margin-bottom:20px;border:2px solid #333}
-.hero h1{font-size:32px;margin-bottom:12px;color:#4da3ff}
+p{
+    margin-bottom:20px;
+    opacity:.8;
+}
 
-.links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;margin-top:30px}
-.link-card{background:rgba(35,35,35,0.95);border-radius:14px;overflow:hidden;border:2px solid #333}
-.link-card img{width:100%;height:130px;object-fit:cover}
-.link-card.pad{padding:14px}
-.link-card h4{font-size:15px;margin-bottom:7px;color:#4da3ff;font-weight:bold}
-.link-card p{font-size:13px;color:#aaa;line-height:1.5}
-.link-card a{display:block;background:#1a73e8;color:white;text-align:center;padding:8px;border-radius:8px;text-decoration:none;font-size:13px;margin-top:10px;font-weight:bold}
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    margin-bottom:15px;
+    font-size:16px;
+}
 
-.admin-login{position:fixed;top:20px;right:20px;background:#1a73e8;color:white;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:bold;z-index:200}
-.admin-panel{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:300;overflow-y:auto;padding:20px}
-.admin-box{max-width:700px;margin:50px auto;background:#1a1a1a;padding:30px;border-radius:12px;border:2px solid #4da3ff}
-.admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:12px;margin-bottom:12px;background:#2a2a2a;border:2px solid #444;border-radius:8px;color:#fff;font-size:14px}
-.admin-box button{background:#1a73e8;color:white;padding:12px 25px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:5px}
-.btn-danger{background:#d93025!important}
-.close-btn{float:right;background:#666!important}
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#00e5ff;
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:16px;
+}
 
-@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}.links-grid{grid-template-columns:repeat(2,1fr)}}
+button:hover{
+    opacity:.9;
+}
+
+#welcome{
+    display:none;
+}
+
+.games{
+    margin-top:20px;
+}
+
+.game{
+    background:#0ea5e9;
+    padding:12px;
+    border-radius:10px;
+    margin:10px 0;
+}
 </style>
 </head>
-<body class="home-bg">
-
-<video id="video-bg" autoplay loop playsinline style="display:none">
-  <source src="https://i.imgur.com/4cDNpGL.mp4" type="video/mp4">
-</video>
-<div class="video-overlay" style="display:none"></div>
-
-<button class="admin-login" onclick="adminLogin()">Admin Ingia</button>
-
-<nav>
-  <div class="nav-wrap">
-    <h2 id="site-name">Nova Hub</h2>
-    <div class="tabs">
-      <div class="tab active" data-page="home">Home</div>
-      <div class="tab" data-page="ps2">PS2 Games</div>
-      <div class="tab" data-page="ppspp">PPSSPP</div>
-      <div class="tab" data-page="apk">APK</div>
-    </div>
-  </div>
-</nav>
+<body>
 
 <div class="container">
-  <div id="home" class="page active">
-    <div class="hero" id="hero-section"><h1>Karibu Nova Hub</h1><p>Pakua michezo ya PS2, PPSSPP na APK Apps</p></div>
-    <h2 style="font-size:20px;margin:30px 0 15px;color:#4da3ff">Vitu Vipya 🔥</h2>
-    <div id="recent" class="grid"></div>
-    <h2 style="font-size:20px;margin:40px 0 15px;color:#4da3ff">Apps Muhimu</h2>
-    <div id="links-section" class="links-grid"></div>
-  </div>
 
-  <div id="ps2" class="page"><h1>PS2 Games</h1><p>Michezo ya PlayStation 2</p><div id="ps2g" class="grid"></div></div>
-  <div id="ppspp" class="page"><h1>PPSSPP Games</h1><p>Michezo ya PSP</p><div id="ppsppg" class="grid"></div></div>
-  <div id="apk" class="page"><h1>APK Apps & Games</h1><p>Apps za Android</p><div id="apkg" class="grid"></div></div>
+<div id="login">
+    <h1>🎮 ENJOY GAMES</h1>
+    <p>Weka namba yako ya simu kuingia.</p>
+
+    <input type="tel" id="phone" placeholder="Mfano: 07XXXXXXXX">
+    <button onclick="login()">INGIA SASA</button>
 </div>
 
-<div id="admin-panel" class="admin-panel">
-  <div class="admin-box">
-    <button class="close-btn" onclick="closeAdmin()">Funga</button>
-    <h2 style="color:#4da3ff;margin-bottom:20px">Admin Panel</h2>
-    
-    <h3 style="color:#fbbc04;margin:20px 0 10px">Edit Home</h3>
-    <input id="siteName" placeholder="Jina la Website">
-    <textarea id="about" rows="3" placeholder="Kuhusu website"></textarea>
-    <input id="homeTitle" placeholder="Title ya Hero">
-    <input id="homeDesc" placeholder="Maelezo ya Hero">
-    <input id="homeImg" placeholder="Link ya picha ya Hero">
-    
-    <h3 style="color:#fbbc04;margin:20px 0 10px">Links 5</h3>
-    <div id="links-inputs"></div>
-    <button onclick="saveHome()">Hifadhi Home</button>
-    <hr style="margin:25px 0;border:1px solid #444">
-    
-    <h3 style="color:#4da3ff;margin-bottom:10px">Ongeza Game/App</h3>
-    <select id="cat"><option value="ps2">PS2</option><option value="ppspp">PPSSPP</option><option value="apk">APK</option></select>
-    <input id="gtitle" placeholder="Jina la game">
-    <input id="gsize" placeholder="Size - mf: 660MB">
-    <textarea id="gdesc" rows="2" placeholder="Maelezo"></textarea>
-    <input id="gimg" placeholder="Link ya picha">
-    <input id="glink" placeholder="Link ya download">
-    <button onclick="upload()">Upload</button>
-    <div id="msg" style="margin-top:10px;color:#51cf66"></div>
-    
-    <hr style="margin:25px 0;border:1px solid #444">
-    <h3 style="color:#ff5555">Futa Games</h3>
-    <div id="all-games" class="grid"></div>
-  </div>
+<div id="welcome">
+    <h1>Karibu ENJOY GAMES</h1>
+    <p id="userPhone"></p>
+
+    <div class="games">
+        <div class="game">🎮 Game Slot 1</div>
+        <div class="game">🎮 Game Slot 2</div>
+        <div class="game">🎮 Game Slot 3</div>
+    </div>
+
+    <button onclick="logout()">TOKA</button>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
-  authDomain: "nova-ec213.firebaseapp.com",
-  projectId: "nova-ec213",
-  storageBucket: "nova-ec213.firebasestorage.app",
-  messagingSenderId: "978338235926",
-  appId: "1:978338235926:web:6193ea73d8fcc8ded89737"
-};
+<script>
+function login() {
+    let phone = document.getElementById("phone").value;
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const ADMIN_PASS = "mwena2025"; // Password ya kuingia Admin
-let isAdmin = false;
-
-// Tengeneza input za links 5
-const linksBox = document.getElementById('links-inputs');
-for(let i=1; i<=5; i++){
-  linksBox.innerHTML += `<div style="background:#2a2a2a;padding:15px;border-radius:8px;margin-bottom:15px"><h4 style="color:#fbbc04">Link ${i}</h4><input id="link${i}Title" placeholder="Jina"><input id="link${i}Url" placeholder="Link"><textarea id="link${i}Desc" rows="2" placeholder="Maelezo"></textarea><input id="link${i}Img" placeholder="Picha link"></div>`;
-}
-
-function adminLogin(){
-  const pass = prompt("Weka password ya Admin:");
-  if(pass === ADMIN_PASS){
-    isAdmin = true;
-    document.getElementById('admin-panel').style.display = 'block';
-    loadHomeAdmin();
-    loadGamesAdmin();
-  }else if(pass){
-    alert("Password si sahihi!");
-  }
-}
-window.adminLogin = adminLogin;
-
-function closeAdmin(){
-  document.getElementById('admin-panel').style.display = 'none';
-}
-window.closeAdmin = closeAdmin;
-
-document.querySelectorAll('.tab').forEach(tab=>{
-  tab.onclick = ()=>showPage(tab.dataset.page);
-});
-
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelector(`.tab[data-page="${id}"]`).classList.add('active');
-
-  const body = document.body;
-  const video = document.getElementById('video-bg');
-  const overlay = document.querySelector('.video-overlay');
-
-  if(id === 'home'){
-    body.className = 'home-bg';
-    video.style.display = 'none';
-    overlay.style.display = 'none';
-    video.pause();
-  }else{
-    body.className = 'video-bg';
-    video.style.display = 'block';
-    overlay.style.display = 'block';
-    video.play();
-    video.muted = false;
-  }
-}
-
-async function saveHome(){
-  const links = [];
-  for(let i=1; i<=5; i++){
-    const title = document.getElementById(`link${i}Title`).value.trim();
-    const url = document.getElementById(`link${i}Url`).value.trim();
-    if(title && url){
-      links.push({title:title,url:url,desc:document.getElementById(`link${i}Desc`).value.trim(),img:document.getElementById(`link${i}Img`).value.trim()});
+    if(phone.length < 10){
+        alert("Weka namba sahihi ya simu");
+        return;
     }
-  }
-  await setDoc(doc(db,'settings','home'),{
-    siteName:document.getElementById('siteName').value,
-    about:document.getElementById('about').value,
-    title:document.getElementById('homeTitle').value,
-    desc:document.getElementById('homeDesc').value,
-    img:document.getElementById('homeImg').value,
-    links:links
-  });
-  document.getElementById('msg').textContent='Imehifadhiwa!';
-  loadHome();
-  setTimeout(()=>document.getElementById('msg').textContent='',2000);
-}
-window.saveHome = saveHome;
 
-async function loadHome(){
-  const snap = await getDoc(doc(db,'settings','home'));
-  if(snap.exists()){
-    const d = snap.data();
-    document.getElementById('site-name').textContent = d.siteName || 'Nova Hub';
-    document.getElementById('home-title').textContent = d.title || '';
-    document.getElementById('home-desc').textContent = d.about || d.desc || '';
-    if(d.img) document.getElementById('hero-section').innerHTML = `<img src="${d.img}"><h1>${d.title||''}</h1><p>${d.about||d.desc||''}</p>`;
+    localStorage.setItem("userPhone", phone);
 
-    const linksSection = document.getElementById('links-section');
-    linksSection.innerHTML = d.links && d.links.length>0? d.links.map(l=>`<div class="link-card"><img src="${l.img||'https://via.placeholder.com/190x130/333/666'}" onerror="this.src='https://via.placeholder.com/190x130/333/666'"><div class="pad"><h4>${l.title}</h4><p>${l.desc||''}</p><a href="${l.url}" target="_blank">Fungua</a></div></div>`).join('') : '';
-  }
+    document.getElementById("login").style.display = "none";
+    document.getElementById("welcome").style.display = "block";
+    document.getElementById("userPhone").innerText = "Namba: " + phone;
 }
 
-async function loadHomeAdmin(){
-  const snap = await getDoc(doc(db,'settings','home'));
-  if(snap.exists()){
-    const d = snap.data();
-    document.getElementById('siteName').value = d.siteName||'';
-    document.getElementById('about').value = d.about||'';
-    document.getElementById('homeTitle').value = d.title||'';
-    document.getElementById('homeDesc').value = d.desc||'';
-    document.getElementById('homeImg').value = d.img||'';
-    if(d.links) d.links.forEach((l,i)=>{if(i<5){
-      document.getElementById(`link${i+1}Title`).value=l.title||'';
-      document.getElementById(`link${i+1}Url`).value=l.url||'';
-      document.getElementById(`link${i+1}Desc`).value=l.desc||'';
-      document.getElementById(`link${i+1}Img`).value=l.img||'';
-    }});
-  }
+function logout(){
+    localStorage.removeItem("userPhone");
+    location.reload();
 }
 
-async function upload(){
-  if(!isAdmin) return alert('Ingia Admin kwanza');
-  const data = {cat:document.getElementById('cat').value,title:document.getElementById('gtitle').value,size:document.getElementById('gsize').value,desc:document.getElementById('gdesc').value,img:document.getElementById('gimg').value,link:document.getElementById('glink').value,time:Date.now()};
-  if(!data.title||!data.link) return document.getElementById('msg').textContent='Jaza jina na link';
-  await addDoc(collection(db,'games'),data);
-  document.getElementById('msg').textContent='Imewekwa!';
-  ['gtitle','gsize','gdesc','gimg','glink'].forEach(id=>document.getElementById(id).value='');
-  load();loadGamesAdmin();
-  setTimeout(()=>document.getElementById('msg').textContent='',2000);
-}
-window.upload = upload;
+window.onload = function(){
+    let saved = localStorage.getItem("userPhone");
 
-window.deleteGame = async (id)=>{
-  if(!confirm('Futa?')) return;
-  await deleteDoc(doc(db,'games',id));
-  load();loadGamesAdmin();
+    if(saved){
+        document.getElementById("login").style.display = "none";
+        document.getElementById("welcome").style.display = "block";
+        document.getElementById("userPhone").innerText = "Namba: " + saved;
+    }
 }
-
-async function loadGamesAdmin(){
-  const q = query(collection(db,'games'),orderBy('time','desc'));
-  const snap = await getDocs(q);
-  let all = [];
-  snap.forEach(d=>all.push({id:d.id,...d.data()}));
-  document.getElementById('all-games').innerHTML = all.map(g=>`<div class="card"><img src="${g.img||'https://via.placeholder.com/170x150/333/666'}"><div class="card-body"><h3>${g.title}</h3><div class="size">${g.size||'N/A'}</div><button class="btn-danger" onclick="deleteGame('${g.id}')">Futa</button></div></div>`).join('');
-}
-
-async function load(){
-  const q = query(collection(db,'games'),orderBy('time','desc'));
-  const snap = await getDocs(q);
-  let all = [];
-  snap.forEach(d=>all.push({id:d.id,...d.data()}));
-  render(all,'recent');
-  render(all.filter(x=>x.cat=='ps2'),'ps2g');
-  render(all.filter(x=>x.cat=='ppspp'),'ppsppg');
-  render(all.filter(x=>x.cat=='apk'),'apkg');
-}
-
-function render(arr,id){
-  const box = document.getElementById(id);
-  box.innerHTML = arr.length==0? '<div style="padding:50px;text-align:center;color:#666">Hakuna bado</div>' : arr.map(x=>`<div class="card"><img src="${x.img||'https://via.placeholder.com/170x150/333/666'}"><div class="card-body"><h3>${x.title}</h3><div class="size">${x.size||'Size N/A'}</div><p>${x.desc||''}</p><a href="${x.link}" target="_blank" class="download-btn">Pakua</a></div></div>`).join('');
-}
-
-loadHome();
-load();
 </script>
+
 </body>
 </html>
