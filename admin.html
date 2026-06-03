@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Pro Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+// LOCK: Lazima uweke key kwenye URL: admin.html?key=2026mwena
+const urlParams = new URLSearchParams(window.location.search)
+const key = urlParams.get('key')
+if(key !== '2026mwena') {
+  alert('Huna ruhusa kuingia hapa!')
+  window.location.href = 'index.html'
+}
+</script>
+
+<div class="bg-animation"></div>
+
+<header>
+  <div class="logo">
+    <span class="logo-icon">⚡</span>
+    <h1>Admin <span class="pro">Dashboard</span></h1>
+  </div>
+  <button id="logoutBtn" class="neon-btn red">🚪 Toka</button>
+</header>
+
+<div class="admin-container">
+  <div class="stats-box">
+    <div class="stat"><h3 id="totalGames">0</h3><p>Total Games</p></div>
+    <div class="stat"><h3 id="totalVideos">0</h3><p>Total Videos</p></div>
+  </div>
+
+  <!-- TENGENEZA CODE ZA USERS -->
+  <div class="upload-box neon-box">
+    <h2>🔑 Tengeneza Access Code za Users</h2>
+    <p style="color:#aaa;font-size:13px;margin-bottom:15px">Code hizi users watatumia kufungua site. Zinatumiwa mara 1 tu!</p>
+    <div class="code-generator">
+      <input type="text" id="newCode" placeholder="Andika code: 12345">
+      <button id="genCodeBtn" class="neon-btn">➕ Tengeneza</button>
+    </div>
+    <div id="codesList"></div>
+  </div>
+
+  <!-- UPLOAD GAMES -->
+  <div class="upload-box neon-box">
+    <h2>➕ Ongeza Game Mpya</h2>
+    <form id="uploadForm">
+      <input type="text" id="gameName" placeholder="🎯 Jina la Game" required>
+      <input type="url" id="gameUrl" placeholder="🔗 Link ya Game" required>
+      <input type="url" id="gameImage" placeholder="🖼️ Link ya Thumbnail" required>
+      <select id="gameCategory" required>
+        <option value="">📂 Category</option>
+        <option value="Action">Action</option>
+        <option value="Racing">Racing</option>
+        <option value="Puzzle">Puzzle</option>
+        <option value="Sports">Sports</option>
+      </select>
+      <button type="submit" class="neon-btn">🚀 PUBLISH GAME</button>
+    </form>
+  </div>
+
+  <!-- UPLOAD VIDEO TUTORIAL -->
+  <div class="upload-box neon-box">
+    <h2>📹 Ongeza Video ya Kufundisha</h2>
+    <form id="uploadVideoForm">
+      <input type="text" id="videoTitle" placeholder="📌 Jina la Video - mfano: Jinsi ya kuseti game" required>
+      <input type="url" id="videoUrl" placeholder="🎥 Link ya YouTube au Video" required>
+      <textarea id="videoDesc" placeholder="📝 Maelezo ya Video - andika hapa" rows="3" required></textarea>
+      <button type="submit" class="neon-btn">📤 PUBLISH VIDEO</button>
+    </form>
+  </div>
+
+  <h2 class="section-title">📋 Games Zilizopandishwa</h2>
+  <div id="adminGamesList"></div>
+
+  <h2 class="section-title">📹 Videos Zilizopandishwa</h2>
+  <div id="adminVideosList"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
