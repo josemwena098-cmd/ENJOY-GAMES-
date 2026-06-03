@@ -9,7 +9,6 @@
 <body>
 
 <script>
-// LOCK: Lazima uweke key kwenye URL
 const urlParams = new URLSearchParams(window.location.search)
 const key = urlParams.get('key')
 if(key !== '2026mwena') {
@@ -30,21 +29,11 @@ if(key !== '2026mwena') {
 
 <div class="admin-container">
   <div class="stats-box">
-    <div class="stat">
-      <h3 id="totalGames">0</h3>
-      <p>Total Games</p>
-    </div>
-    <div class="stat">
-      <h3 id="totalVideos">0</h3>
-      <p>Total Videos</p>
-    </div>
-    <div class="stat">
-      <h3 id="activeCodes">0</h3>
-      <p>Active Codes</p>
-    </div>
+    <div class="stat"><h3 id="totalGames">0</h3><p>Total Games</p></div>
+    <div class="stat"><h3 id="totalVideos">0</h3><p>Total Videos</p></div>
+    <div class="stat"><h3 id="activeCodes">0</h3><p>Active Codes</p></div>
   </div>
 
-  <!-- TENGENEZA CODE -->
   <div class="upload-box neon-box">
     <h2>🔑 Tengeneza Access Code za Users</h2>
     <p class="hint">Code hizi users watatumia kufungua site. Kila code inatumiwa mara 1 tu!</p>
@@ -55,14 +44,14 @@ if(key !== '2026mwena') {
     <div id="codesList"></div>
   </div>
 
-  <!-- UPLOAD GAME + MAELEZO -->
+  <!-- UPLOAD GAME + LINK NYINGI -->
   <div class="upload-box neon-box">
     <h2>➕ Ongeza Game Mpya</h2>
     <form id="uploadForm">
       <input type="text" id="gameName" placeholder="🎯 Jina la Game" required>
-      <input type="url" id="gameUrl" placeholder="🔗 Link ya Game" required>
       <input type="url" id="gameImage" placeholder="🖼️ Link ya Thumbnail" required>
-      <select id="gameCategory" required>
+      
+      <select id="gameCategory" required onchange="toggleLinks()">
         <option value="">📂 Chagua Category</option>
         <option value="Action">Action</option>
         <option value="Racing">Racing</option>
@@ -70,13 +59,28 @@ if(key !== '2026mwena') {
         <option value="Sports">Sports</option>
         <option value="Shooting">Shooting</option>
         <option value="Adventure">Adventure</option>
+        <option value="PPSSPP">🎮 PPSSPP Gold</option>
+        <option value="PS2">🎮 PS2 Emulator</option>
       </select>
+      
+      <!-- LINKS ZA KAWIDA -->
+      <div id="normalLinks">
+        <input type="url" id="gameUrl" placeholder="🔗 Link ya Game" required>
+      </div>
+      
+      <!-- LINKS ZA EMULATOR 3 -->
+      <div id="emulatorLinks" class="hidden">
+        <p style="color:var(--neon);font-size:13px;margin-bottom:10px">🎮 Weka link 3 za emulator. Zisizotumika acha wazi</p>
+        <input type="url" id="gameUrl1" placeholder="🔗 Link 1 - App/ISO">
+        <input type="url" id="gameUrl2" placeholder="🔗 Link 2 - Backup Link">
+        <input type="url" id="gameUrl3" placeholder="🔗 Link 3 - Direct Download">
+      </div>
+      
       <textarea id="gameDesc" placeholder="📝 Maelezo kuhusu game - andika hapa" rows="3" required></textarea>
       <button type="submit" class="neon-btn">🚀 PUBLISH GAME</button>
     </form>
   </div>
 
-  <!-- UPLOAD VIDEO -->
   <div class="upload-box neon-box">
     <h2>📹 Ongeza Video ya Kufundisha</h2>
     <form id="uploadVideoForm">
@@ -95,5 +99,19 @@ if(key !== '2026mwena') {
 </div>
 
 <script src="script.js"></script>
+<script>
+function toggleLinks() {
+  let cat = document.getElementById('gameCategory').value
+  if(cat === 'PPSSPP' || cat === 'PS2') {
+    document.getElementById('normalLinks').classList.add('hidden')
+    document.getElementById('emulatorLinks').classList.remove('hidden')
+    document.getElementById('gameUrl').required = false
+  } else {
+    document.getElementById('normalLinks').classList.remove('hidden')
+    document.getElementById('emulatorLinks').classList.add('hidden')
+    document.getElementById('gameUrl').required = true
+  }
+}
+</script>
 </body>
 </html>
