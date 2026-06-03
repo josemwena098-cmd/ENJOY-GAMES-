@@ -29,7 +29,6 @@ body {
  50% {opacity: 1;}
 }
 
-/* LOCK SCREEN */
 .lock-screen {
   position: fixed;
   top: 0; left: 0;
@@ -222,6 +221,19 @@ header h1 {
   color: var(--neon);
   font-weight: 600;
   text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.category.PPSSPP {
+  background: rgba(255,215,0,0.2);
+  color: #ffd700;
+  border: 1px solid #ffd700;
+}
+
+.category.PS2 {
+  background: rgba(0,123,255,0.2);
+  color: #007bff;
+  border: 1px solid #007bff;
 }
 
 .game-desc {
@@ -243,6 +255,7 @@ header h1 {
   font-weight: 700;
   cursor: pointer;
   transition: 0.3s;
+  margin-top: 8px;
 }
 
 .play-btn:hover {
@@ -332,6 +345,10 @@ header h1 {
   border-color: var(--neon);
   box-shadow: 0 0 15px rgba(0,245,255,0.3);
   outline: none;
+}
+
+#emulatorLinks input {
+  margin-bottom: 10px;
 }
 
 .error {
