@@ -1,4 +1,4 @@
-// ========== LOCK YA SITE YOTE ==========
+// ========== LOCK YA SITE ==========
 function checkLock() {
   if(localStorage.getItem('siteAccess') === 'true') {
     document.getElementById('codeLock').style.display = 'none'
@@ -52,7 +52,7 @@ function showTab(tab) {
   }
 }
 
-// ========== GAMES NA MAELEZO ==========
+// ========== GAMES NA LINK NYINGI ==========
 function loadGames() {
   let games = JSON.parse(localStorage.getItem('games') || '[]')
   const grid = document.getElementById('gamesGrid')
@@ -62,17 +62,23 @@ function loadGames() {
     return
   }
   
-  grid.innerHTML = games.map(game => `
-    <div class="game-card">
-      <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/280x180?text=Game'">
-      <div class="game-info">
-        <h3>${game.name}</h3>
-        <span class="category">${game.category}</span>
-        <p class="game-desc">${game.desc || 'Hakuna maelezo'}</p>
-        <button class="play-btn" onclick="window.open('${game.url}', '_blank')">▶ CHEZA SASA</button>
+  grid.innerHTML = games.map(game => {
+    let buttons = game.links.map(link => 
+      `<button class="play-btn" onclick="window.open('${link.url}', '_blank')">${link.label}</button>`
+    ).join('')
+    
+    return `
+      <div class="game-card">
+        <img src="${game.image}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/280x180?text=Game'">
+        <div class="game-info">
+          <h3>${game.name}</h3>
+          <span class="category ${game.category}">${game.category}</span>
+          <p class="game-desc">${game.desc || 'Hakuna maelezo'}</p>
+          ${buttons}
+        </div>
       </div>
-    </div>
-  `).join('')
+    `
+  }).join('')
 }
 
 // ========== VIDEOS ==========
@@ -126,21 +132,42 @@ if(document.getElementById('uploadForm')) {
     alert('✅ Code imetengenezwa: ' + newCode + '\n\nCode hii inatumiwa mara 1 tu!')
   })
   
-  // Upload game + maelezo
+  // Upload game + maelezo + link nyingi
   document.getElementById('uploadForm').addEventListener('submit', (e) => {
     e.preventDefault()
+    let cat = document.getElementById('gameCategory').value
     let games = JSON.parse(localStorage.getItem('games') || '[]')
-    games.unshift({
+    
+    let newGame = {
       id: Date.now(),
       name: document.getElementById('gameName').value,
-      url: document.getElementById('gameUrl').value,
       image: document.getElementById('gameImage').value,
-      category: document.getElementById('gameCategory').value,
-      desc: document.getElementById('gameDesc').value
-    })
+      category: cat,
+      desc: document.getElementById('gameDesc').value,
+      links: []
+    }
+    
+    if(cat === 'PPSSPP' || cat === 'PS2') {
+      let l1 = document.getElementById('gameUrl1').value.trim()
+      let l2 = document.getElementById('gameUrl2').value.trim()
+      let l3 = document.getElementById('gameUrl3').value.trim()
+      if(l1) newGame.links.push({url: l1, label: 'Download 1'})
+      if(l2) newGame.links.push({url: l2, label: 'Download 2'})
+      if(l3) newGame.links.push({url: l3, label: 'Download 3'})
+    } else {
+      newGame.links.push({url: document.getElementById('gameUrl').value, label: 'Cheza Sasa'})
+    }
+    
+    if(newGame.links.length === 0) {
+      alert('❌ Lazima uweke angalau link 1!')
+      return
+    }
+    
+    games.unshift(newGame)
     localStorage.setItem('games', JSON.stringify(games))
     alert('✅ Game imepandishwa!')
     document.getElementById('uploadForm').reset()
+    toggleLinks()
     loadAdminGames()
   })
   
@@ -201,15 +228,15 @@ function loadAdminGames() {
   list.innerHTML = games.map(game => `
     <div class="admin-game">
       <div>
-        <b>${game.name}</b> - ${game.category}<br>
-        <small style="color:#aaa">${game.desc ? game.desc.substring(0,60)+'...' : 'Hakuna maelezo'}</small>
+        <b>${game.name}</b> - <span class="category ${game.category}">${game.category}</span><br>
+        <small style="color:#aaa">${game.desc ? game.desc.substring(0,60)+'...' : 'Hakuna maelezo'}</small><br>
+        <small style="color:var(--neon)">${game.links.length} link(s)</small>
       </div>
       <button class="delete-btn" onclick="deleteGameWithCode(${game.id})">🗑️ Futa</button>
     </div>
   `).join('')
 }
 
-// KUFUTA GAME KWA CODE YA UTHIBITISHO
 window.deleteGameWithCode = (id) => {
   let code = prompt('⚠️ Weka CODE ya uthibitisho ili ufute game hii:\n\nCode lazima iwe active!')
   if(code === null) return
