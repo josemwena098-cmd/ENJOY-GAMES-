@@ -8,37 +8,26 @@
 </head>
 <body>
 
-<script>
-// LOCK: Kama hana access, funga site yote
-if(localStorage.getItem('siteAccess') !== 'true') {
-  // Ondoa kila kitu isipokuwa popup
-  document.addEventListener('DOMContentLoaded', () => {
-    document.body.innerHTML = document.getElementById('codeLock').outerHTML
-  })
-}
-</script>
-
-<div class="bg-animation"></div>
-
-<!-- POPUP YA KUFUNGA SITE YOTE -->
+<!-- LOCK SCREEN - HII INATOKA KWANZA KWA WATU WOTE -->
 <div id="codeLock" class="lock-screen">
   <div class="lock-box neon-box">
     <h2>🔒 Access Code Inahitajika</h2>
-    <p>Weka code ili uingie kwenye site</p>
-    <input type="text" id="siteCode" placeholder="Weka Access Code">
+    <p>Site imefungwa. Weka code ili uingie</p>
+    <input type="text" id="siteCode" placeholder="Weka Access Code yako">
     <button id="unlockBtn" class="neon-btn">FUNGUA SITE</button>
-    <p id="lockError" class="error hidden">❌ Code si sahihi!</p>
+    <p id="lockError" class="error hidden">❌ Code si sahihi au imetumika!</p>
   </div>
 </div>
 
-<!-- CONTENT YA SITE - ITAFUNGUKA BAADA YA CODE -->
+<!-- CONTENT YOTE YA SITE -->
 <div id="siteContent" class="hidden">
+  <div class="bg-animation"></div>
+  
   <header>
     <div class="logo">
       <span class="logo-icon">🎮</span>
       <h1>GameZone <span class="pro">PRO</span></h1>
     </div>
-    <!-- Admin button imefichwa. Wewe ingia kwa: admin.html?key=2026mwena -->
   </header>
 
   <div class="hero">
