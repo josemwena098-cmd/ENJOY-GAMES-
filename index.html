@@ -3,145 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ENJOY GAMES</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:linear-gradient(135deg,#0f172a,#1e293b);
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-}
-
-.container{
-    width:90%;
-    max-width:400px;
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(10px);
-    padding:30px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 0 20px rgba(0,0,0,.4);
-}
-
-h1{
-    color:#00e5ff;
-    margin-bottom:10px;
-}
-
-p{
-    margin-bottom:20px;
-    opacity:.8;
-}
-
-input{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    margin-bottom:15px;
-    font-size:16px;
-}
-
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    background:#00e5ff;
-    color:#000;
-    font-weight:bold;
-    cursor:pointer;
-    font-size:16px;
-}
-
-button:hover{
-    opacity:.9;
-}
-
-#welcome{
-    display:none;
-}
-
-.games{
-    margin-top:20px;
-}
-
-.game{
-    background:#0ea5e9;
-    padding:12px;
-    border-radius:10px;
-    margin:10px 0;
-}
-</style>
+<title>GameZone Pro</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-
-<div id="login">
-    <h1>🎮 ENJOY GAMES</h1>
-    <p>Weka namba yako ya simu kuingia.</p>
-
-    <input type="tel" id="phone" placeholder="Mfano: 07XXXXXXXX">
-    <button onclick="login()">INGIA SASA</button>
-</div>
-
-<div id="welcome">
-    <h1>Karibu ENJOY GAMES</h1>
-    <p id="userPhone"></p>
-
-    <div class="games">
-        <div class="game">🎮 Game Slot 1</div>
-        <div class="game">🎮 Game Slot 2</div>
-        <div class="game">🎮 Game Slot 3</div>
-    </div>
-
-    <button onclick="logout()">TOKA</button>
-</div>
-
-</div>
-
 <script>
-function login() {
-    let phone = document.getElementById("phone").value;
-
-    if(phone.length < 10){
-        alert("Weka namba sahihi ya simu");
-        return;
-    }
-
-    localStorage.setItem("userPhone", phone);
-
-    document.getElementById("login").style.display = "none";
-    document.getElementById("welcome").style.display = "block";
-    document.getElementById("userPhone").innerText = "Namba: " + phone;
-}
-
-function logout(){
-    localStorage.removeItem("userPhone");
-    location.reload();
-}
-
-window.onload = function(){
-    let saved = localStorage.getItem("userPhone");
-
-    if(saved){
-        document.getElementById("login").style.display = "none";
-        document.getElementById("welcome").style.display = "block";
-        document.getElementById("userPhone").innerText = "Namba: " + saved;
-    }
+// LOCK: Kama hana access, funga site yote
+if(localStorage.getItem('siteAccess') !== 'true') {
+  // Ondoa kila kitu isipokuwa popup
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.innerHTML = document.getElementById('codeLock').outerHTML
+  })
 }
 </script>
 
+<div class="bg-animation"></div>
+
+<!-- POPUP YA KUFUNGA SITE YOTE -->
+<div id="codeLock" class="lock-screen">
+  <div class="lock-box neon-box">
+    <h2>🔒 Access Code Inahitajika</h2>
+    <p>Weka code ili uingie kwenye site</p>
+    <input type="text" id="siteCode" placeholder="Weka Access Code">
+    <button id="unlockBtn" class="neon-btn">FUNGUA SITE</button>
+    <p id="lockError" class="error hidden">❌ Code si sahihi!</p>
+  </div>
+</div>
+
+<!-- CONTENT YA SITE - ITAFUNGUKA BAADA YA CODE -->
+<div id="siteContent" class="hidden">
+  <header>
+    <div class="logo">
+      <span class="logo-icon">🎮</span>
+      <h1>GameZone <span class="pro">PRO</span></h1>
+    </div>
+    <!-- Admin button imefichwa. Wewe ingia kwa: admin.html?key=2026mwena -->
+  </header>
+
+  <div class="hero">
+    <h2>Cheza Games Bora Kabisa</h2>
+    <p>Bure kabisa. Cheza moja kwa moja</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('games')">🎮 Games</button>
+    <button class="tab-btn" id="tutorialsTab" onclick="showTab('tutorials')" style="display:none">📹 Jinsi ya Kuset</button>
+  </div>
+
+  <div class="grid" id="gamesGrid"></div>
+  <div class="grid hidden" id="tutorialsGrid"></div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
