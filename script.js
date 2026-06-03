@@ -81,13 +81,13 @@ function loadGames() {
   }).join('')
 }
 
-// ========== VIDEOS ==========
+// ========== VIDEOS - IMEREJESHWA ==========
 function loadVideos() {
   let videos = JSON.parse(localStorage.getItem('videos') || '[]')
   const grid = document.getElementById('tutorialsGrid')
   
   if(videos.length === 0) {
-    grid.innerHTML = '<p class="no-games">Bado hakuna video za mafunzo</p>'
+    grid.innerHTML = '<p class="no-games">Bado hakuna video za mafunzo. Admin atapandisha hivi karibuni.</p>'
     return
   }
   
@@ -117,7 +117,6 @@ if(document.getElementById('uploadForm')) {
     window.location.href = 'index.html'
   })
   
-  // Tengeneza code
   document.getElementById('genCodeBtn').addEventListener('click', () => {
     let newCode = document.getElementById('newCode').value.trim()
     if(newCode === '') return alert('Andika code kwanza!')
@@ -132,7 +131,6 @@ if(document.getElementById('uploadForm')) {
     alert('✅ Code imetengenezwa: ' + newCode + '\n\nCode hii inatumiwa mara 1 tu!')
   })
   
-  // Upload game + maelezo + link nyingi
   document.getElementById('uploadForm').addEventListener('submit', (e) => {
     e.preventDefault()
     let cat = document.getElementById('gameCategory').value
@@ -171,7 +169,7 @@ if(document.getElementById('uploadForm')) {
     loadAdminGames()
   })
   
-  // Upload video
+  // VIDEO UPLOAD IMEREJESHWA
   document.getElementById('uploadVideoForm').addEventListener('submit', (e) => {
     e.preventDefault()
     let videos = JSON.parse(localStorage.getItem('videos') || '[]')
@@ -182,7 +180,7 @@ if(document.getElementById('uploadForm')) {
       desc: document.getElementById('videoDesc').value
     })
     localStorage.setItem('videos', JSON.stringify(videos))
-    alert('✅ Video imepandishwa!')
+    alert('✅ Video imepandishwa! Users wataiona kwenye tab "Jinsi ya Kuset"')
     document.getElementById('uploadVideoForm').reset()
     loadAdminVideos()
   })
@@ -263,7 +261,7 @@ function loadAdminVideos() {
   let videos = JSON.parse(localStorage.getItem('videos') || '[]')
   document.getElementById('totalVideos').textContent = videos.length
   document.getElementById('adminVideosList').innerHTML = videos.length === 0 ? 
-    '<p class="no-games">Hakuna videos</p>' :
+    '<p class="no-games">Hakuna videos bado</p>' :
     videos.map(v => `<div class="admin-game"><div><b>${v.title}</b><br><small style="color:#aaa">${v.desc.substring(0,50)}...</small></div><button class="delete-btn" onclick="deleteVideo(${v.id})">🗑️</button></div>`).join('')
 }
 
