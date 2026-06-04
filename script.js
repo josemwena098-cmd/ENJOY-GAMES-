@@ -34,9 +34,8 @@ if(document.getElementById('unlockBtn')) {
 function initSite() {
   loadGames()
   loadVideos()
-  if(localStorage.getItem('isAdmin') === 'true') {
-    document.getElementById('tutorialsTab').style.display = 'block'
-  }
+  // TAB YA VIDEO SASA INAONEKANA KWA WATU WOTE
+  document.getElementById('tutorialsTab').style.display = 'block'
 }
 
 function showTab(tab) {
@@ -49,6 +48,7 @@ function showTab(tab) {
   } else {
     document.getElementById('gamesGrid').classList.add('hidden')
     document.getElementById('tutorialsGrid').classList.remove('hidden')
+    loadVideos() // reload videos kila ukibonyeza tab
   }
 }
 
@@ -81,7 +81,7 @@ function loadGames() {
   }).join('')
 }
 
-// ========== VIDEOS - IMEREJESHWA ==========
+// ========== VIDEOS ==========
 function loadVideos() {
   let videos = JSON.parse(localStorage.getItem('videos') || '[]')
   const grid = document.getElementById('tutorialsGrid')
@@ -91,17 +91,26 @@ function loadVideos() {
     return
   }
   
-  grid.innerHTML = videos.map(video => `
-    <div class="video-card">
-      <div class="video-wrapper">
-        <iframe src="${video.url.replace('watch?v=', 'embed/')}" frameborder="0" allowfullscreen></iframe>
+  grid.innerHTML = videos.map(video => {
+    let embedUrl = video.url
+    if(video.url.includes('watch?v=')) {
+      embedUrl = video.url.replace('watch?v=', 'embed/')
+    } else if(video.url.includes('youtu.be/')) {
+      embedUrl = video.url.replace('youtu.be/', 'youtube.com/embed/')
+    }
+    
+    return `
+      <div class="video-card">
+        <div class="video-wrapper">
+          <iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="video-info">
+          <h3>${video.title}</h3>
+          <p>${video.desc}</p>
+        </div>
       </div>
-      <div class="video-info">
-        <h3>${video.title}</h3>
-        <p>${video.desc}</p>
-      </div>
-    </div>
-  `).join('')
+    `
+  }).join('')
 }
 
 // ========== ADMIN DASHBOARD ==========
@@ -169,7 +178,6 @@ if(document.getElementById('uploadForm')) {
     loadAdminGames()
   })
   
-  // VIDEO UPLOAD IMEREJESHWA
   document.getElementById('uploadVideoForm').addEventListener('submit', (e) => {
     e.preventDefault()
     let videos = JSON.parse(localStorage.getItem('videos') || '[]')
