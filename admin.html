@@ -11,7 +11,7 @@
 <script>
 const urlParams = new URLSearchParams(window.location.search)
 const key = urlParams.get('key')
-if(key !== '2026mwena') {
+if(key!== '2026mwena') {
   alert('Huna ruhusa kuingia hapa!')
   window.location.href = 'index.html'
 }
@@ -36,7 +36,6 @@ if(key !== '2026mwena') {
 
   <div class="upload-box neon-box">
     <h2>🔑 Tengeneza Access Code za Users</h2>
-    <p class="hint">Code hizi users watatumia kufungua site. Kila code inatumiwa mara 1 tu!</p>
     <div class="code-generator">
       <input type="text" id="newCode" placeholder="Andika code: mfano 12345">
       <button id="genCodeBtn" class="neon-btn">➕ Tengeneza Code</button>
@@ -44,49 +43,60 @@ if(key !== '2026mwena') {
     <div id="codesList"></div>
   </div>
 
-  <!-- UPLOAD GAME + LINK NYINGI -->
   <div class="upload-box neon-box">
     <h2>➕ Ongeza Game Mpya</h2>
     <form id="uploadForm">
       <input type="text" id="gameName" placeholder="🎯 Jina la Game" required>
       <input type="url" id="gameImage" placeholder="🖼️ Link ya Thumbnail" required>
-      
       <select id="gameCategory" required onchange="toggleLinks()">
         <option value="">📂 Chagua Category</option>
         <option value="Action">Action</option>
         <option value="Racing">Racing</option>
         <option value="Puzzle">Puzzle</option>
         <option value="Sports">Sports</option>
-        <option value="Shooting">Shooting</option>
-        <option value="Adventure">Adventure</option>
         <option value="PPSSPP">🎮 PPSSPP Gold</option>
         <option value="PS2">🎮 PS2 Emulator</option>
       </select>
-      
-      <!-- LINKS ZA KAWIDA -->
       <div id="normalLinks">
         <input type="url" id="gameUrl" placeholder="🔗 Link ya Game" required>
       </div>
-      
-      <!-- LINKS ZA EMULATOR 3 -->
       <div id="emulatorLinks" class="hidden">
-        <p style="color:var(--neon);font-size:13px;margin-bottom:10px">🎮 Weka link 3 za emulator. Zisizotumika acha wazi</p>
-        <input type="url" id="gameUrl1" placeholder="🔗 Link 1 - App/ISO">
-        <input type="url" id="gameUrl2" placeholder="🔗 Link 2 - Backup Link">
-        <input type="url" id="gameUrl3" placeholder="🔗 Link 3 - Direct Download">
+        <p style="color:var(--neon);font-size:13px;margin-bottom:10px">🎮 Weka link 3. Zisizotumika acha wazi</p>
+        <input type="url" id="gameUrl1" placeholder="🔗 Link 1">
+        <input type="url" id="gameUrl2" placeholder="🔗 Link 2">
+        <input type="url" id="gameUrl3" placeholder="🔗 Link 3">
       </div>
-      
-      <textarea id="gameDesc" placeholder="📝 Maelezo kuhusu game - andika hapa" rows="3" required></textarea>
+      <textarea id="gameDesc" placeholder="📝 Maelezo kuhusu game" rows="3" required></textarea>
       <button type="submit" class="neon-btn">🚀 PUBLISH GAME</button>
     </form>
   </div>
 
+  <!-- UPLOAD VIDEO: LINK + FILE -->
   <div class="upload-box neon-box">
     <h2>📹 Ongeza Video ya Kufundisha</h2>
+    <p class="hint">Chagua 1: Weka link ya YouTube AU Panda video kutoka simu</p>
     <form id="uploadVideoForm">
       <input type="text" id="videoTitle" placeholder="📌 Jina la Video" required>
-      <input type="url" id="videoUrl" placeholder="🎥 Link ya YouTube" required>
-      <textarea id="videoDesc" placeholder="📝 Maelezo ya Video - andika hapa" rows="3" required></textarea>
+
+      <!-- CHAGUA AINA YA VIDEO -->
+      <select id="videoType" onchange="toggleVideoType()" required>
+        <option value="">🎥 Chagua Aina ya Video</option>
+        <option value="youtube">🔗 Link ya YouTube</option>
+        <option value="upload">📤 Panda Video kutoka Simu</option>
+      </select>
+
+      <!-- KAMA NI YOUTUBE -->
+      <div id="youtubeInput" class="hidden">
+        <input type="url" id="videoUrl" placeholder="🎥 Weka link ya YouTube">
+      </div>
+
+      <!-- KAMA NI UPLOAD -->
+      <div id="uploadInput" class="hidden">
+        <input type="file" id="videoFile" accept="video/*">
+        <p style="color:#ffaa00;font-size:12px;margin-top:5px">⚠️ Video isizidi 10MB. Kubwa zaidi tumia YouTube/Google Drive link</p>
+      </div>
+
+      <textarea id="videoDesc" placeholder="📝 Maelezo ya Video" rows="3" required></textarea>
       <button type="submit" class="neon-btn">📤 PUBLISH VIDEO</button>
     </form>
   </div>
@@ -110,6 +120,24 @@ function toggleLinks() {
     document.getElementById('normalLinks').classList.remove('hidden')
     document.getElementById('emulatorLinks').classList.add('hidden')
     document.getElementById('gameUrl').required = true
+  }
+}
+
+function toggleVideoType() {
+  let type = document.getElementById('videoType').value
+  if(type === 'youtube') {
+    document.getElementById('youtubeInput').classList.remove('hidden')
+    document.getElementById('uploadInput').classList.add('hidden')
+    document.getElementById('videoUrl').required = true
+    document.getElementById('videoFile').required = false
+  } else if(type === 'upload') {
+    document.getElementById('youtubeInput').classList.add('hidden')
+    document.getElementById('uploadInput').classList.remove('hidden')
+    document.getElementById('videoUrl').required = false
+    document.getElementById('videoFile').required = true
+  } else {
+    document.getElementById('youtubeInput').classList.add('hidden')
+    document.getElementById('uploadInput').classList.add('hidden')
   }
 }
 </script>
