@@ -3,7 +3,7 @@ function checkLock() {
   let userCode = localStorage.getItem('myAccessCode')
   let usedCodes = JSON.parse(localStorage.getItem('usedCodes') || '[]')
   
-  // Kama admin kaifuta code, mtoe user site
+  // Kama admin kaifuta code, mtoe user site mara moja
   if(userCode && !usedCodes.includes(userCode)) {
     localStorage.removeItem('siteAccess')
     localStorage.removeItem('myAccessCode')
