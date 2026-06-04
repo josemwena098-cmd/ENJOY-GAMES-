@@ -39,15 +39,15 @@ body {
  50% {opacity: 1; transform: scale(1.05);}
 }
 
-/* LOCK SCREEN */
+/* LOCK BOX MPYA NEON GLOW */
 .lock-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.98);
-  backdrop-filter: blur(20px);
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(30px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,29 +56,83 @@ body {
 
 .lock-box {
   padding: 50px 40px;
-  border-radius: 20px;
+  border-radius: 25px;
   text-align: center;
-  max-width: 400px;
+  max-width: 420px;
   width: 90%;
-  animation: fadeIn 0.5s;
+  background: linear-gradient(135deg, #0a0a1a 0%, #12122a 100%);
+  border: 2px solid var(--neon);
+  box-shadow: 0 0 60px rgba(0,245,255,0.6), inset 0 0 30px rgba(0,245,255,0.1);
+  animation: lockGlow 2s ease-in-out infinite alternate;
 }
 
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(-20px);}
-  to {opacity: 1; transform: translateY(0);}
+@keyframes lockGlow {
+  from {box-shadow: 0 0 40px rgba(0,245,255,0.4), inset 0 0 20px rgba(0,245,255,0.1);}
+  to {box-shadow: 0 0 80px rgba(0,245,255,0.8), inset 0 0 40px rgba(0,245,255,0.2);}
 }
 
 .lock-box h2 {
   color: var(--neon);
-  margin-bottom: 10px;
-  font-size: 28px;
+  margin-bottom: 12px;
+  font-size: 30px;
   text-shadow: 0 0 20px var(--neon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .lock-box p {
   color: #aaa;
-  margin-bottom: 25px;
-  font-size: 14px;
+  margin-bottom: 30px;
+  font-size: 15px;
+}
+
+#siteCode {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 2px solid #333;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+#siteCode:focus {
+  border-color: var(--neon);
+  box-shadow: 0 0 20px rgba(0,245,255,0.5);
+  outline: none;
+  background: rgba(0,245,255,0.1);
+}
+
+#unlockBtn {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--neon), var(--pink));
+  border: none;
+  color: var(--dark);
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 30px rgba(0,245,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#unlockBtn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 0 50px rgba(0,245,255,0.8);
+}
+
+#unlockBtn:active {
+  transform: scale(0.98);
 }
 
 .hidden {
@@ -219,7 +273,7 @@ header h1 {
   color: white;
 }
 
-/* GRID YA GAMES NA VIDEOS */
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -441,13 +495,54 @@ header h1 {
   font-style: italic;
 }
 
+/* ADMIN CODE GENERATOR MPYA */
 .code-generator {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.code-generator input {
+#newCode {
   flex: 1;
+  padding: 16px;
+  border: 2px solid #333;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+
+#newCode:focus {
+  border-color: var(--neon);
+  box-shadow: 0 0 20px rgba(0,245,255,0.4);
+  outline: none;
+  background: rgba(0,245,255,0.1);
+}
+
+#genCodeBtn {
+  padding: 16px 28px;
+  background: linear-gradient(90deg, var(--neon), #00d4ff);
+  border: none;
+  border-radius: 12px;
+  color: var(--dark);
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 25px rgba(0,245,255,0.4);
+  white-space: nowrap;
+  font-size: 15px;
+}
+
+#genCodeBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(0,245,255,0.7);
+}
+
+#genCodeBtn:active {
+  transform: scale(0.95);
 }
 
 /* FORMS */
@@ -539,21 +634,23 @@ header h1 {
   transform: scale(1.05);
 }
 
-/* CODES */
+/* CODES MPYA */
 .code-item {
-  background: var(--card);
-  padding: 15px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(18,18,42,0.8), rgba(10,10,26,0.8));
+  padding: 18px;
+  border-radius: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
-  border-left: 3px solid var(--neon);
+  margin-top: 12px;
+  border-left: 4px solid var(--neon);
   transition: 0.3s;
+  box-shadow: 0 0 15px rgba(0,245,255,0.2);
 }
 
 .code-item:hover {
-  background: rgba(0,245,255,0.1);
+  transform: translateX(5px);
+  box-shadow: 0 0 25px rgba(0,245,255,0.4);
 }
 
 .no-games {
@@ -564,7 +661,7 @@ header h1 {
   grid-column: 1/-1;
 }
 
-/* MOBILE RESPONSIVE */
+/* MOBILE */
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
@@ -604,6 +701,10 @@ header h1 {
   .tab-btn {
     padding: 10px 16px;
     font-size: 13px;
+  }
+  
+  .lock-box {
+    padding: 40px 25px;
   }
 }
 
