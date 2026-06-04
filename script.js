@@ -1,10 +1,10 @@
-// ========== CHECK ACCESS + KUFUTA CODE UKITUMIKA ==========
+// ========== LOCK SYSTEM + ONE TIME CODE ==========
 function checkLock() {
   let userCode = localStorage.getItem('myAccessCode')
   let usedCodes = JSON.parse(localStorage.getItem('usedCodes') || '[]')
   
-  // Kama code ya user imetumika na admin kaifuta, mtoe site
-  if(userCode && usedCodes.includes(userCode) === false) {
+  // Kama admin kaifuta code, mtoe user site
+  if(userCode && !usedCodes.includes(userCode)) {
     localStorage.removeItem('siteAccess')
     localStorage.removeItem('myAccessCode')
     alert('⚠️ Code yako imefutwa na admin. Weka code mpya.')
@@ -76,11 +76,12 @@ function showTab(tab) {
   }
 }
 
+// ========== GAMES ==========
 function loadGames() {
   let games = JSON.parse(localStorage.getItem('games') || '[]')
   const grid = document.getElementById('gamesGrid')
   if(games.length === 0) {
-    grid.innerHTML = '<p class="no-games">Bado hakuna games.</p>'
+    grid.innerHTML = '<p class="no-games">Bado hakuna games. Admin atapandisha hivi karibuni.</p>'
     return
   }
   grid.innerHTML = games.map(game => {
@@ -89,11 +90,12 @@ function loadGames() {
   }).join('')
 }
 
+// ========== VIDEOS ==========
 function loadVideos() {
   let videos = JSON.parse(localStorage.getItem('videos') || '[]')
   const grid = document.getElementById('tutorialsGrid')
   if(videos.length === 0) {
-    grid.innerHTML = '<p class="no-games">Bado hakuna video za mafunzo.</p>'
+    grid.innerHTML = '<p class="no-games">Bado hakuna video za mafunzo. Admin atapandisha hivi karibuni.</p>'
     return
   }
   grid.innerHTML = videos.map(video => {
@@ -102,7 +104,7 @@ function loadVideos() {
       let embedUrl = video.url
       if(video.url.includes('watch?v=')) embedUrl = video.url.replace('watch?v=', 'embed/')
       else if(video.url.includes('youtu.be/')) embedUrl = video.url.replace('youtu.be/', 'youtube.com/embed/')
-      player = `<div class="video-wrapper"><iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe></div>`
+      player = `<div class="video-wrapper"><iframe src="${embedUrl}" frameborder="0" allowfullscreen allow="autoplay"></iframe></div>`
     } else if(video.type === 'upload') {
       player = `<div class="video-wrapper"><video controls><source src="${video.data}" type="${video.filetype}"></video></div>`
     }
@@ -110,7 +112,7 @@ function loadVideos() {
   }).join('')
 }
 
-// ========== ADMIN DASHBOARD ==========
+// ========== ADMIN DASHBOARD FULL ==========
 if(document.getElementById('uploadForm')) {
   localStorage.setItem('isAdmin', 'true')
   loadAdminGames()
@@ -123,24 +125,62 @@ if(document.getElementById('uploadForm')) {
     window.location.href = 'index.html'
   })
   
+  // CODE GENERATOR FIXED 100% - INAHIFADHI MARA MOJA
   document.getElementById('genCodeBtn').addEventListener('click', () => {
     let newCode = document.getElementById('newCode').value.trim()
-    if(newCode === '') return alert('Andika code kwanza!')
+    
+    if(newCode === '') {
+      alert('⚠️ Andika code kwanza!')
+      return
+    }
+    
+    if(newCode.length < 4) {
+      alert('⚠️ Code lazima iwe angalau herufi 4!')
+      return
+    }
+    
     let codes = JSON.parse(localStorage.getItem('siteCodes') || '[]')
     let used = JSON.parse(localStorage.getItem('usedCodes') || '[]')
-    if(codes.includes(newCode) || used.includes(newCode)) return alert('Code ipo tayari!')
-    codes.push(newCode)
+    
+    if(codes.includes(newCode)) {
+      alert('❌ Code "' + newCode + '" ipo tayari kwenye Active!')
+      return
+    }
+    
+    if(used.includes(newCode)) {
+      alert('❌ Code "' + newCode + '" imeshakamatwa tayari!')
+      return
+    }
+    
+    // Ongeza code juu kabisa na save
+    codes.unshift(newCode)
     localStorage.setItem('siteCodes', JSON.stringify(codes))
+    
+    // Safisha input
     document.getElementById('newCode').value = ''
+    
+    // Reload list mara moja bila refresh
     loadCodes()
-    alert('✅ Code imetengenezwa: ' + newCode + '\nMtu 1 tu atatumia!')
+    
+    // Taa ya mafanikio
+    alert('✅ Code imetengenezwa: ' + newCode + '\n\nMtu 1 tu atatumia. Ukifuta code mtu atatolewa site!')
   })
   
+  // UPLOAD GAME
   document.getElementById('uploadForm').addEventListener('submit', (e) => {
     e.preventDefault()
     let cat = document.getElementById('gameCategory').value
     let games = JSON.parse(localStorage.getItem('games') || '[]')
-    let newGame = {id: Date.now(), name: document.getElementById('gameName').value, image: document.getElementById('gameImage').value, category: cat, desc: document.getElementById('gameDesc').value, links: []}
+    
+    let newGame = {
+      id: Date.now(),
+      name: document.getElementById('gameName').value,
+      image: document.getElementById('gameImage').value,
+      category: cat,
+      desc: document.getElementById('gameDesc').value,
+      links: []
+    }
+    
     if(cat === 'PPSSPP' || cat === 'PS2') {
       let l1 = document.getElementById('gameUrl1').value.trim()
       let l2 = document.getElementById('gameUrl2').value.trim()
@@ -151,7 +191,12 @@ if(document.getElementById('uploadForm')) {
     } else {
       newGame.links.push({url: document.getElementById('gameUrl').value, label: 'Cheza Sasa'})
     }
-    if(newGame.links.length === 0) return alert('❌ Weka angalau link 1!')
+    
+    if(newGame.links.length === 0) {
+      alert('❌ Lazima uweke angalau link 1!')
+      return
+    }
+    
     games.unshift(newGame)
     localStorage.setItem('games', JSON.stringify(games))
     alert('✅ Game imepandishwa!')
@@ -160,14 +205,17 @@ if(document.getElementById('uploadForm')) {
     loadAdminGames()
   })
   
+  // UPLOAD VIDEO
   document.getElementById('uploadVideoForm').addEventListener('submit', (e) => {
     e.preventDefault()
     let type = document.getElementById('videoType').value
     let title = document.getElementById('videoTitle').value
     let desc = document.getElementById('videoDesc').value
+    
     if(type === 'youtube') {
       let url = document.getElementById('videoUrl').value
       if(!url) return alert('Weka link ya YouTube!')
+      
       let videos = JSON.parse(localStorage.getItem('videos') || '[]')
       videos.unshift({id: Date.now(), title, desc, type: 'youtube', url})
       localStorage.setItem('videos', JSON.stringify(videos))
@@ -179,13 +227,24 @@ if(document.getElementById('uploadForm')) {
     else if(type === 'upload') {
       let file = document.getElementById('videoFile').files[0]
       if(!file) return alert('Chagua video kwanza!')
-      if(file.size > 10 * 1024 * 1024) return alert('❌ Max 10MB!')
+      
+      if(file.size > 10 * 1024 * 1024) {
+        return alert('❌ Video ni kubwa sana! Max 10MB. Tumia YouTube link kwa video kubwa.')
+      }
+      
       let reader = new FileReader()
       reader.onload = function(e) {
         let videos = JSON.parse(localStorage.getItem('videos') || '[]')
-        videos.unshift({id: Date.now(), title, desc, type: 'upload', data: e.target.result, filetype: file.type})
+        videos.unshift({
+          id: Date.now(),
+          title,
+          desc,
+          type: 'upload',
+          data: e.target.result,
+          filetype: file.type
+        })
         localStorage.setItem('videos', JSON.stringify(videos))
-        alert('✅ Video imepandishwa!')
+        alert('✅ Video imepandishwa kutoka simu!')
         document.getElementById('uploadVideoForm').reset()
         toggleVideoType()
         loadAdminVideos()
@@ -195,32 +254,43 @@ if(document.getElementById('uploadForm')) {
   })
 }
 
-// ========== ONE-TIME CODE LOGIC ==========
+// ========== LOAD CODES FIXED 100% ==========
 function loadCodes() {
   let codes = JSON.parse(localStorage.getItem('siteCodes') || '[]')
   let used = JSON.parse(localStorage.getItem('usedCodes') || '[]')
   
-  document.getElementById('activeCodes').textContent = codes.length
-  document.getElementById('usedCodes').textContent = used.length
+  // Update stats
+  if(document.getElementById('activeCodes')) {
+    document.getElementById('activeCodes').textContent = codes.length
+  }
+  if(document.getElementById('usedCodes')) {
+    document.getElementById('usedCodes').textContent = used.length
+  }
   
-  // Codes zilizobaki
+  // Codes zilizobaki - Active
   const list = document.getElementById('codesList')
-  if(codes.length === 0) {
-    list.innerHTML = '<p style="color:#666;font-size:13px;margin-top:15px">Hakuna codes active</p>'
-  } else {
-    list.innerHTML = '<h4 style="margin-top:20px;color:var(--neon)">Codes Active - Zisizotumika:</h4>' + 
-      codes.map(code => `<div class="code-item"><span><b>${code}</b> - Hazijatumika</span><button class="delete-btn" onclick="deleteCode('${code}')">🗑️ Futa</button></div>`).join('')
+  if(list) {
+    if(codes.length === 0) {
+      list.innerHTML = '<p style="color:#666;font-size:13px;margin-top:15px">Hakuna codes active</p>'
+    } else {
+      list.innerHTML = '<h4 style="margin-top:20px;color:var(--neon)">Codes Active - Zisizotumika:</h4>' + 
+        codes.map(code => `<div class="code-item"><span><b>${code}</b> - Hazijatumika</span><button class="delete-btn" onclick="deleteCode('${code}')">🗑️ Futa</button></div>`).join('')
+    }
   }
   
   // Codes zilizotumika
   const usedList = document.getElementById('usedCodesList')
-  if(used.length === 0) {
-    usedList.innerHTML = '<p style="color:#666;font-size:13px">Hakuna mtu ameweka code bado</p>'
-  } else {
-    usedList.innerHTML = used.map(code => `<div class="code-item" style="border-left-color:var(--pink)"><span><b>${code}</b> - Imeshakamatwa</span></div>`).join('')
+  if(usedList) {
+    if(used.length === 0) {
+      usedList.innerHTML = '<p style="color:#666;font-size:13px">Hakuna mtu ameweka code bado</p>'
+    } else {
+      usedList.innerHTML = '<h4 style="margin-top:20px;color:var(--pink)">Codes Zilizotumika:</h4>' +
+        used.map(code => `<div class="code-item" style="border-left-color:var(--pink)"><span><b>${code}</b> - Imeshakamatwa</span></div>`).join('')
+    }
   }
 }
 
+// Futa code
 window.deleteCode = (code) => {
   if(confirm('Una uhakika kufuta code hii?\nMtu aliyetumia code hii atatolewa site mara moja!')) {
     let codes = JSON.parse(localStorage.getItem('siteCodes') || '[]')
@@ -241,42 +311,84 @@ window.deleteCode = (code) => {
   }
 }
 
+// Load games admin
 function loadAdminGames() {
   let games = JSON.parse(localStorage.getItem('games') || '[]')
-  document.getElementById('totalGames').textContent = games.length
-  const list = document.getElementById('adminGamesList')
-  if(games.length === 0) {
-    list.innerHTML = '<p class="no-games">Hakuna games bado</p>'
-    return
+  if(document.getElementById('totalGames')) {
+    document.getElementById('totalGames').textContent = games.length
   }
-  list.innerHTML = games.map(game => `<div class="admin-game"><div><b>${game.name}</b> - <span class="category ${game.category}">${game.category}</span><br><small style="color:#aaa">${game.desc ? game.desc.substring(0,60)+'...' : 'Hakuna maelezo'}</small><br><small style="color:var(--neon)">${game.links.length} link(s)</small></div><button class="delete-btn" onclick="deleteGameWithCode(${game.id})">🗑️ Futa</button></div>`).join('')
+  
+  const list = document.getElementById('adminGamesList')
+  if(list) {
+    if(games.length === 0) {
+      list.innerHTML = '<p class="no-games">Hakuna games bado</p>'
+      return
+    }
+    
+    list.innerHTML = games.map(game => `
+      <div class="admin-game">
+        <div>
+          <b>${game.name}</b> - <span class="category ${game.category}">${game.category}</span><br>
+          <small style="color:#aaa">${game.desc ? game.desc.substring(0,60)+'...' : 'Hakuna maelezo'}</small><br>
+          <small style="color:var(--neon)">${game.links.length} link(s)</small>
+        </div>
+        <button class="delete-btn" onclick="deleteGameWithCode(${game.id})">🗑️ Futa</button>
+      </div>
+    `).join('')
+  }
 }
 
+// Futa game na code
 window.deleteGameWithCode = (id) => {
-  let code = prompt('⚠️ Weka CODE ya uthibitisho:')
+  let code = prompt('⚠️ Weka CODE ya uthibitisho ili ufute game hii:\n\nCode lazima iwe active!')
   if(code === null) return
+  
   let codes = JSON.parse(localStorage.getItem('siteCodes') || '[]')
-  if(!codes.includes(code)) return alert('❌ Code si sahihi!')
+  if(!codes.includes(code)) {
+    alert('❌ Code si sahihi! Game haijafutwa.')
+    return
+  }
+  
   codes = codes.filter(c => c !== code)
   localStorage.setItem('siteCodes', JSON.stringify(codes))
+  
   let games = JSON.parse(localStorage.getItem('games') || '[]')
   games = games.filter(g => g.id !== id)
   localStorage.setItem('games', JSON.stringify(games))
-  alert('✅ Game imefutwa!')
+  
+  alert('✅ Game imefutwa na code imetumika!')
   loadAdminGames()
   loadCodes()
 }
 
+// Load videos admin
 function loadAdminVideos() {
   let videos = JSON.parse(localStorage.getItem('videos') || '[]')
-  document.getElementById('totalVideos').textContent = videos.length
-  document.getElementById('adminVideosList').innerHTML = videos.length === 0? '<p class="no-games">Hakuna videos</p>' : videos.map(v => `<div class="admin-game"><div><b>${v.title}</b> - ${v.type === 'youtube'? '🔗 YouTube' : '📤 Uploaded'}<br><small style="color:#aaa">${v.desc.substring(0,50)}...</small></div><button class="delete-btn" onclick="deleteVideo(${v.id})">🗑️</button></div>`).join('')
+  if(document.getElementById('totalVideos')) {
+    document.getElementById('totalVideos').textContent = videos.length
+  }
+  
+  const list = document.getElementById('adminVideosList')
+  if(list) {
+    list.innerHTML = videos.length === 0 ? 
+      '<p class="no-games">Hakuna videos bado</p>' :
+      videos.map(v => `
+        <div class="admin-game">
+          <div>
+            <b>${v.title}</b> - ${v.type === 'youtube'? '🔗 YouTube' : '📤 Uploaded'}<br>
+            <small style="color:#aaa">${v.desc.substring(0,50)}...</small>
+          </div>
+          <button class="delete-btn" onclick="deleteVideo(${v.id})">🗑️</button>
+        </div>
+      `).join('')
+  }
 }
 
+// Futa video
 window.deleteVideo = (id) => {
   if(confirm('Futa video hii?')) {
     let videos = JSON.parse(localStorage.getItem('videos') || '[]')
-    localStorage.setItem('videos', JSON.stringify(videos.filter(v => v.id!== id)))
+    localStorage.setItem('videos', JSON.stringify(videos.filter(v => v.id !== id)))
     loadAdminVideos()
   }
 }
