@@ -2,266 +2,135 @@
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
+<title>Admin TEKNOVA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - TEKNOVA</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: #0a0a0f;
-  color: white;
-  font-family: 'Segoe UI', sans-serif;
-  padding: 20px;
-}
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #00f5ff;
-}
-.header h2 { background: linear-gradient(90deg, #00f5ff, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
-.btn-toka {
-  background: #ff4444;
-  border: 2px solid #ff6666;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 700;
-}
-.box {
-  background: #111;
-  border: 2px solid #00f5ff;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 20px rgba(0,245,255,0.2);
-}
-.box h3 { color: #00f5ff; margin-bottom: 15px; font-size: 18px; }
-.stats { font-size: 48px; color: #00f5ff; font-weight: 900; text-align: center; }
-.stats-label { text-align: center; color: #aaa; margin-top: 5px; }
-input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: 1px solid #333;
-  border-radius: 8px;
-  background: #0a0a0f;
-  color: white;
-  font-size: 14px;
-}
-.btn {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(90deg, #00f5ff, #00d4e0);
-  border: none;
-  border-radius: 8px;
-  color: #0a0a0f;
-  font-weight: 800;
-  cursor: pointer;
-  font-size: 15px;
-}
-.btn:hover { opacity: 0.8; }
-.success {
-  background: #00ff88;
-  color: #000;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  display: none;
-  font-weight: 700;
-}
-.code-item {
-  background: #1a1a1a;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.error {
-  background: #ff4444;
-  padding: 30px;
-  border-radius: 15px;
-  text-align: center;
-  font-size: 20px;
-  margin-top: 100px;
-}
+body{background:#0a0a0f;color:#fff;font-family:Segoe UI;padding:20px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.header h2{background:linear-gradient(90deg,#00f5ff,#ff00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:24px}
+.btn-red{background:#ff0044;border:none;padding:10px 18px;border-radius:8px;color:#fff;font-weight:700;cursor:pointer}
+.box{background:#111;border:2px solid #00f5ff;border-radius:15px;padding:25px;margin-bottom:20px}
+.stats{font-size:55px;color:#00f5ff;text-align:center;font-weight:900}
+.stats-label{text-align:center;color:#aaa;margin-top:5px}
+input{width:100%;padding:13px;margin:8px 0;background:#0a0a0f;border:1px solid #333;border-radius:8px;color:#fff;font-size:15px}
+.btn{width:100%;padding:15px;background:linear-gradient(90deg,#00f5ff,#00d4e0);border:none;border-radius:8px;color:#000;font-weight:800;font-size:16px;cursor:pointer;margin-top:10px}
+.success{background:#00ff88;color:#000;padding:12px;border-radius:8px;margin:10px 0;display:none;font-weight:700}
+.code-item{background:#1a1a1a;padding:12px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between}
+.error-box{background:#ff0044;padding:40px;border-radius:15px;text-align:center;font-size:22px;margin-top:100px}
+code{color:#00f5ff;font-size:18px}
 </style>
 </head>
 <body>
 
-<div id="adminContent">
-
-  <div class="header">
-    <h2>⚡ Admin Dashboard</h2>
-    <button class="btn-toka" onclick="logout()">🚪 TOKA</button>
-  </div>
-
-  <div class="box">
-    <div class="stats" id="codesBaki">0</div>
-    <div class="stats-label">CODES ZILIZOBAKI</div>
-  </div>
-
-  <div class="box">
-    <div class="stats" id="codesTumika">0</div>
-    <div class="stats-label">CODES ZILIZOTUMIKA</div>
-  </div>
-
-  <div class="box">
-    <h3>🔑 Tengeneza Access Code za Users</h3>
-    <p style="color:#aaa;font-size:13px;margin-bottom:15px">Code 1 = mtu 1 tu. Ikitumika inajifuta. Ukifuta code mtu atatolewa site</p>
-    <input type="text" id="codeName" placeholder="Weka jina la code mfano: Mimiwe" required>
-    <div id="msgSuccess" class="success">✅ Code imetengenezwa!</div>
-    <button class="btn" onclick="tengenezaCode()">+ TENGENEZA CODE</button>
-    <div style="margin-top:20px">
-      <h3 style="color:#ff00ff">Codes Zilizotumika:</h3>
-      <div id="codesList"></div>
-    </div>
-  </div>
-
-  <div class="box">
-    <h3>+ Ongeza Game Mpya</h3>
-    <div id="gameSuccess" class="success">✅ Game imeongezwa!</div>
-    <input type="text" id="gameTitle" placeholder="Jina la Game">
-    <input type="text" id="gameLink" placeholder="Link ya YouTube">
-    <textarea id="gameDesc" placeholder="Maelezo" rows="3"></textarea>
-    <button class="btn" onclick="ongezaGame()">✅ Ongeza Game</button>
-  </div>
-
-</div>
+<div id="main"></div>
 
 <script>
-// ===== LOCK YA ADMIN KEY =====
-const SECRET_KEY = '2026mwena';
-const urlParams = new URLSearchParams(window.location.search);
-const userKey = urlParams.get('key');
+// ===== KEY YA ADMIN =====
+const ADMIN_KEY = "2026mwena";
+const params = new URLSearchParams(location.search);
+const key = params.get('key');
 
-if(userKey !== SECRET_KEY) {
-  document.getElementById('adminContent').innerHTML = `
-    <div class="error">
-      🔒 Huna ruhusa kuingia hapa!<br><br>
-      Tumia link sahihi:<br>
-      <code style="color:#00f5ff">admin.html?key=2026mwena</code>
-    </div>
-  `;
+// KAMA KEY SIPO, ONYESHA ERROR
+if(key!== ADMIN_KEY) {
+document.getElementById('main').innerHTML = `
+<div class="error-box">
+🔒 Huna ruhusa kuingia hapa!<br><br>
+Tumia link kamili:<br>
+<code>admin.html?key=2026mwena</code>
+</div>
+`;
+} else {
+// KAMA KEY SIKO, ONYESHA ADMIN
+showAdmin();
 }
 
-// ===== SYSTEM YA ACCESS CODES =====
-let codes = JSON.parse(localStorage.getItem('accessCodes') || '[]');
-let usedCodes = JSON.parse(localStorage.getItem('usedCodes') || '[]');
+function showAdmin() {
+document.getElementById('main').innerHTML = `
+<div class="header">
+<h2>⚡ Admin Dashboard</h2>
+<button class="btn-red" onclick="location.href='/'">🚪 TOKA</button>
+</div>
 
-function updateStats() {
-  document.getElementById('codesBaki').textContent = codes.length;
-  document.getElementById('codesTumika').textContent = usedCodes.length;
-  displayCodes();
+<div class="box">
+<div class="stats" id="baki">0</div>
+<div class="stats-label">CODES ZILIZOBAKI</div>
+</div>
+
+<div class="box">
+<div class="stats" id="tumia">0</div>
+<div class="stats-label">CODES ZILIZOTUMIKA</div>
+</div>
+
+<div class="box">
+<h3 style="color:#00f5ff;margin-bottom:15px">🔑 Tengeneza Access Code za Users</h3>
+<p style="color:#999;font-size:13px;margin-bottom:12px">Code 1 = mtu 1 tu. Ikitumika inajifuta.</p>
+<input id="jina" placeholder="Weka jina mfano: Mimiwe">
+<div id="ok" class="success">✅ CODE IMETENGENEZWA!</div>
+<button class="btn" onclick="makeCode()">+ TENGENEZA CODE</button>
+<div style="margin-top:20px">
+<h3 style="color:#ff00ff;margin-bottom:10px">Codes Zilizotumika:</h3>
+<div id="list"></div>
+</div>
+</div>
+
+<div class="box">
+<h3 style="color:#00f5ff;margin-bottom:15px">+ Ongeza Game Mpya</h3>
+<input id="gt" placeholder="Jina la Game">
+<input id="gl" placeholder="Link ya YouTube">
+<textarea id="gd" placeholder="Maelezo" rows="3" style="width:100%;padding:13px;background:#0a0a0f;border:1px solid #333;border-radius:8px;color:#fff"></textarea>
+<div id="ok2" class="success">✅ GAME IMEONGEZWA!</div>
+<button class="btn" onclick="addGame()">✅ ONGEZA GAME</button>
+</div>
+`;
+
+loadData();
 }
 
-function tengenezaCode() {
-  let name = document.getElementById('codeName').value.trim();
-  if(!name) {
-    alert('❌ Weka jina la code kwanza!');
-    return;
-  }
+let codes = JSON.parse(localStorage.getItem('tek_codes')||'[]');
+let used = JSON.parse(localStorage.getItem('tek_used')||'[]');
 
-  let newCode = {
-    id: Date.now(),
-    name: name,
-    code: 'TEK' + Math.random().toString(36).substr(2, 8).toUpperCase(),
-    used: false
-  };
-
-  codes.push(newCode);
-  localStorage.setItem('accessCodes', JSON.stringify(codes));
-  
-  document.getElementById('msgSuccess').style.display = 'block';
-  document.getElementById('codeName').value = '';
-  
-  setTimeout(() => {
-    document.getElementById('msgSuccess').style.display = 'none';
-  }, 3000);
-  
-  updateStats();
-  alert('✅ CODE IMETENGENEZWA:\n\n' + newCode.code + '\n\nMpe user huyu code ili aingie site');
+function loadData() {
+document.getElementById('baki').textContent = codes.length;
+document.getElementById('tumia').textContent = used.length;
+let html = used.length? used.map(c=>`<div class="code-item"><span>${c.name} - ${c.code}</span><button onclick="delCode(${c.id})" style="background:#ff0044;border:none;padding:5px 12px;border-radius:5px;color:#fff;cursor:pointer">Futa</button></div>`).join(''): '<p style="color:#666">Hakuna bado</p>';
+document.getElementById('list').innerHTML = html;
 }
 
-function displayCodes() {
-  let list = document.getElementById('codesList');
-  if(usedCodes.length === 0) {
-    list.innerHTML = '<p style="color:#666">Hakuna code zilizotumika bado</p>';
-    return;
-  }
-  
-  list.innerHTML = usedCodes.map(c => `
-    <div class="code-item">
-      <span>${c.name} - ${c.code}</span>
-      <button onclick="futaCode(${c.id})" style="background:#ff4444;border:none;padding:5px 10px;border-radius:5px;color:white;cursor:pointer">Futa</button>
-    </div>
-  `).join('');
+function makeCode() {
+let jina = document.getElementById('jina').value.trim();
+if(!jina) return alert('❌ Weka jina kwanza!');
+let code = 'TEK' + Math.random().toString(36).substr(2,8).toUpperCase();
+codes.push({id:Date.now(),name:jina,code:code});
+localStorage.setItem('tek_codes',JSON.stringify(codes));
+document.getElementById('ok').style.display='block';
+document.getElementById('jina').value='';
+setTimeout(()=>document.getElementById('ok').style.display='none',3000);
+loadData();
+alert('CODE YAKO:\\n\\n'+code+'\\n\\nMpe '+jina+' aingie nayo site');
 }
 
-function futaCode(id) {
-  if(confirm('Una uhakika unataka kufuta code hii? User atatolewa site')) {
-    usedCodes = usedCodes.filter(c => c.id !== id);
-    localStorage.setItem('usedCodes', JSON.stringify(usedCodes));
-    updateStats();
-  }
+function delCode(id) {
+if(confirm('Futa code hii? User atatolewa')) {
+used = used.filter(x=>x.id!=id);
+localStorage.setItem('tek_used',JSON.stringify(used));
+loadData();
+}
 }
 
-// ===== ONGEZA GAME =====
-function getYouTubeID(url) {
-  let match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-  return match? match[1] : false;
+function addGame() {
+let t = document.getElementById('gt').value.trim();
+let l = document.getElementById('gl').value.trim();
+if(!t||!l) return alert('Jaza jina na link!');
+let id = l.match(/(?:youtube\\.com.*v=|youtu\\.be\\/)([^&?\\s]{11})/);
+if(!id) return alert('Link ya YouTube si sahihi!');
+let games = JSON.parse(localStorage.getItem('tek_games')||'[]');
+games.unshift({id:Date.now(),title:t,vid:id[1],desc:document.getElementById('gd').value,poster:'https://img.youtube.com/vi/'+id[1]+'/maxresdefault.jpg'});
+localStorage.setItem('tek_games',JSON.stringify(games));
+document.getElementById('ok2').style.display='block';
+document.getElementById('gt').value=''; document.getElementById('gl').value=''; document.getElementById('gd').value='';
+setTimeout(()=>document.getElementById('ok2').style.display='none',3000);
+alert('✅ Game imeongezwa! Kagua kwenye site kuu');
 }
-
-function ongezaGame() {
-  let title = document.getElementById('gameTitle').value.trim();
-  let link = document.getElementById('gameLink').value.trim();
-  
-  if(!title || !link) {
-    alert('❌ Jaza jina na link kwanza!');
-    return;
-  }
-  
-  let videoId = getYouTubeID(link);
-  if(!videoId) {
-    alert('❌ Link ya YouTube si sahihi!');
-    return;
-  }
-  
-  let games = JSON.parse(localStorage.getItem('games') || '[]');
-  let newGame = {
-    id: Date.now(),
-    title: title,
-    videoId: videoId,
-    poster: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-    desc: document.getElementById('gameDesc').value
-  };
-  
-  games.unshift(newGame);
-  localStorage.setItem('games', JSON.stringify(games));
-  
-  document.getElementById('gameSuccess').style.display = 'block';
-  document.getElementById('gameTitle').value = '';
-  document.getElementById('gameLink').value = '';
-  document.getElementById('gameDesc').value = '';
-  
-  setTimeout(() => {
-    document.getElementById('gameSuccess').style.display = 'none';
-  }, 3000);
-  
-  alert('✅ Game imeongezwa! Rudia kwenye site kuu kuiona');
-}
-
-// ===== LOGOUT =====
-function logout() {
-  window.location.href = '/';
-}
-
-// Load stats
-updateStats();
 </script>
 </body>
 </html>
