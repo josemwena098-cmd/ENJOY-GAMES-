@@ -112,16 +112,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// NAMBA YAKO IMEWEKWA HAPA 255611378027
+// NAMBA YAKO HAPA 255611378027
 const myWhatsApp = "255611378027";
 
-// FUNCTION YA WHATSAPP
+// FUNCTION YA WHATSAPP - INAFUNGUA MOJA KWA MOJA NA MESSAGE
 function askWhatsApp(){
-  const phone = prompt('Weka namba yako ya simu ili admin akujue:\nMfano: 0712345678');
-  if(phone){
-    const message = `Naomba code ya kuingia GAMES STORE. Namba yangu: ${phone}`;
-    window.open(`https://wa.me/${myWhatsApp}?text=${encodeURIComponent(message)}`, '_blank');
-  }
+  const message = `Naomba code ya kuingia GAMES STORE`;
+  window.open(`https://wa.me/${myWhatsApp}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 // CHECK ACCESS
@@ -139,7 +136,7 @@ function checkCode(){
     alert('❌ Weka code kwanza!');
     return;
   }
-  
+
   db.ref('siteCodes/' + code).once('value', snap => {
     if(snap.exists()){
       localStorage.setItem('siteAccess', 'true');
