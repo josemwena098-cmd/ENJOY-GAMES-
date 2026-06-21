@@ -6,28 +6,47 @@
 <title>ADMIN PANEL</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#0a0a0f;color:#fff;font-family:Arial,sans-serif;padding:20px}
- .container{max-width:800px;margin:0 auto}
- .header{text-align:center;margin-bottom:30px}
- .header h1{color:#4d9fff;font-size:28px}
+  body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',Arial,sans-serif;padding:20px}
+.container{max-width:850px;margin:0 auto}
+.header{text-align:center;margin-bottom:30px}
+.header h1{color:#4d9fff;font-size:28px}
 
- .tabs{display:flex;gap:10px;margin-bottom:20px}
- .tab-btn{flex:1;padding:12px;background:#1a1a2e;border:1px solid #2a2a4e;border-radius:10px;cursor:pointer;font-weight:bold}
- .tab-btn.active{background:#4d9fff;border-color:#4d9fff}
+.tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{flex:1;min-width:120px;padding:12px;background:#1a1a2e;border:1px solid #2a2a4e;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.3s}
+.tab-btn.active{background:#4d9fff;border-color:#4d9fff}
 
- .section{background:#1a1a2e;padding:20px;border-radius:15px;border:1px solid #2a2a4e;margin-bottom:20px}
- .section h2{color:#4d9fff;margin-bottom:15px;font-size:20px}
+.section{background:#1a1a2e;padding:20px;border-radius:15px;border:1px solid #2a2a4e;margin-bottom:20px}
+.section h2{color:#4d9fff;margin-bottom:15px;font-size:20px}
 
   input,textarea,select{width:100%;padding:12px;margin:8px 0;background:#0a0a0f;border:1px solid #2a2a4e;border-radius:8px;color:#fff;font-size:14px}
   textarea{min-height:80px;resize:vertical}
+  label{display:block;margin-top:12px;color:#aaa;font-size:13px;font-weight:bold}
 
- .link-group{border:1px solid #333;padding:12px;border-radius:8px;margin:10px 0;background:#0f0f1a}
- .btn{background:#4d9fff;color:#fff;padding:12px 25px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin:5px}
- .btn-danger{background:#ff3333}
- .btn-small{padding:8px 15px;font-size:13px}
+.link-group{border:1px solid #333;padding:12px;border-radius:8px;margin:10px 0;background:#0f0f1a;position:relative}
+.btn{background:#4d9fff;color:#fff;padding:12px 25px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin:5px 5px 5px 0;transition:0.3s}
+.btn:hover{opacity:0.8}
+.btn-danger{background:#ff3333}
+.btn-success{background:#00cc66}
+.btn-small{padding:8px 12px;font-size:13px}
 
- .hidden{display:none}
- .game-item{background:#0a0a0f;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #2a2a4e;display:flex;justify-content:space-between;align-items:center}
+.hidden{display:none}
+
+.item-card{background:#0a0a0f;padding:15px;margin:10px 0;border-radius:10px;border:1px solid #2a2a4e;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.item-info{flex:1}
+.item-title{font-weight:bold;color:#4d9fff;margin-bottom:4px}
+.item-sub{font-size:12px;color:#888}
+
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:1000}
+.modal.active{display:flex}
+.modal-content{background:#1a1a2e;padding:25px;border-radius:15px;max-width:600px;width:90%;max-height:90vh;overflow-y:auto;border:1px solid #4d9fff}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.modal-header h3{color:#4d9fff}
+.close-btn{background:#ff3333;border:none;color:#fff;padding:5px 10px;border-radius:5px;cursor:pointer}
+
+.cat-input-group{display:flex;gap:8px;align-items:center}
+.cat-input-group select{flex:1}
+.cat-input-group input{flex:1;display:none}
+.cat-input-group input.show{display:block}
 </style>
 </head>
 <body>
@@ -47,20 +66,32 @@
   <!-- ADD GAME SECTION -->
   <div id="gameSection" class="section">
     <h2>➕ Ongeza Game Mpya</h2>
-    <input type="text" id="gName" placeholder="Jina la Game: Tanzania Traffic Bus">
-    <select id="gCat">
-      <option>ANDROID GAME</option>
-      <option>PC GAME</option>
-      <option>PS4/PS5</option>
-    </select>
-    <input type="text" id="gImg" placeholder="Link ya Picha: https://i.imgur.com/xxx.jpg">
-    <textarea id="gDesc" placeholder="Maelezo ya Game..."></textarea>
+    <label>Jina la Game</label>
+    <input type="text" id="gName" placeholder="Tanzania Traffic Bus Mood">
 
-    <h3 style="margin-top:15px;color:#aaa">Download Links</h3>
+    <label>Category</label>
+    <div class="cat-input-group">
+      <select id="gCatSelect" onchange="toggleCatInput()">
+        <option value="ANDROID GAME">ANDROID GAME</option>
+        <option value="PC GAME">PC GAME</option>
+        <option value="PS4/PS5">PS4/PS5</option>
+        <option value="IOS GAME">IOS GAME</option>
+        <option value="CUSTOM">➕ Ongeza Category Nyingine...</option>
+      </select>
+      <input type="text" id="gCatCustom" placeholder="Andika category mpya: SIMULATOR GAME">
+    </div>
+
+    <label>Link ya Picha</label>
+    <input type="text" id="gImg" placeholder="https://i.imgur.com/xxx.jpg">
+
+    <label>Maelezo ya Game</label>
+    <textarea id="gDesc" placeholder="Andika maelezo hapa..."></textarea>
+
+    <label>Download Links</label>
     <div id="linksBox"></div>
-    <button class="btn btn-small" onclick="addLink()">+ Ongeza Link Nyingine</button>
+    <button class="btn btn-small btn-success" onclick="addLink()">+ Ongeza Link Nyingine</button>
 
-    <h3 style="margin-top:15px;color:#aaa">Password / Setting</h3>
+    <label>Password / Setting</label>
     <input type="text" id="sLabel" placeholder="Label: PASSWORD">
     <input type="text" id="sText" placeholder="Password: JUMA2029">
     <input type="text" id="sLink" placeholder="Link ya Setting File: https://...">
@@ -68,13 +99,21 @@
     <button class="btn" onclick="saveGame()">💾 Hifadhi Game</button>
   </div>
 
-  <!-- ADD VIDEO SECTION - HII NDIO ILIKUWA HAIJAWASHA -->
+  <!-- ADD VIDEO SECTION -->
   <div id="videoSection" class="section hidden">
     <h2>🎬 Ongeza Video ya YouTube</h2>
-    <input type="text" id="vTitle" placeholder="Title ya Video: Gameplay Tanzania Bus">
-    <input type="text" id="vGame" placeholder="Jina la Game husika">
-    <input type="text" id="vYoutube" placeholder="Link ya YouTube: https://youtube.com/watch?v=xxxxx">
-    <textarea id="vDesc" placeholder="Maelezo mafupi ya video..."></textarea>
+    <label>Title ya Video</label>
+    <input type="text" id="vTitle" placeholder="Gameplay Tanzania Bus">
+
+    <label>Jina la Game husika</label>
+    <input type="text" id="vGame" placeholder="Tanzania Traffic Bus">
+
+    <label>Link ya YouTube</label>
+    <input type="text" id="vYoutube" placeholder="https://youtube.com/watch?v=xxxxx">
+
+    <label>Maelezo</label>
+    <textarea id="vDesc" placeholder="Maelezo mafupi..."></textarea>
+
     <button class="btn" onclick="saveVideo()">💾 Hifadhi Video</button>
   </div>
 
@@ -85,6 +124,34 @@
 
     <h2 style="margin-top:30px">🎬 Videos Zilizopo</h2>
     <div id="videosList">Inapakia...</div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>✏️ Hariri Game</h3>
+      <button class="close-btn" onclick="closeModal()">X</button>
+    </div>
+    <input type="hidden" id="editId">
+
+    <label>Jina la Game</label>
+    <input type="text" id="editName">
+
+    <label>Category</label>
+    <input type="text" id="editCat" placeholder="ANDROID GAME">
+
+    <label>Link ya Picha</label>
+    <input type="text" id="editImg">
+
+    <label>Maelezo</label>
+    <textarea id="editDesc"></textarea>
+
+    <label>Password</label>
+    <input type="text" id="editPass">
+
+    <button class="btn btn-success" onclick="updateGame()">💾 Save Changes</button>
   </div>
 </div>
 
@@ -103,7 +170,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ADMIN KEY CHECK
+// ADMIN KEY
 if(prompt('Weka Admin Key:')!== '2026mwena'){
   alert('Key si sahihi!');
   window.location = 'index.html';
@@ -126,33 +193,51 @@ function showSection(sec){
   }
 }
 
+function toggleCatInput(){
+  const sel = document.getElementById('gCatSelect');
+  const custom = document.getElementById('gCatCustom');
+  if(sel.value === 'CUSTOM'){
+    custom.classList.add('show');
+    custom.focus();
+  } else {
+    custom.classList.remove('show');
+    custom.value = '';
+  }
+}
+
 let linkCount = 0;
 function addLink(){
   linkCount++;
   document.getElementById('linksBox').innerHTML += `
     <div class="link-group" id="link${linkCount}">
-      <input type="text" placeholder="Label: APK" id="label${linkCount}">
+      <input type="text" placeholder="Label: APK / OBB / DATA" id="label${linkCount}">
       <input type="text" placeholder="URL ya Download" id="url${linkCount}">
-      <button class="btn btn-danger btn-small" onclick="document.getElementById('link${linkCount}').remove()">Tuma</button>
+      <button class="btn btn-danger btn-small" onclick="document.getElementById('link${linkCount}').remove()">🗑️ Tuma</button>
     </div>
   `;
 }
 addLink();
 
-function saveGame(){
-  const name = document.getElementById('gName').value;
-  const cat = document.getElementById('gCat').value;
-  const img = document.getElementById('gImg').value;
-  const desc = document.getElementById('gDesc').value;
+function getCategory(){
+  const sel = document.getElementById('gCatSelect').value;
+  const custom = document.getElementById('gCatCustom').value;
+  return sel === 'CUSTOM'? custom.toUpperCase() : sel;
+}
 
-  if(!name ||!img){alert('Jaza jina na picha!');return;}
+function saveGame(){
+  const name = document.getElementById('gName').value.trim();
+  const cat = getCategory();
+  const img = document.getElementById('gImg').value.trim();
+  const desc = document.getElementById('gDesc').value.trim();
+
+  if(!name ||!img ||!cat){alert('Jaza jina, category na picha!');return;}
 
   let links = [];
   for(let i=1;i<=linkCount;i++){
     const l = document.getElementById('label'+i);
     const u = document.getElementById('url'+i);
-    if(l && u && l.value && u.value){
-      links.push({label:l.value, url:u.value});
+    if(l && u && l.value.trim() && u.value.trim()){
+      links.push({label:l.value.trim(), url:u.value.trim()});
     }
   }
 
@@ -171,15 +256,14 @@ function saveGame(){
 }
 
 function saveVideo(){
-  const title = document.getElementById('vTitle').value;
-  const gameName = document.getElementById('vGame').value;
-  const youtube = document.getElementById('vYoutube').value;
-  const desc = document.getElementById('vDesc').value;
+  const title = document.getElementById('vTitle').value.trim();
+  const gameName = document.getElementById('vGame').value.trim();
+  const youtube = document.getElementById('vYoutube').value.trim();
+  const desc = document.getElementById('vDesc').value.trim();
 
   if(!title ||!youtube){alert('Jaza title na link ya YouTube!');return;}
 
-  // Toa video ID kutoka YouTube link
-  const videoId = youtube.split('v=')[1]?.split('&')[0] || youtube.split('/').pop();
+  const videoId = youtube.split('v=')[1]?.split('&')[0] || youtube.split('/').pop().split('?')[0];
 
   db.ref('videos').push({
     title, gameName, videoId, description:desc, time:Date.now()
@@ -197,34 +281,88 @@ function loadList(){
   db.ref('games').on('value', snap => {
     const data = snap.val() || {};
     let html = '';
-    Object.entries(data).reverse().forEach(([id,g])=>{
-      html += `<div class="game-item">
-        <span>${g.name} - ${g.category}</span>
-        <button class="btn btn-danger btn-small" onclick="delGame('${id}')">Delete</button>
-      </div>`;
-    });
-    document.getElementById('gamesList').innerHTML = html || 'Hakuna games';
+    if(Object.keys(data).length === 0){
+      html = '<p style="color:#666;text-align:center;padding:20px">Hakuna games bado</p>';
+    } else {
+      Object.entries(data).reverse().forEach(([id,g])=>{
+        html += `<div class="item-card">
+          <div class="item-info">
+            <div class="item-title">${g.name}</div>
+            <div class="item-sub">${g.category} | ${g.links?.length || 0} links</div>
+          </div>
+          <div>
+            <button class="btn btn-small" onclick="editGame('${id}','${g.name.replace(/'/g,"\\'")}','${g.category}','${g.img}','${(g.description||'').replace(/'/g,"\\'")}','${g.setting?.text||''}')">✏️ Edit</button>
+            <button class="btn btn-danger btn-small" onclick="delGame('${id}')">🗑️ Delete</button>
+          </div>
+        </div>`;
+      });
+    }
+    document.getElementById('gamesList').innerHTML = html;
   });
 
   // Load Videos
   db.ref('videos').on('value', snap => {
     const data = snap.val() || {};
     let html = '';
-    Object.entries(data).reverse().forEach(([id,v])=>{
-      html += `<div class="game-item">
-        <span>${v.title} - ${v.gameName}</span>
-        <button class="btn btn-danger btn-small" onclick="delVideo('${id}')">Delete</button>
-      </div>`;
-    });
-    document.getElementById('videosList').innerHTML = html || 'Hakuna videos';
+    if(Object.keys(data).length === 0){
+      html = '<p style="color:#666;text-align:center;padding:20px">Hakuna videos bado</p>';
+    } else {
+      Object.entries(data).reverse().forEach(([id,v])=>{
+        html += `<div class="item-card">
+          <div class="item-info">
+            <div class="item-title">${v.title}</div>
+            <div class="item-sub">Game: ${v.gameName}</div>
+          </div>
+          <button class="btn btn-danger btn-small" onclick="delVideo('${id}')">🗑️ Delete</button>
+        </div>`;
+      });
+    }
+    document.getElementById('videosList').innerHTML = html;
+  });
+}
+
+let currentEditId = '';
+function editGame(id,name,cat,img,desc,pass){
+  currentEditId = id;
+  document.getElementById('editId').value = id;
+  document.getElementById('editName').value = name;
+  document.getElementById('editCat').value = cat;
+  document.getElementById('editImg').value = img;
+  document.getElementById('editDesc').value = desc;
+  document.getElementById('editPass').value = pass;
+  document.getElementById('editModal').classList.add('active');
+}
+
+function closeModal(){
+  document.getElementById('editModal').classList.remove('active');
+}
+
+function updateGame(){
+  const id = document.getElementById('editId').value;
+  const updates = {
+    name: document.getElementById('editName').value,
+    category: document.getElementById('editCat').value.toUpperCase(),
+    img: document.getElementById('editImg').value,
+    description: document.getElementById('editDesc').value,
+    'setting/text': document.getElementById('editPass').value
+  };
+
+  db.ref('games/'+id).update(updates).then(()=>{
+    alert('✅ Game imeupdate!');
+    closeModal();
+    loadList();
   });
 }
 
 function delGame(id){
-  if(confirm('Una uhakika?')) db.ref('games/'+id).remove();
+  if(confirm('Una uhakika unataka kuifuta game hii?')) {
+    db.ref('games/'+id).remove().then(()=>alert('✅ Imefutwa'));
+  }
 }
 function delVideo(id){
-  if(confirm('Una uhakika?')) db.ref('videos/'+id).remove();
+  if(confirm('Una uhakika unataka kuifuta video hii?')) {
+    db.ref('videos/'+id).remove().then(()=>alert('✅ Imefutwa'));
+  }
 }
 </script>
 </body>
