@@ -8,46 +8,52 @@
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',Arial,sans-serif}
 
-.header{padding:25px 15px;text-align:center;background:#0a0a0f}
-.header h1{font-size:26px;font-weight:bold;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header{padding:20px 15px;text-align:center;background:#0a0a0f}
+.header h1{font-size:22px;font-weight:bold;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-.tabs{display:flex;gap:10px;padding:15px;justify-content:center}
-.tab{padding:10px 35px;background:#1a1a2e;border-radius:25px;cursor:pointer;font-weight:bold;border:1px solid #2a2a4e;transition:0.3s;font-size:15px}
+.tabs{display:flex;gap:8px;padding:12px 15px;justify-content:center}
+.tab{padding:8px 28px;background:#1a1a2e;border-radius:20px;cursor:pointer;font-weight:bold;border:1px solid #2a2a4e;font-size:14px;transition:0.3s}
 .tab.active{background:#3b82f6;border-color:#3b82f6;color:#fff}
 
-.container{max-width:500px;margin:0 auto;padding:0 15px}
+.container{max-width:420px;margin:0 auto;padding:0 12px}
 .hidden{display:none}
 
-.games-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.games-grid{display:grid;grid-template-columns:1fr;gap:14px}
 
-.game-card{background:#111827;border-radius:15px;overflow:hidden;border:1px solid #1f2937}
-.game-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.5)}
+  /* CARD NDOGO SANA - KAMA SCREENSHOT YAKO */
+.game-card{background:#111827;border-radius:12px;overflow:hidden;border:1px solid #1f2937}
+.game-card:hover{transform:translateY(-2px)}
 
 .game-img-wrap{position:relative}
-.game-card img{width:100%;height:180px;object-fit:cover;display:block}
+  /* PICHA NDOGO - 160px TU */
+.game-card img{width:100%;height:160px;object-fit:cover;display:block}
 
-.game-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.7);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold;text-transform:uppercase}
+  /* CATEGORY BADGE NDOGO */
+.game-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);padding:4px 10px;border-radius:15px;font-size:10px;font-weight:bold;text-transform:uppercase;color:#fff}
 
-.game-info{padding:14px}
-.game-name{font-size:16px;font-weight:bold;color:#fff;margin-bottom:8px}
-.game-desc{color:#9ca3af;font-size:13px;margin:8px 0;min-height:35px}
+.game-info{padding:12px}
+  /* JINA NDOGO */
+.game-name{font-size:14px;font-weight:bold;color:#fff;margin-bottom:6px;line-height:1.3}
+  /* MAELEZO NDOGO */
+.game-desc{color:#9ca3af;font-size:12px;margin:6px 0;line-height:1.4;min-height:32px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
-/* BUTTON GLASSY KAMA VANNY */
-.download-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:12px;margin:8px 0;border-radius:12px;text-decoration:none;font-weight:bold;text-align:center;cursor:pointer;transition:0.3s;font-size:14px}
+  /* BUTTON NDOGO KAMA VANNY */
+.download-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:10px;margin:6px 0;border-radius:10px;text-decoration:none;font-weight:bold;text-align:center;cursor:pointer;font-size:13px}
 .download-btn:hover{background:rgba(255,255,255,0.15)}
 
-.setting-box{margin-top:12px;padding:12px;background:rgba(0,255,136,0.1);border-left:3px solid #00ff88;border-radius:8px;font-size:13px;color:#00ff88}
+  /* PASSWORD BOX NDOGO */
+.setting-box{margin-top:10px;padding:10px;background:rgba(0,255,136,0.1);border-left:3px solid #00ff88;border-radius:8px;font-size:12px;color:#00ff88}
 .setting-box b{color:#00ff88}
 
-.videos-grid{display:grid;grid-template-columns:1fr;gap:18px}
-.video-card{background:#111827;border-radius:15px;overflow:hidden;border:1px solid #1f2937}
-.video-card iframe{width:100%;height:200px;border:none}
-.video-info{padding:14px}
-.video-title{font-size:16px;font-weight:bold;color:#fff;margin-bottom:5px}
-.video-game{color:#fbbf24;font-size:13px;margin-bottom:8px}
-.video-desc{color:#9ca3af;font-size:13px}
+.videos-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.video-card{background:#111827;border-radius:12px;overflow:hidden;border:1px solid #1f2937}
+.video-card iframe{width:100%;height:160px;border:none}
+.video-info{padding:12px}
+.video-title{font-size:14px;font-weight:bold;color:#fff;margin-bottom:4px}
+.video-game{color:#fbbf24;font-size:12px;margin-bottom:6px}
+.video-desc{color:#9ca3af;font-size:12px}
 
-.empty-msg{text-align:center;color:#666;padding:60px 20px;font-size:16px}
+.empty-msg{text-align:center;color:#666;padding:50px 20px;font-size:14px}
 </style>
 </head>
 <body>
@@ -133,7 +139,7 @@ db.ref('games').on('value', snap => {
   Object.entries(data).reverse().forEach(([id, g]) => {
     let linksHtml = '';
     if(g.links && g.links.length > 0){
-      linksHtml = '<div style="margin-top:12px">';
+      linksHtml = '<div style="margin-top:10px">';
       g.links.forEach(link => {
         linksHtml += `<a href="${link.url}" target="_blank" class="download-btn">⬇️ DOWNLOAD ${link.label.toUpperCase()}</a>`;
       });
@@ -146,7 +152,7 @@ db.ref('games').on('value', snap => {
     gamesGrid.innerHTML += `
       <div class="game-card">
         <div class="game-img-wrap">
-          <img src="${g.img}" onerror="this.src='https://via.placeholder.com/400x180/111827/fff?text=NO+IMAGE'">
+          <img src="${g.img}" onerror="this.src='https://via.placeholder.com/400x160/111827/fff?text=NO+IMAGE'">
           <div class="game-badge">${g.category}</div>
         </div>
         <div class="game-info">
