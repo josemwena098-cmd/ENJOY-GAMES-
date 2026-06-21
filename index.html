@@ -8,56 +8,55 @@
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',Arial,sans-serif}
 
- .header{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:25px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
- .header h1{color:#4d9fff;font-size:32px;font-weight:bold;letter-spacing:1px;text-shadow:0 2px 10px rgba(77,159,255,0.4)}
+.header{padding:18px 15px;display:flex;justify-content:space-between;align-items:center;background:#0a0a0f;border-bottom:1px solid #1a1a2e}
+.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,#00d4ff,#ff66cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pakua-app{background:linear-gradient(135deg,#00d4ff,#9b59b6);color:#fff;padding:8px 16px;border-radius:25px;font-size:13px;border:none;cursor:pointer;font-weight:bold;display:flex;align-items:center;gap:5px}
 
- .tabs{display:flex;gap:10px;padding:15px;background:#0f0f1a;justify-content:center}
- .tab{padding:12px 35px;background:#1a1a2e;border-radius:12px;cursor:pointer;font-weight:bold;border:2px solid #2a2a4e;transition:0.3s;font-size:16px}
- .tab.active{background:linear-gradient(135deg,#4d9fff,#66b3ff);border-color:#4d9fff;color:#fff;box-shadow:0 4px 15px rgba(77,159,255,0.4)}
+.login-btn{width:90%;margin:15px auto 5px;display:block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:10px;border-radius:25px;cursor:pointer;font-size:14px;backdrop-filter:blur(10px)}
+.download-top{width:90%;margin:0 auto 20px;display:block;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:12px;border-radius:25px;cursor:pointer;font-size:14px;text-align:center;backdrop-filter:blur(10px)}
 
- .container{max-width:1100px;margin:25px auto;padding:0 15px}
- .hidden{display:none}
+.tabs{display:flex;gap:10px;padding:0 15px 15px;justify-content:center}
+.tab{padding:10px 30px;background:rgba(255,255,255,0.05);border-radius:25px;cursor:pointer;font-weight:bold;border:1px solid rgba(255,255,255,0.1);transition:0.3s;font-size:14px}
+.tab.active{background:#3b82f6;border-color:#3b82f6;color:#fff}
 
- .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:25px}
+.container{max-width:500px;margin:0 auto;padding:0 15px}
+.hidden{display:none}
 
- .game-card{background:#1a1a2e;border-radius:20px;overflow:hidden;border:1px solid #2a2a4e;transition:0.4s;box-shadow:0 5px 20px rgba(0,0,0,0.3)}
- .game-card:hover{transform:translateY(-8px);box-shadow:0 15px 40px rgba(77,159,255,0.4)}
+.games-grid{display:grid;grid-template-columns:1fr;gap:18px}
 
- .game-img-wrap{position:relative}
-  /* PICHA IONEKANE - HII NDIO ILIKUWA HAIJAWASHA */
- .game-card img{width:100%;height:220px;object-fit:cover;background:#0a0a0f;display:block;border-bottom:2px solid #2a2a4e}
+  /* CARD SAIZI NDOGO - KAMA VANNY */
+.game-card{background:#111827;border-radius:15px;overflow:hidden;border:1px solid #1f2937;transition:0.3s}
+.game-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.5)}
+
+.game-img-wrap{position:relative}
+.game-card img{width:100%;height:180px;object-fit:cover;display:block}
 
   /* CATEGORY BADGE JUU YA PICHA */
- .game-badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);padding:6px 14px;border-radius:25px;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;border:1px solid rgba(255,255,255,0.1)}
+.game-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold;text-transform:uppercase;color:#fff}
 
- .game-info{padding:18px}
- .game-name{font-size:20px;font-weight:bold;color:#4d9fff;margin:10px 0;line-height:1.4}
+.game-info{padding:14px}
+.game-name{font-size:16px;font-weight:bold;color:#fff;margin-bottom:8px;line-height:1.4}
+.game-desc{color:#9ca3af;font-size:13px;margin:8px 0;line-height:1.5;min-height:35px}
 
-  /* MAELEZO - HII ILIKUWA INAONYESHA undefined */
- .game-desc{color:#bbb;font-size:14px;margin:12px 0;line-height:1.6;min-height:45px}
+  /* BUTTON YA DOWNLOAD KAMA VANNY - GLASSY DARK */
+.download-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:12px;margin:8px 0;border-radius:12px;text-decoration:none;font-weight:bold;text-align:center;cursor:pointer;transition:0.3s;font-size:14px;backdrop-filter:blur(10px)}
+.download-btn:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25)}
 
-  /* BUTTON ZA KISASA SANA - GRADIENT + ANIMATION */
- .download-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,#ff3333,#ff6666);color:#fff;padding:16px;margin:10px 0;border-radius:12px;text-decoration:none;font-weight:bold;text-align:center;border:none;cursor:pointer;transition:0.3s;font-size:16px;box-shadow:0 5px 20px rgba(255,51,51,0.4);position:relative;overflow:hidden}
- .download-btn:before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:0.5s}
- .download-btn:hover:before{left:100%}
- .download-btn:hover{transform:scale(1.03);box-shadow:0 8px 25px rgba(255,51,51,0.6)}
- .download-btn:active{transform:scale(0.97)}
+.setting-box{margin-top:12px;padding:12px;background:rgba(0,255,136,0.1);border-left:3px solid #00ff88;border-radius:8px;font-size:13px;color:#00ff88}
+.setting-box b{color:#00ff88}
 
- .setting-box{margin-top:15px;padding:14px;background:linear-gradient(135deg,#0f1a0f,#1a2a1a);border-left:4px solid #00ff88;border-radius:10px;font-size:14px}
- .setting-box b{color:#00ff88;font-size:15px}
-
- .empty-msg{text-align:center;color:#666;padding:100px 20px;font-size:20px}
-
-  @media(max-width:768px){
-   .games-grid{grid-template-columns:1fr}
-  }
+.empty-msg{text-align:center;color:#666;padding:60px 20px;font-size:16px}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>🎮 GAMES STORE</h1>
+  <div class="logo">GAMES STORE</div>
+  <button class="pakua-app">⬇️ PAKUA APP</button>
 </div>
+
+<button class="login-btn">LOG IN</button>
+<button class="download-top">⬇️ DOWNLOAD</button>
 
 <div class="tabs">
   <div class="tab active" onclick="showTab('games')">GAMES</div>
@@ -80,7 +79,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyAyz_E70mm8RbYmWGYdBu1TLuBqK4ipdgU",
+  apiKey: "AIzaSyAyz_Eyz_E70mm8RbYmWGYdBu1TLuBqK4ipdgU",
   authDomain: "nova-ec213.firebaseapp.com",
   databaseURL: "https://nova-ec213-default-rtdb.firebaseio.com",
   projectId: "nova-ec213",
@@ -91,7 +90,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// PASSWORD
+// PASSWORD CHECK
 if(!localStorage.getItem('siteAccess')){
   const code = prompt('🔑 Weka Code ya Ku ingia Site:');
   db.ref('siteCodes/' + code).once('value', snap => {
@@ -121,7 +120,7 @@ function showTab(tab){
 
 const gamesGrid = document.getElementById('gamesGrid');
 
-// LOAD GAMES - FIX KAMILI
+// LOAD GAMES
 db.ref('games').on('value', snap => {
   const data = snap.val() || {};
   gamesGrid.innerHTML = '';
@@ -132,10 +131,10 @@ db.ref('games').on('value', snap => {
   }
 
   Object.entries(data).reverse().forEach(([id, g]) => {
-    // BUTTONS ZA KISASA
+    // BUTTONS KAMA VANNY - GLASSY DARK
     let linksHtml = '';
     if(g.links && g.links.length > 0){
-      linksHtml = '<div style="margin-top:15px">';
+      linksHtml = '<div style="margin-top:12px">';
       g.links.forEach(link => {
         linksHtml += `<a href="${link.url}" target="_blank" rel="noopener" class="download-btn">
           ⬇️ DOWNLOAD ${link.label.toUpperCase()}
@@ -146,21 +145,21 @@ db.ref('games').on('value', snap => {
 
     // PASSWORD
     let settingHtml = '';
-    if(g.setting && g.setting.text && g.setting.text.trim()!== ''){
+    if(g.setting && g.setting.text){
       settingHtml = `<div class="setting-box">
-        <b>🔐 PASSWORD:</b> ${g.setting.text}
+        🔐 <b>PASSWORD:</b> ${g.setting.text}
       </div>`;
     }
 
     gamesGrid.innerHTML += `
       <div class="game-card">
         <div class="game-img-wrap">
-          <img src="${g.img}" alt="${g.name}" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/4d9fff?text=NO+IMAGE'">
+          <img src="${g.img}" alt="${g.name}" onerror="this.src='https://via.placeholder.com/400x180/111827/fff?text=NO+IMAGE'">
           <div class="game-badge">${g.category}</div>
         </div>
         <div class="game-info">
           <div class="game-name">${g.name}</div>
-          <div class="game-desc">${g.description || 'Hakuna maelezo'}</div>
+          <div class="game-desc">${g.description || ''}</div>
           ${linksHtml}
           ${settingHtml}
         </div>
