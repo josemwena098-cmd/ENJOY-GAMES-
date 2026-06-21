@@ -8,15 +8,11 @@
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',Arial,sans-serif}
 
-.header{padding:18px 15px;display:flex;justify-content:space-between;align-items:center;background:#0a0a0f;border-bottom:1px solid #1a1a2e}
-.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,#00d4ff,#ff66cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.pakua-app{background:linear-gradient(135deg,#00d4ff,#9b59b6);color:#fff;padding:8px 16px;border-radius:25px;font-size:13px;border:none;cursor:pointer;font-weight:bold;display:flex;align-items:center;gap:5px}
+.header{padding:25px 15px;text-align:center;background:#0a0a0f}
+.header h1{font-size:26px;font-weight:bold;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-.login-btn{width:90%;margin:15px auto 5px;display:block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:10px;border-radius:25px;cursor:pointer;font-size:14px;backdrop-filter:blur(10px)}
-.download-top{width:90%;margin:0 auto 20px;display:block;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:12px;border-radius:25px;cursor:pointer;font-size:14px;text-align:center;backdrop-filter:blur(10px)}
-
-.tabs{display:flex;gap:10px;padding:0 15px 15px;justify-content:center}
-.tab{padding:10px 30px;background:rgba(255,255,255,0.05);border-radius:25px;cursor:pointer;font-weight:bold;border:1px solid rgba(255,255,255,0.1);transition:0.3s;font-size:14px}
+.tabs{display:flex;gap:10px;padding:15px;justify-content:center}
+.tab{padding:10px 35px;background:#1a1a2e;border-radius:25px;cursor:pointer;font-weight:bold;border:1px solid #2a2a4e;transition:0.3s;font-size:15px}
 .tab.active{background:#3b82f6;border-color:#3b82f6;color:#fff}
 
 .container{max-width:500px;margin:0 auto;padding:0 15px}
@@ -24,26 +20,32 @@
 
 .games-grid{display:grid;grid-template-columns:1fr;gap:18px}
 
-  /* CARD SAIZI NDOGO - KAMA VANNY */
-.game-card{background:#111827;border-radius:15px;overflow:hidden;border:1px solid #1f2937;transition:0.3s}
+.game-card{background:#111827;border-radius:15px;overflow:hidden;border:1px solid #1f2937}
 .game-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.5)}
 
 .game-img-wrap{position:relative}
 .game-card img{width:100%;height:180px;object-fit:cover;display:block}
 
-  /* CATEGORY BADGE JUU YA PICHA */
-.game-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold;text-transform:uppercase;color:#fff}
+.game-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.7);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold;text-transform:uppercase}
 
 .game-info{padding:14px}
-.game-name{font-size:16px;font-weight:bold;color:#fff;margin-bottom:8px;line-height:1.4}
-.game-desc{color:#9ca3af;font-size:13px;margin:8px 0;line-height:1.5;min-height:35px}
+.game-name{font-size:16px;font-weight:bold;color:#fff;margin-bottom:8px}
+.game-desc{color:#9ca3af;font-size:13px;margin:8px 0;min-height:35px}
 
-  /* BUTTON YA DOWNLOAD KAMA VANNY - GLASSY DARK */
-.download-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:12px;margin:8px 0;border-radius:12px;text-decoration:none;font-weight:bold;text-align:center;cursor:pointer;transition:0.3s;font-size:14px;backdrop-filter:blur(10px)}
-.download-btn:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25)}
+/* BUTTON GLASSY KAMA VANNY */
+.download-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:12px;margin:8px 0;border-radius:12px;text-decoration:none;font-weight:bold;text-align:center;cursor:pointer;transition:0.3s;font-size:14px}
+.download-btn:hover{background:rgba(255,255,255,0.15)}
 
 .setting-box{margin-top:12px;padding:12px;background:rgba(0,255,136,0.1);border-left:3px solid #00ff88;border-radius:8px;font-size:13px;color:#00ff88}
 .setting-box b{color:#00ff88}
+
+.videos-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.video-card{background:#111827;border-radius:15px;overflow:hidden;border:1px solid #1f2937}
+.video-card iframe{width:100%;height:200px;border:none}
+.video-info{padding:14px}
+.video-title{font-size:16px;font-weight:bold;color:#fff;margin-bottom:5px}
+.video-game{color:#fbbf24;font-size:13px;margin-bottom:8px}
+.video-desc{color:#9ca3af;font-size:13px}
 
 .empty-msg{text-align:center;color:#666;padding:60px 20px;font-size:16px}
 </style>
@@ -51,12 +53,8 @@
 <body>
 
 <div class="header">
-  <div class="logo">GAMES STORE</div>
-  <button class="pakua-app">⬇️ PAKUA APP</button>
+  <h1>🎮 GAMES STORE</h1>
 </div>
-
-<button class="login-btn">LOG IN</button>
-<button class="download-top">⬇️ DOWNLOAD</button>
 
 <div class="tabs">
   <div class="tab active" onclick="showTab('games')">GAMES</div>
@@ -71,7 +69,9 @@
   </div>
 
   <div id="videosTab" class="hidden">
-    <p class="empty-msg">Bado hakuna videos.</p>
+    <div id="videosGrid" class="videos-grid">
+      <p class="empty-msg">Bado hakuna videos.</p>
+    </div>
   </div>
 </div>
 
@@ -79,7 +79,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyAyz_Eyz_E70mm8RbYmWGYdBu1TLuBqK4ipdgU",
+  apiKey: "AIzaSyAyz_E70mm8RbYmWGYdBu1TLuBqK4ipdgU",
   authDomain: "nova-ec213.firebaseapp.com",
   databaseURL: "https://nova-ec213-default-rtdb.firebaseio.com",
   projectId: "nova-ec213",
@@ -90,7 +90,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// PASSWORD CHECK
+// PASSWORD
 if(!localStorage.getItem('siteAccess')){
   const code = prompt('🔑 Weka Code ya Ku ingia Site:');
   db.ref('siteCodes/' + code).once('value', snap => {
@@ -115,46 +115,38 @@ function showTab(tab){
   } else {
     document.querySelectorAll('.tab')[1].classList.add('active');
     document.getElementById('videosTab').classList.remove('hidden');
+    loadVideos();
   }
 }
 
 const gamesGrid = document.getElementById('gamesGrid');
+const videosGrid = document.getElementById('videosGrid');
 
 // LOAD GAMES
 db.ref('games').on('value', snap => {
   const data = snap.val() || {};
   gamesGrid.innerHTML = '';
-
   if(Object.keys(data).length === 0){
     gamesGrid.innerHTML = '<p class="empty-msg">📦 Hakuna games bado.</p>';
     return;
   }
-
   Object.entries(data).reverse().forEach(([id, g]) => {
-    // BUTTONS KAMA VANNY - GLASSY DARK
     let linksHtml = '';
     if(g.links && g.links.length > 0){
       linksHtml = '<div style="margin-top:12px">';
       g.links.forEach(link => {
-        linksHtml += `<a href="${link.url}" target="_blank" rel="noopener" class="download-btn">
-          ⬇️ DOWNLOAD ${link.label.toUpperCase()}
-        </a>`;
+        linksHtml += `<a href="${link.url}" target="_blank" class="download-btn">⬇️ DOWNLOAD ${link.label.toUpperCase()}</a>`;
       });
       linksHtml += '</div>';
     }
-
-    // PASSWORD
     let settingHtml = '';
     if(g.setting && g.setting.text){
-      settingHtml = `<div class="setting-box">
-        🔐 <b>PASSWORD:</b> ${g.setting.text}
-      </div>`;
+      settingHtml = `<div class="setting-box">🔐 <b>PASSWORD:</b> ${g.setting.text}</div>`;
     }
-
     gamesGrid.innerHTML += `
       <div class="game-card">
         <div class="game-img-wrap">
-          <img src="${g.img}" alt="${g.name}" onerror="this.src='https://via.placeholder.com/400x180/111827/fff?text=NO+IMAGE'">
+          <img src="${g.img}" onerror="this.src='https://via.placeholder.com/400x180/111827/fff?text=NO+IMAGE'">
           <div class="game-badge">${g.category}</div>
         </div>
         <div class="game-info">
@@ -167,6 +159,30 @@ db.ref('games').on('value', snap => {
     `;
   });
 });
+
+// LOAD VIDEOS
+function loadVideos(){
+  db.ref('videos').on('value', snap => {
+    const data = snap.val() || {};
+    videosGrid.innerHTML = '';
+    if(Object.keys(data).length === 0){
+      videosGrid.innerHTML = '<p class="empty-msg">📺 Bado hakuna videos.</p>';
+      return;
+    }
+    Object.values(data).reverse().forEach(v => {
+      videosGrid.innerHTML += `
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/${v.videoId}" allowfullscreen></iframe>
+          <div class="video-info">
+            <div class="video-title">${v.title}</div>
+            <div class="video-game">🎮 ${v.gameName}</div>
+            <div class="video-desc">${v.description}</div>
+          </div>
+        </div>
+      `;
+    });
+  });
+}
 </script>
 </body>
 </html>
