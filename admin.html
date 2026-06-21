@@ -2,135 +2,92 @@
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
-<title>Admin TEKNOVA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{background:#0a0a0f;color:#fff;font-family:Segoe UI;padding:20px}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
-.header h2{background:linear-gradient(90deg,#00f5ff,#ff00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:24px}
-.btn-red{background:#ff0044;border:none;padding:10px 18px;border-radius:8px;color:#fff;font-weight:700;cursor:pointer}
-.box{background:#111;border:2px solid #00f5ff;border-radius:15px;padding:25px;margin-bottom:20px}
-.stats{font-size:55px;color:#00f5ff;text-align:center;font-weight:900}
-.stats-label{text-align:center;color:#aaa;margin-top:5px}
-input{width:100%;padding:13px;margin:8px 0;background:#0a0a0f;border:1px solid #333;border-radius:8px;color:#fff;font-size:15px}
-.btn{width:100%;padding:15px;background:linear-gradient(90deg,#00f5ff,#00d4e0);border:none;border-radius:8px;color:#000;font-weight:800;font-size:16px;cursor:pointer;margin-top:10px}
-.success{background:#00ff88;color:#000;padding:12px;border-radius:8px;margin:10px 0;display:none;font-weight:700}
-.code-item{background:#1a1a1a;padding:12px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between}
-.error-box{background:#ff0044;padding:40px;border-radius:15px;text-align:center;font-size:22px;margin-top:100px}
-code{color:#00f5ff;font-size:18px}
-</style>
-</head>
-<body>
-
-<div id="main"></div>
-
+<title>ADMIN PANEL</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
-// ===== KEY YA ADMIN =====
-const ADMIN_KEY = "2026mwena";
-const params = new URLSearchParams(location.search);
-const key = params.get('key');
+const firebaseConfig = {
+  apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
+  authDomain: "nova-ec213.firebaseapp.com",
+  projectId: "nova-ec213",
+  storageBucket: "nova-ec213.firebasestorage.app",
+  messagingSenderId: "978338235926",
+  appId: "1:978338235926:web:6193ea73d8fcc8ded89737",
+  measurementId: "G-211R5KP10J"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-// KAMA KEY SIPO, ONYESHA ERROR
-if(key!== ADMIN_KEY) {
-document.getElementById('main').innerHTML = `
-<div class="error-box">
-🔒 Huna ruhusa kuingia hapa!<br><br>
-Tumia link kamili:<br>
-<code>admin.html?key=2026mwena</code>
-</div>
-`;
-} else {
-// KAMA KEY SIKO, ONYESHA ADMIN
-showAdmin();
-}
-
-function showAdmin() {
-document.getElementById('main').innerHTML = `
-<div class="header">
-<h2>⚡ Admin Dashboard</h2>
-<button class="btn-red" onclick="location.href='/'">🚪 TOKA</button>
-</div>
-
-<div class="box">
-<div class="stats" id="baki">0</div>
-<div class="stats-label">CODES ZILIZOBAKI</div>
-</div>
-
-<div class="box">
-<div class="stats" id="tumia">0</div>
-<div class="stats-label">CODES ZILIZOTUMIKA</div>
-</div>
-
-<div class="box">
-<h3 style="color:#00f5ff;margin-bottom:15px">🔑 Tengeneza Access Code za Users</h3>
-<p style="color:#999;font-size:13px;margin-bottom:12px">Code 1 = mtu 1 tu. Ikitumika inajifuta.</p>
-<input id="jina" placeholder="Weka jina mfano: Mimiwe">
-<div id="ok" class="success">✅ CODE IMETENGENEZWA!</div>
-<button class="btn" onclick="makeCode()">+ TENGENEZA CODE</button>
-<div style="margin-top:20px">
-<h3 style="color:#ff00ff;margin-bottom:10px">Codes Zilizotumika:</h3>
-<div id="list"></div>
-</div>
-</div>
-
-<div class="box">
-<h3 style="color:#00f5ff;margin-bottom:15px">+ Ongeza Game Mpya</h3>
-<input id="gt" placeholder="Jina la Game">
-<input id="gl" placeholder="Link ya YouTube">
-<textarea id="gd" placeholder="Maelezo" rows="3" style="width:100%;padding:13px;background:#0a0a0f;border:1px solid #333;border-radius:8px;color:#fff"></textarea>
-<div id="ok2" class="success">✅ GAME IMEONGEZWA!</div>
-<button class="btn" onclick="addGame()">✅ ONGEZA GAME</button>
-</div>
-`;
-
-loadData();
-}
-
-let codes = JSON.parse(localStorage.getItem('tek_codes')||'[]');
-let used = JSON.parse(localStorage.getItem('tek_used')||'[]');
-
-function loadData() {
-document.getElementById('baki').textContent = codes.length;
-document.getElementById('tumia').textContent = used.length;
-let html = used.length? used.map(c=>`<div class="code-item"><span>${c.name} - ${c.code}</span><button onclick="delCode(${c.id})" style="background:#ff0044;border:none;padding:5px 12px;border-radius:5px;color:#fff;cursor:pointer">Futa</button></div>`).join(''): '<p style="color:#666">Hakuna bado</p>';
-document.getElementById('list').innerHTML = html;
-}
-
-function makeCode() {
-let jina = document.getElementById('jina').value.trim();
-if(!jina) return alert('❌ Weka jina kwanza!');
-let code = 'TEK' + Math.random().toString(36).substr(2,8).toUpperCase();
-codes.push({id:Date.now(),name:jina,code:code});
-localStorage.setItem('tek_codes',JSON.stringify(codes));
-document.getElementById('ok').style.display='block';
-document.getElementById('jina').value='';
-setTimeout(()=>document.getElementById('ok').style.display='none',3000);
-loadData();
-alert('CODE YAKO:\\n\\n'+code+'\\n\\nMpe '+jina+' aingie nayo site');
-}
-
-function delCode(id) {
-if(confirm('Futa code hii? User atatolewa')) {
-used = used.filter(x=>x.id!=id);
-localStorage.setItem('tek_used',JSON.stringify(used));
-loadData();
-}
-}
-
-function addGame() {
-let t = document.getElementById('gt').value.trim();
-let l = document.getElementById('gl').value.trim();
-if(!t||!l) return alert('Jaza jina na link!');
-let id = l.match(/(?:youtube\\.com.*v=|youtu\\.be\\/)([^&?\\s]{11})/);
-if(!id) return alert('Link ya YouTube si sahihi!');
-let games = JSON.parse(localStorage.getItem('tek_games')||'[]');
-games.unshift({id:Date.now(),title:t,vid:id[1],desc:document.getElementById('gd').value,poster:'https://img.youtube.com/vi/'+id[1]+'/maxresdefault.jpg'});
-localStorage.setItem('tek_games',JSON.stringify(games));
-document.getElementById('ok2').style.display='block';
-document.getElementById('gt').value=''; document.getElementById('gl').value=''; document.getElementById('gd').value='';
-setTimeout(()=>document.getElementById('ok2').style.display='none',3000);
-alert('✅ Game imeongezwa! Kagua kwenye site kuu');
+// ADMIN LOCK
+let pass = prompt('Weka Admin Key:')
+if(pass !== '2026mwena') {
+  alert('Key si sahihi!')
+  window.location = 'index.html'
 }
 </script>
+</head>
+<body class="admin-body">
+
+<header class="admin-header">
+  <h1>⚙️ ADMIN PANEL</h1>
+</header>
+
+<div class="admin-container">
+  <!-- TENGENEZA CODE -->
+  <div class="admin-card">
+    <h3>🔑 Tengeneza Code 1-Time</h3>
+    <input type="text" id="newCode" placeholder="Andika code, mfano: CODE123">
+    <button id="genCodeBtn">Tengeneza Code</button>
+    <div class="stats">
+      <p>Codes Active: <span id="activeCodes">0</span></p>
+      <p>Zimetumika: <span id="usedCodes">0</span></p>
+    </div>
+    <div id="codesList"></div>
+  </div>
+
+  <!-- UPLOAD GAME -->
+  <div class="admin-card">
+    <h3>🎮 Ongeza Game</h3>
+    <form id="uploadForm">
+      <input type="text" id="gameName" placeholder="Jina la Game" required>
+      <input type="text" id="gameImage" placeholder="Link ya Picha" required>
+      <select id="gameCategory" required>
+        <option value="">Chagua Category</option>
+        <option value="PC GAME">PC GAME</option>
+        <option value="MOBILE GAME">MOBILE GAME</option>
+        <option value="PPSSPP">PPSSPP</option>
+        <option value="PS2">PS2</option>
+      </select>
+      <textarea id="gameDesc" placeholder="Maelezo ya Game"></textarea>
+      
+      <div id="singleLink">
+        <input type="text" id="gameUrl" placeholder="Link ya Download/Play">
+      </div>
+      
+      <div id="multiLinks" class="hidden">
+        <input type="text" id="gameUrl1" placeholder="Download 1">
+        <input type="text" id="gameUrl2" placeholder="Download 2">
+        <input type="text" id="gameUrl3" placeholder="Download 3">
+      </div>
+      
+      <button type="submit">Pandisha Game</button>
+    </form>
+  </div>
+
+  <!-- UPLOAD VIDEO YOUTUBE -->
+  <div class="admin-card">
+    <h3>📺 Ongeza Video Ya YouTube</h3>
+    <form id="videoForm">
+      <input type="text" id="videoTitle" placeholder="Title ya Video" required>
+      <textarea id="videoDesc" placeholder="Maelezo ya Video"></textarea>
+      <input type="text" id="videoLink" placeholder="Weka Link ya YouTube, mfano: https://youtube.com/watch?v=XXXX" required>
+      <button type="submit">Pandisha Video</button>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
