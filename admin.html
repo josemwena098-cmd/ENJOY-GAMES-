@@ -50,7 +50,7 @@
 
 <div class="container">
   <div class="header">
-    <h1>🎮 ADMIN PANEL</h1>
+    <h1>🎮 ADMIN PANEL - GAMES STORE</h1>
     <p style="color:#666;margin-top:5px">Admin Key: 2026mwena</p>
   </div>
 
@@ -97,7 +97,7 @@
   <!-- GENERATE CODE -->
   <div id="codeSection" class="section hidden">
     <h2>🔑 Tengeneza Code - Mtu 1 Tu</h2>
-    <p style="color:#aaa;font-size:13px;margin-bottom:15px">Code ikitumiwa inafutwa kwenye siteCodes na kupelekwa usedCodes. Watu wengine hawawezi kuitumia tena.</p>
+    <p style="color:#aaa;font-size:13px;margin-bottom:15px">Code ikitumiwa inafutwa kwenye siteCodes na kupelekwa usedCodes na timestamp. Watu wengine hawawezi kuitumia tena.</p>
 
     <div class="code-box">
       <div style="color:#666;font-size:13px">Code Mpya:</div>
@@ -106,7 +106,7 @@
       <button class="btn" onclick="copyCode()">📋 Copy</button>
     </div>
 
-    <h3 style="color:#4d9fff;margin-top:25px">Codes Zilizotumika</h3>
+    <h3 style="color:#4d9fff;margin-top:25px">Codes Zilizotumika - usedCodes</h3>
     <div class="code-list" id="usedList">Inapakia...</div>
   </div>
 
@@ -218,7 +218,7 @@ function saveVideo(){
   });
 }
 
-// CODE GENERATOR - CODE 1 MTU TU
+// CODE GENERATOR - FIX HIFADHI KAMA OBJECT
 function generateCode(){
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
@@ -227,8 +227,10 @@ function generateCode(){
   }
   document.getElementById('newCode').textContent = code;
 
-  // Hifadhi kwenye siteCodes - ndio inayotumika kuingia
-  db.ref('siteCodes/' + code).set(true).then(()=>{
+  // FIX: Hifadhi kama object ili isioverwrite
+  db.ref('siteCodes/' + code).set({
+    created: Date.now()
+  }).then(()=>{
     showAlert('✅ Code imehifadhiwa kwenye siteCodes!', 'success');
   });
 }
@@ -240,17 +242,24 @@ function copyCode(){
   showAlert('📋 Code imecopy!', 'success');
 }
 
+// FIX: Soma usedCodes zote kama list
 function loadUsedCodes(){
   db.ref('usedCodes').on('value', snap => {
     const data = snap.val() || {};
     let html = '';
-    if(Object.keys(data).length === 0){
+    const codes = Object.keys(data);
+    if(codes.length === 0){
       html = '<p style="color:#666;text-align:center;padding:20px">Bado hakuna code zilizotumika</p>';
     } else {
-      Object.keys(data).reverse().forEach(code=>{
+      codes.reverse().forEach(code=>{
+        const info = data[code];
+        const date = info?.usedAt? new Date(info.usedAt).toLocaleString('sw-TZ') : 'Sijulikani';
         html += `<div class="code-item used">
-          <span style="font-family:monospace;font-size:16px">${code}</span>
-          <span style="color:#ff6666;font-size:12px">✓ Imetumika</span>
+          <div>
+            <span style="font-family:monospace;font-size:16px;font-weight:bold">${code}</span>
+            <div style="font-size:11px;color:#666;margin-top:3px">Imetumika: ${date}</div>
+          </div>
+          <span style="color:#ff6666;font-size:12px">✓ Used</span>
         </div>`;
       });
     }
@@ -302,4 +311,4 @@ function delGame(id){if(confirm('Futa?')) db.ref('games/'+id).remove();}
 function delVideo(id){if(confirm('Futa?')) db.ref('videos/'+id).remove();}
 </script>
 </body>
-</html>
+ </html>
