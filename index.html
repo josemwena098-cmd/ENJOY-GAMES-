@@ -43,29 +43,55 @@
 .video-desc{color:#9ca3af;font-size:12px}
 
 .empty-msg{text-align:center;color:#666;padding:50px 20px;font-size:14px}
+
+/* LOCK SCREEN */
+.lock-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0f;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.lock-box{background:#111827;border:1px solid #2a2a4e;border-radius:15px;padding:30px 20px;text-align:center;max-width:350px;width:100%}
+.lock-box h2{font-size:24px;margin-bottom:10px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.lock-box p{color:#9ca3af;font-size:14px;margin-bottom:20px}
+.lock-input{width:100%;padding:14px;background:#0a0a0f;border:1px solid #2a2a4e;border-radius:10px;color:#fff;font-size:15px;text-align:center;margin:15px 0;letter-spacing:2px;text-transform:uppercase}
+.lock-input:focus{outline:none;border-color:#3b82f6}
+.lock-btn{width:100%;padding:14px;background:#3b82f6;border:none;border-radius:10px;color:#fff;font-weight:bold;font-size:15px;cursor:pointer;margin-bottom:12px}
+.lock-btn:hover{background:#2563eb}
+.whatsapp-btn{width:100%;padding:12px;background:#25D366;border:none;border-radius:10px;color:#fff;font-weight:bold;font-size:14px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px}
+.whatsapp-btn:hover{background:#1da851}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>🎮 GAMES STORE</h1>
+<!-- LOCK SCREEN -->
+<div id="lockScreen" class="lock-screen">
+  <div class="lock-box">
+    <h2>🎮 GAMES STORE</h2>
+    <p>Weka code yako ya kuingia</p>
+    <input type="text" id="codeInput" class="lock-input" placeholder="WEKA CODE HAPA" autocomplete="off">
+    <button class="lock-btn" onclick="checkCode()">INGIA SITE</button>
+    <button class="whatsapp-btn" onclick="askWhatsApp()">💬 Omba Code WhatsApp</button>
+  </div>
 </div>
 
-<div class="tabs">
-  <div class="tab active" onclick="showTab('games')">GAMES</div>
-  <div class="tab" onclick="showTab('videos')">VIDEOS</div>
-</div>
-
-<div class="container">
-  <div id="gamesTab">
-    <div id="gamesGrid" class="games-grid">
-      <p class="empty-msg">Inapakia games...</p>
-    </div>
+<!-- MAIN CONTENT -->
+<div id="mainContent" class="hidden">
+  <div class="header">
+    <h1>🎮 GAMES STORE</h1>
   </div>
 
-  <div id="videosTab" class="hidden">
-    <div id="videosGrid" class="videos-grid">
-      <p class="empty-msg">Bado hakuna videos.</p>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('games')">GAMES</div>
+    <div class="tab" onclick="showTab('videos')">VIDEOS</div>
+  </div>
+
+  <div class="container">
+    <div id="gamesTab">
+      <div id="gamesGrid" class="games-grid">
+        <p class="empty-msg">Inapakia games...</p>
+      </div>
+    </div>
+
+    <div id="videosTab" class="hidden">
+      <div id="videosGrid" class="videos-grid">
+        <p class="empty-msg">Bado hakuna videos.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -73,7 +99,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-// CONFIG YAKO MPYA
 const firebaseConfig = {
   apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
   authDomain: "nova-ec213.firebaseapp.com",
@@ -87,25 +112,50 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// PASSWORD SYSTEM - CODE 1 MTU TU + FIX USIBADILI MUONEKANO
-if(!localStorage.getItem('siteAccess')){
-  const code = prompt('🔑 Weka Code ya Ku ingia GAMES STORE:');
+// WEKA NAMBA YAKO HAPA BILA +
+const myWhatsApp = "255712345678";
+
+// FUNCTION YA WHATSAPP - UJUMBE AUTOMATIC
+function askWhatsApp(){
+  const phone = prompt('Weka namba yako ya simu ili admin akujue:\nMfano: 0712345678');
+  if(phone){
+    const message = `Naomba code ya kuingia GAMES STORE. Namba yangu: ${phone}`;
+    window.open(`https://wa.me/${myWhatsApp}?text=${encodeURIComponent(message)}`, '_blank');
+  }
+}
+
+// CHECK ACCESS
+if(localStorage.getItem('siteAccess')){
+  document.getElementById('lockScreen').style.display = 'none';
+  document.getElementById('mainContent').classList.remove('hidden');
+  loadGames();
+} else {
+  document.getElementById('lockScreen').style.display = 'flex';
+}
+
+function checkCode(){
+  const code = document.getElementById('codeInput').value.trim().toUpperCase();
+  if(!code){
+    alert('❌ Weka code kwanza!');
+    return;
+  }
+  
   db.ref('siteCodes/' + code).once('value', snap => {
     if(snap.exists()){
       localStorage.setItem('siteAccess', 'true');
-      // FIX: Hifadhi kwenye usedCodes kama object na timestamp
-      db.ref('usedCodes/' + code).set({
-        usedAt: Date.now()
-      });
-      // Futa kwenye siteCodes
+      db.ref('usedCodes/' + code).set({usedAt: Date.now()});
       db.ref('siteCodes/' + code).remove();
       location.reload();
     } else {
       alert('❌ Code si sahihi au imetumika tayari!');
-      window.location = 'https://google.com';
+      document.getElementById('codeInput').value = '';
     }
   });
 }
+
+document.getElementById('codeInput').addEventListener('keypress', function(e){
+  if(e.key === 'Enter') checkCode();
+});
 
 function showTab(tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -123,45 +173,45 @@ function showTab(tab){
 const gamesGrid = document.getElementById('gamesGrid');
 const videosGrid = document.getElementById('videosGrid');
 
-// LOAD GAMES
-db.ref('games').on('value', snap => {
-  const data = snap.val() || {};
-  gamesGrid.innerHTML = '';
-  if(Object.keys(data).length === 0){
-    gamesGrid.innerHTML = '<p class="empty-msg">📦 Hakuna games bado.</p>';
-    return;
-  }
-  Object.entries(data).reverse().forEach(([id, g]) => {
-    let linksHtml = '';
-    if(g.links && g.links.length > 0){
-      linksHtml = '<div style="margin-top:10px">';
-      g.links.forEach(link => {
-        linksHtml += `<a href="${link.url}" target="_blank" class="download-btn">⬇️ DOWNLOAD ${link.label.toUpperCase()}</a>`;
-      });
-      linksHtml += '</div>';
+function loadGames(){
+  db.ref('games').on('value', snap => {
+    const data = snap.val() || {};
+    gamesGrid.innerHTML = '';
+    if(Object.keys(data).length === 0){
+      gamesGrid.innerHTML = '<p class="empty-msg">📦 Hakuna games bado.</p>';
+      return;
     }
-    let settingHtml = '';
-    if(g.setting && g.setting.text){
-      settingHtml = `<div class="setting-box">🔐 <b>PASSWORD:</b> ${g.setting.text}</div>`;
-    }
-    gamesGrid.innerHTML += `
-      <div class="game-card">
-        <div class="game-img-wrap">
-          <img src="${g.img}" onerror="this.src='https://via.placeholder.com/400x160/111827/fff?text=NO+IMAGE'">
-          <div class="game-badge">${g.category}</div>
+    Object.entries(data).reverse().forEach(([id, g]) => {
+      let linksHtml = '';
+      if(g.links && g.links.length > 0){
+        linksHtml = '<div style="margin-top:10px">';
+        g.links.forEach(link => {
+          linksHtml += `<a href="${link.url}" target="_blank" class="download-btn">⬇️ DOWNLOAD ${link.label.toUpperCase()}</a>`;
+        });
+        linksHtml += '</div>';
+      }
+      let settingHtml = '';
+      if(g.setting && g.setting.text){
+        settingHtml = `<div class="setting-box">🔐 <b>PASSWORD:</b> ${g.setting.text}</div>`;
+      }
+      gamesGrid.innerHTML += `
+        <div class="game-card">
+          <div class="game-img-wrap">
+            <img src="${g.img}" onerror="this.src='https://via.placeholder.com/400x160/111827/fff?text=NO+IMAGE'">
+            <div class="game-badge">${g.category}</div>
+          </div>
+          <div class="game-info">
+            <div class="game-name">${g.name}</div>
+            <div class="game-desc">${g.description || ''}</div>
+            ${linksHtml}
+            ${settingHtml}
+          </div>
         </div>
-        <div class="game-info">
-          <div class="game-name">${g.name}</div>
-          <div class="game-desc">${g.description || ''}</div>
-          ${linksHtml}
-          ${settingHtml}
-        </div>
-      </div>
-    `;
+      `;
+    });
   });
-});
+}
 
-// LOAD VIDEOS
 function loadVideos(){
   db.ref('videos').on('value', snap => {
     const data = snap.val() || {};
