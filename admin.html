@@ -11,8 +11,8 @@
 .header{text-align:center;margin-bottom:30px}
 .header h1{color:#4d9fff;font-size:28px}
 
-.tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-.tab-btn{flex:1;min-width:120px;padding:12px;background:#1a1a2e;border:1px solid #2a2a4e;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.3s}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{flex:1;min-width:100px;padding:10px;background:#1a1a2e;border:1px solid #2a2a4e;border-radius:10px;cursor:pointer;font-weight:bold;font-size:13px}
 .tab-btn.active{background:#4d9fff;border-color:#4d9fff}
 
 .section{background:#1a1a2e;padding:20px;border-radius:15px;border:1px solid #2a2a4e;margin-bottom:20px}
@@ -22,9 +22,8 @@
   textarea{min-height:80px;resize:vertical}
   label{display:block;margin-top:12px;color:#aaa;font-size:13px;font-weight:bold}
 
-.link-group{border:1px solid #333;padding:12px;border-radius:8px;margin:10px 0;background:#0f0f1a;position:relative}
-.btn{background:#4d9fff;color:#fff;padding:12px 25px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin:5px 5px 5px 0;transition:0.3s}
-.btn:hover{opacity:0.8}
+.link-group{border:1px solid #333;padding:12px;border-radius:8px;margin:10px 0;background:#0f0f1a}
+.btn{background:#4d9fff;color:#fff;padding:12px 25px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin:5px}
 .btn-danger{background:#ff3333}
 .btn-success{background:#00cc66}
 .btn-small{padding:8px 12px;font-size:13px}
@@ -36,17 +35,15 @@
 .item-title{font-weight:bold;color:#4d9fff;margin-bottom:4px}
 .item-sub{font-size:12px;color:#888}
 
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:1000}
-.modal.active{display:flex}
-.modal-content{background:#1a1a2e;padding:25px;border-radius:15px;max-width:600px;width:90%;max-height:90vh;overflow-y:auto;border:1px solid #4d9fff}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.modal-header h3{color:#4d9fff}
-.close-btn{background:#ff3333;border:none;color:#fff;padding:5px 10px;border-radius:5px;cursor:pointer}
+.alert{padding:12px;border-radius:8px;margin:10px 0;font-size:14px;display:none}
+.alert.success{background:rgba(0,255,136,0.2);border:1px solid #00ff88;color:#00ff88}
+.alert.error{background:rgba(255,51,51,0.2);border:1px solid #ff3333;color:#ff3333}
 
-.cat-input-group{display:flex;gap:8px;align-items:center}
-.cat-input-group select{flex:1}
-.cat-input-group input{flex:1;display:none}
-.cat-input-group input.show{display:block}
+.code-box{background:#0a0a0f;border:2px dashed #4d9fff;padding:30px;border-radius:12px;text-align:center;margin:20px 0}
+.code-display{font-size:32px;font-weight:bold;color:#00ff88;letter-spacing:3px;margin:15px 0;word-break:break-all}
+.code-list{max-height:300px;overflow-y:auto;margin-top:20px}
+.code-item{background:#0a0a0f;padding:10px;border-radius:8px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;border:1px solid #2a2a4e}
+.code-item.used{opacity:0.6}
 </style>
 </head>
 <body>
@@ -57,118 +54,95 @@
     <p style="color:#666;margin-top:5px">Admin Key: 2026mwena</p>
   </div>
 
+  <div id="alertBox" class="alert"></div>
+
   <div class="tabs">
     <div class="tab-btn active" onclick="showSection('game')">ADD GAME</div>
     <div class="tab-btn" onclick="showSection('video')">ADD VIDEO</div>
+    <div class="tab-btn" onclick="showSection('code')">GENERATE CODE</div>
     <div class="tab-btn" onclick="showSection('list')">MANAGE</div>
   </div>
 
-  <!-- ADD GAME SECTION -->
+  <!-- ADD GAME -->
   <div id="gameSection" class="section">
     <h2>➕ Ongeza Game Mpya</h2>
     <label>Jina la Game</label>
-    <input type="text" id="gName" placeholder="Tanzania Traffic Bus Mood">
-
+    <input type="text" id="gName">
     <label>Category</label>
-    <div class="cat-input-group">
-      <select id="gCatSelect" onchange="toggleCatInput()">
-        <option value="ANDROID GAME">ANDROID GAME</option>
-        <option value="PC GAME">PC GAME</option>
-        <option value="PS4/PS5">PS4/PS5</option>
-        <option value="IOS GAME">IOS GAME</option>
-        <option value="CUSTOM">➕ Ongeza Category Nyingine...</option>
-      </select>
-      <input type="text" id="gCatCustom" placeholder="Andika category mpya: SIMULATOR GAME">
-    </div>
-
+    <input type="text" id="gCat" placeholder="ANDROID GAME">
     <label>Link ya Picha</label>
-    <input type="text" id="gImg" placeholder="https://i.imgur.com/xxx.jpg">
-
-    <label>Maelezo ya Game</label>
-    <textarea id="gDesc" placeholder="Andika maelezo hapa..."></textarea>
-
+    <input type="text" id="gImg">
+    <label>Maelezo</label>
+    <textarea id="gDesc"></textarea>
     <label>Download Links</label>
     <div id="linksBox"></div>
-    <button class="btn btn-small btn-success" onclick="addLink()">+ Ongeza Link Nyingine</button>
-
-    <label>Password / Setting</label>
-    <input type="text" id="sLabel" placeholder="Label: PASSWORD">
-    <input type="text" id="sText" placeholder="Password: JUMA2029">
-    <input type="text" id="sLink" placeholder="Link ya Setting File: https://...">
-
+    <button class="btn btn-small btn-success" onclick="addLink()">+ Ongeza Link</button>
+    <label>Password</label>
+    <input type="text" id="sText" placeholder="JUMA2029">
     <button class="btn" onclick="saveGame()">💾 Hifadhi Game</button>
   </div>
 
-  <!-- ADD VIDEO SECTION -->
+  <!-- ADD VIDEO -->
   <div id="videoSection" class="section hidden">
-    <h2>🎬 Ongeza Video ya YouTube</h2>
-    <label>Title ya Video</label>
-    <input type="text" id="vTitle" placeholder="Gameplay Tanzania Bus">
-
-    <label>Jina la Game husika</label>
-    <input type="text" id="vGame" placeholder="Tanzania Traffic Bus">
-
+    <h2>🎬 Ongeza Video</h2>
+    <label>Title</label>
+    <input type="text" id="vTitle">
+    <label>Jina la Game</label>
+    <input type="text" id="vGame">
     <label>Link ya YouTube</label>
-    <input type="text" id="vYoutube" placeholder="https://youtube.com/watch?v=xxxxx">
-
-    <label>Maelezo</label>
-    <textarea id="vDesc" placeholder="Maelezo mafupi..."></textarea>
-
+    <input type="text" id="vYoutube">
     <button class="btn" onclick="saveVideo()">💾 Hifadhi Video</button>
   </div>
 
-  <!-- MANAGE SECTION -->
-  <div id="listSection" class="section hidden">
-    <h2>📦 Games Zilizopo</h2>
-    <div id="gamesList">Inapakia...</div>
+  <!-- GENERATE CODE -->
+  <div id="codeSection" class="section hidden">
+    <h2>🔑 Tengeneza Code - Mtu 1 Tu</h2>
+    <p style="color:#aaa;font-size:13px;margin-bottom:15px">Code ikitumiwa inafutwa kwenye siteCodes na kupelekwa usedCodes. Watu wengine hawawezi kuitumia tena.</p>
 
-    <h2 style="margin-top:30px">🎬 Videos Zilizopo</h2>
-    <div id="videosList">Inapakia...</div>
-  </div>
-</div>
-
-<!-- EDIT MODAL -->
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>✏️ Hariri Game</h3>
-      <button class="close-btn" onclick="closeModal()">X</button>
+    <div class="code-box">
+      <div style="color:#666;font-size:13px">Code Mpya:</div>
+      <div class="code-display" id="newCode">BONGEZA KITUFE</div>
+      <button class="btn btn-success" onclick="generateCode()">🎲 Tengeneza Code</button>
+      <button class="btn" onclick="copyCode()">📋 Copy</button>
     </div>
-    <input type="hidden" id="editId">
 
-    <label>Jina la Game</label>
-    <input type="text" id="editName">
+    <h3 style="color:#4d9fff;margin-top:25px">Codes Zilizotumika</h3>
+    <div class="code-list" id="usedList">Inapakia...</div>
+  </div>
 
-    <label>Category</label>
-    <input type="text" id="editCat" placeholder="ANDROID GAME">
-
-    <label>Link ya Picha</label>
-    <input type="text" id="editImg">
-
-    <label>Maelezo</label>
-    <textarea id="editDesc"></textarea>
-
-    <label>Password</label>
-    <input type="text" id="editPass">
-
-    <button class="btn btn-success" onclick="updateGame()">💾 Save Changes</button>
+  <!-- MANAGE -->
+  <div id="listSection" class="section hidden">
+    <h2>📦 Games</h2>
+    <div id="gamesList">Inapakia...</div>
+    <h2 style="margin-top:30px">🎬 Videos</h2>
+    <div id="videosList">Inapakia...</div>
   </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
+// CONFIG YAKO MPYA
 const firebaseConfig = {
-  apiKey: "AIzaSyAyz_E70mm8RbYmWGYdBu1TLuBqK4ipdgU",
+  apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
   authDomain: "nova-ec213.firebaseapp.com",
   databaseURL: "https://nova-ec213-default-rtdb.firebaseio.com",
   projectId: "nova-ec213",
   storageBucket: "nova-ec213.firebasestorage.app",
-  messagingSenderId: "303745079224",
-  appId: "1:303745079224:web:b8b6be511ac128a7202cc1"
+  messagingSenderId: "978338235926",
+  appId: "1:978338235926:web:6193ea73d8fcc8ded89737",
+  measurementId: "G-211R5KP10J"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+
+function showAlert(msg, type){
+  const box = document.getElementById('alertBox');
+  box.className = 'alert ' + type;
+  box.textContent = msg;
+  box.style.display = 'block';
+  setTimeout(()=>box.style.display='none', 4000);
+}
 
 // ADMIN KEY
 if(prompt('Weka Admin Key:')!== '2026mwena'){
@@ -178,30 +152,21 @@ if(prompt('Weka Admin Key:')!== '2026mwena'){
 
 function showSection(sec){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('#gameSection, #videoSection, #listSection').forEach(s=>s.classList.add('hidden'));
-
+  document.querySelectorAll('#gameSection, #videoSection, #codeSection, #listSection').forEach(s=>s.classList.add('hidden'));
   if(sec==='game'){
     document.querySelectorAll('.tab-btn')[0].classList.add('active');
     document.getElementById('gameSection').classList.remove('hidden');
   } else if(sec==='video'){
     document.querySelectorAll('.tab-btn')[1].classList.add('active');
     document.getElementById('videoSection').classList.remove('hidden');
-  } else {
+  } else if(sec==='code'){
     document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    document.getElementById('codeSection').classList.remove('hidden');
+    loadUsedCodes();
+  } else {
+    document.querySelectorAll('.tab-btn')[3].classList.add('active');
     document.getElementById('listSection').classList.remove('hidden');
     loadList();
-  }
-}
-
-function toggleCatInput(){
-  const sel = document.getElementById('gCatSelect');
-  const custom = document.getElementById('gCatCustom');
-  if(sel.value === 'CUSTOM'){
-    custom.classList.add('show');
-    custom.focus();
-  } else {
-    custom.classList.remove('show');
-    custom.value = '';
   }
 }
 
@@ -210,27 +175,20 @@ function addLink(){
   linkCount++;
   document.getElementById('linksBox').innerHTML += `
     <div class="link-group" id="link${linkCount}">
-      <input type="text" placeholder="Label: APK / OBB / DATA" id="label${linkCount}">
-      <input type="text" placeholder="URL ya Download" id="url${linkCount}">
-      <button class="btn btn-danger btn-small" onclick="document.getElementById('link${linkCount}').remove()">🗑️ Tuma</button>
+      <input type="text" placeholder="Label: APK" id="label${linkCount}">
+      <input type="text" placeholder="URL" id="url${linkCount}">
     </div>
   `;
 }
 addLink();
 
-function getCategory(){
-  const sel = document.getElementById('gCatSelect').value;
-  const custom = document.getElementById('gCatCustom').value;
-  return sel === 'CUSTOM'? custom.toUpperCase() : sel;
-}
-
 function saveGame(){
   const name = document.getElementById('gName').value.trim();
-  const cat = getCategory();
+  const cat = document.getElementById('gCat').value.trim();
   const img = document.getElementById('gImg').value.trim();
   const desc = document.getElementById('gDesc').value.trim();
 
-  if(!name ||!img ||!cat){alert('Jaza jina, category na picha!');return;}
+  if(!name ||!img ||!cat){showAlert('❌ Jaza yote!', 'error');return;}
 
   let links = [];
   for(let i=1;i<=linkCount;i++){
@@ -241,17 +199,11 @@ function saveGame(){
     }
   }
 
-  const setting = {
-    label: document.getElementById('sLabel').value || 'PASSWORD',
-    text: document.getElementById('sText').value,
-    link: document.getElementById('sLink').value
-  };
-
   db.ref('games').push({
-    name, category:cat, img, description:desc, links, setting, time:Date.now()
+    name, category:cat, img, description:desc, links, setting:{text:document.getElementById('sText').value}, time:Date.now()
   }).then(()=>{
-    alert('✅ Game imehifadhiwa!');
-    location.reload();
+    showAlert('✅ Game imehifadhiwa!', 'success');
+    setTimeout(()=>location.reload(), 1500);
   });
 }
 
@@ -259,61 +211,86 @@ function saveVideo(){
   const title = document.getElementById('vTitle').value.trim();
   const gameName = document.getElementById('vGame').value.trim();
   const youtube = document.getElementById('vYoutube').value.trim();
-  const desc = document.getElementById('vDesc').value.trim();
-
-  if(!title ||!youtube){alert('Jaza title na link ya YouTube!');return;}
-
+  if(!title ||!youtube){showAlert('❌ Jaza yote!', 'error');return;}
   const videoId = youtube.split('v=')[1]?.split('&')[0] || youtube.split('/').pop().split('?')[0];
+  db.ref('videos').push({title, gameName, videoId, time:Date.now()}).then(()=>{
+    showAlert('✅ Video imehifadhiwa!', 'success');
+  });
+}
 
-  db.ref('videos').push({
-    title, gameName, videoId, description:desc, time:Date.now()
-  }).then(()=>{
-    alert('✅ Video imehifadhiwa!');
-    document.getElementById('vTitle').value = '';
-    document.getElementById('vGame').value = '';
-    document.getElementById('vYoutube').value = '';
-    document.getElementById('vDesc').value = '';
+// CODE GENERATOR - CODE 1 MTU TU
+function generateCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for(let i=0; i<8; i++){
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  document.getElementById('newCode').textContent = code;
+
+  // Hifadhi kwenye siteCodes - ndio inayotumika kuingia
+  db.ref('siteCodes/' + code).set(true).then(()=>{
+    showAlert('✅ Code imehifadhiwa kwenye siteCodes!', 'success');
+  });
+}
+
+function copyCode(){
+  const code = document.getElementById('newCode').textContent;
+  if(code === 'BONGEZA KITUFE'){showAlert('❌ Tengeneza code kwanza!', 'error');return;}
+  navigator.clipboard.writeText(code);
+  showAlert('📋 Code imecopy!', 'success');
+}
+
+function loadUsedCodes(){
+  db.ref('usedCodes').on('value', snap => {
+    const data = snap.val() || {};
+    let html = '';
+    if(Object.keys(data).length === 0){
+      html = '<p style="color:#666;text-align:center;padding:20px">Bado hakuna code zilizotumika</p>';
+    } else {
+      Object.keys(data).reverse().forEach(code=>{
+        html += `<div class="code-item used">
+          <span style="font-family:monospace;font-size:16px">${code}</span>
+          <span style="color:#ff6666;font-size:12px">✓ Imetumika</span>
+        </div>`;
+      });
+    }
+    document.getElementById('usedList').innerHTML = html;
   });
 }
 
 function loadList(){
-  // Load Games
   db.ref('games').on('value', snap => {
     const data = snap.val() || {};
     let html = '';
     if(Object.keys(data).length === 0){
-      html = '<p style="color:#666;text-align:center;padding:20px">Hakuna games bado</p>';
+      html = '<p style="color:#666;text-align:center;padding:20px">Hakuna games</p>';
     } else {
       Object.entries(data).reverse().forEach(([id,g])=>{
         html += `<div class="item-card">
           <div class="item-info">
             <div class="item-title">${g.name}</div>
-            <div class="item-sub">${g.category} | ${g.links?.length || 0} links</div>
+            <div class="item-sub">${g.category}</div>
           </div>
-          <div>
-            <button class="btn btn-small" onclick="editGame('${id}','${g.name.replace(/'/g,"\\'")}','${g.category}','${g.img}','${(g.description||'').replace(/'/g,"\\'")}','${g.setting?.text||''}')">✏️ Edit</button>
-            <button class="btn btn-danger btn-small" onclick="delGame('${id}')">🗑️ Delete</button>
-          </div>
+          <button class="btn btn-danger btn-small" onclick="delGame('${id}')">🗑️</button>
         </div>`;
       });
     }
     document.getElementById('gamesList').innerHTML = html;
   });
 
-  // Load Videos
   db.ref('videos').on('value', snap => {
     const data = snap.val() || {};
     let html = '';
     if(Object.keys(data).length === 0){
-      html = '<p style="color:#666;text-align:center;padding:20px">Hakuna videos bado</p>';
+      html = '<p style="color:#666;text-align:center;padding:20px">Hakuna videos</p>';
     } else {
       Object.entries(data).reverse().forEach(([id,v])=>{
         html += `<div class="item-card">
           <div class="item-info">
             <div class="item-title">${v.title}</div>
-            <div class="item-sub">Game: ${v.gameName}</div>
+            <div class="item-sub">${v.gameName}</div>
           </div>
-          <button class="btn btn-danger btn-small" onclick="delVideo('${id}')">🗑️ Delete</button>
+          <button class="btn btn-danger btn-small" onclick="delVideo('${id}')">🗑️</button>
         </div>`;
       });
     }
@@ -321,49 +298,8 @@ function loadList(){
   });
 }
 
-let currentEditId = '';
-function editGame(id,name,cat,img,desc,pass){
-  currentEditId = id;
-  document.getElementById('editId').value = id;
-  document.getElementById('editName').value = name;
-  document.getElementById('editCat').value = cat;
-  document.getElementById('editImg').value = img;
-  document.getElementById('editDesc').value = desc;
-  document.getElementById('editPass').value = pass;
-  document.getElementById('editModal').classList.add('active');
-}
-
-function closeModal(){
-  document.getElementById('editModal').classList.remove('active');
-}
-
-function updateGame(){
-  const id = document.getElementById('editId').value;
-  const updates = {
-    name: document.getElementById('editName').value,
-    category: document.getElementById('editCat').value.toUpperCase(),
-    img: document.getElementById('editImg').value,
-    description: document.getElementById('editDesc').value,
-    'setting/text': document.getElementById('editPass').value
-  };
-
-  db.ref('games/'+id).update(updates).then(()=>{
-    alert('✅ Game imeupdate!');
-    closeModal();
-    loadList();
-  });
-}
-
-function delGame(id){
-  if(confirm('Una uhakika unataka kuifuta game hii?')) {
-    db.ref('games/'+id).remove().then(()=>alert('✅ Imefutwa'));
-  }
-}
-function delVideo(id){
-  if(confirm('Una uhakika unataka kuifuta video hii?')) {
-    db.ref('videos/'+id).remove().then(()=>alert('✅ Imefutwa'));
-  }
-}
+function delGame(id){if(confirm('Futa?')) db.ref('games/'+id).remove();}
+function delVideo(id){if(confirm('Futa?')) db.ref('videos/'+id).remove();}
 </script>
 </body>
 </html>
