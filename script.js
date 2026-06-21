@@ -1,211 +1,255 @@
-// ===== TAB SWITCH =====
-function showTab(tab) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'))
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
-  document.getElementById(tab).classList.add('active')
-  event.target.classList.add('active')
-}
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAMES STORE</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',Arial,sans-serif}
 
-// ===== CHECK ACCESS NA FIREBASE =====
-function checkLock() {
-  let userCode = localStorage.getItem('myAccessCode')
-  
-  if(localStorage.getItem('siteAccess') === 'true' && userCode) {
-    db.ref('usedCodes/' + userCode).once('value', snap => {
-      if(!snap.exists()) {
-        localStorage.removeItem('siteAccess')
-        localStorage.removeItem('myAccessCode')
-        alert('⚠️ Code yako imefutwa na admin')
-        location.reload()
-      } else {
-        document.getElementById('codeLock').style.display = 'none'
-        document.getElementById('siteContent').classList.remove('hidden')
-        initSite()
-      }
-    })
-  }
-}
-if(document.getElementById('codeLock')) checkLock()
+.header{padding:20px 15px;text-align:center;background:#0a0a0f}
+.header h1{font-size:22px;font-weight:bold;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-// Unlock na code 1-time
-if(document.getElementById('unlockBtn')) {
-  document.getElementById('unlockBtn').addEventListener('click', () => {
-    let code = document.getElementById('siteCode').value.trim()
-    
-    db.ref('siteCodes/' + code).once('value', snap => {
-      if(snap.exists()) {
-        db.ref('siteCodes/' + code).remove()
-        db.ref('usedCodes/' + code).set(true)
-        
-        localStorage.setItem('myAccessCode', code)
-        localStorage.setItem('siteAccess', 'true')
-        
-        document.getElementById('codeLock').style.display = 'none'
-        document.getElementById('siteContent').classList.remove('hidden')
-        initSite()
-        alert('✅ Umeingia! Code imetumika')
-      } else {
-        document.getElementById('lockError').classList.remove('hidden')
-        setTimeout(() => document.getElementById('lockError').classList.add('hidden'), 3000)
-      }
-    })
-  })
-}
+.tabs{display:flex;gap:8px;padding:12px 15px;justify-content:center}
+.tab{padding:8px 28px;background:#1a1a2e;border-radius:20px;cursor:pointer;font-weight:bold;border:1px solid #2a2a4e;font-size:14px}
+.tab.active{background:#3b82f6;border-color:#3b82f6;color:#fff}
 
-function initSite() {
-  loadGames()
-  loadVideos()
-}
+.container{max-width:420px;margin:0 auto;padding:0 12px}
+.hidden{display:none}
 
-// LOAD GAMES
-function loadGames() {
-  if(!document.getElementById('gamesGrid')) return
-  
-  db.ref('games').on('value', snap => {
-    let games = []
-    snap.forEach(child => games.push(child.val()))
-    const grid = document.getElementById('gamesGrid')
-    if(games.length === 0) {
-      grid.innerHTML = '<p class="no-games">Bado hakuna games. Admin aongeze.</p>'
-      return
-    }
-    grid.innerHTML = games.reverse().map(game => {
-      let categoryBadge = `<span class="category-badge">${game.category}</span>`
-      
-      // Fix link ya Mediafire i-download direct
-      let buttons = game.links.map(link => {
-        let downloadLink = link.url.replace('/file?dkey=', '/download?dkey=').replace('/file', '/download')
-        return `<a href="${downloadLink}" target="_blank" class="download-btn">⬇️ ${link.label}</a>`
-      }).join('')
-      
-      return `<div class="game-card">
-        ${categoryBadge}
-        <img src="${game.image}" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
-        <div class="game-info">
-          <h3>${game.name}</h3>
-          <p class="game-desc">${game.desc}</p>
-          ${buttons}
-        </div>
-      </div>`
-    }).join('')
-  })
-}
+.games-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.game-card{background:#111827;border-radius:12px;overflow:hidden;border:1px solid #1f2937;position:relative}
+.game-card img{width:100%;height:160px;object-fit:cover;display:block}
 
-// LOAD VIDEOS YOUTUBE
-function loadVideos() {
-  if(!document.getElementById('videosGrid')) return
-  
-  db.ref('videos').on('value', snap => {
-    let videos = []
-    snap.forEach(child => videos.push(child.val()))
-    const grid = document.getElementById('videosGrid')
-    if(videos.length === 0) {
-      grid.innerHTML = '<p class="no-games">Bado hakuna videos.</p>'
-      return
-    }
-    grid.innerHTML = videos.reverse().map(video => `
-      <div class="video-card">
-        <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.videoId}" 
-        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <div class="video-info">
-          <h3>${video.title}</h3>
-          <p>${video.desc}</p>
-        </div>
+.game-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);padding:4px 10px;border-radius:15px;font-size:10px;font-weight:bold;text-transform:uppercase}
+
+.game-info{padding:12px}
+.game-name{font-size:14px;font-weight:bold;color:#fff;margin-bottom:6px}
+.game-desc{color:#9ca3af;font-size:12px;margin:6px 0;min-height:32px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.download-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:10px;margin:6px 0;border-radius:10px;text-decoration:none;font-weight:bold;font-size:13px}
+.download-btn:hover{background:rgba(255,255,255,0.15)}
+
+.setting-box{margin-top:10px;padding:10px;background:rgba(0,255,136,0.1);border-left:3px solid #00ff88;border-radius:8px;font-size:12px;color:#00ff88}
+.setting-box b{color:#00ff88}
+
+.videos-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.video-card{background:#111827;border-radius:12px;overflow:hidden;border:1px solid #1f2937}
+.video-card iframe{width:100%;height:160px;border:none}
+.video-info{padding:12px}
+.video-title{font-size:14px;font-weight:bold;color:#fff;margin-bottom:4px}
+.video-game{color:#fbbf24;font-size:12px;margin-bottom:6px}
+.video-desc{color:#9ca3af;font-size:12px}
+
+.empty-msg{text-align:center;color:#666;padding:50px 20px;font-size:14px}
+
+/* LOCK SCREEN */
+.lock-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0f;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.lock-box{background:#111827;border:1px solid #2a2a4e;border-radius:15px;padding:30px 20px;text-align:center;max-width:350px;width:100%}
+.lock-box h2{font-size:24px;margin-bottom:10px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.lock-box p{color:#9ca3af;font-size:14px;margin-bottom:20px}
+.lock-input{width:100%;padding:14px;background:#0a0a0f;border:1px solid #2a2a4e;border-radius:10px;color:#fff;font-size:15px;text-align:center;margin:15px 0;letter-spacing:2px;text-transform:uppercase}
+.lock-input:focus{outline:none;border-color:#3b82f6}
+.lock-btn{width:100%;padding:14px;background:#3b82f6;border:none;border-radius:10px;color:#fff;font-weight:bold;font-size:15px;cursor:pointer;margin-bottom:12px}
+.lock-btn:hover{background:#2563eb}
+.whatsapp-btn{width:100%;padding:12px;background:#25D366;border:none;border-radius:10px;color:#fff;font-weight:bold;font-size:14px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px}
+.whatsapp-btn:hover{background:#1da851}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen" class="lock-screen">
+  <div class="lock-box">
+    <h2>🎮 GAMES STORE</h2>
+    <p>Weka code yako ya kuingia</p>
+    <input type="text" id="codeInput" class="lock-input" placeholder="WEKA CODE HAPA" autocomplete="off">
+    <button class="lock-btn" onclick="checkCode()">INGIA SITE</button>
+    <button class="whatsapp-btn" onclick="askWhatsApp()">💬 Omba Code WhatsApp</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent" class="hidden">
+  <div class="header">
+    <h1>🎮 GAMES STORE</h1>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('games')">GAMES</div>
+    <div class="tab" onclick="showTab('videos')">VIDEOS</div>
+  </div>
+
+  <div class="container">
+    <div id="gamesTab">
+      <div id="gamesGrid" class="games-grid">
+        <p class="empty-msg">Inapakia games...</p>
       </div>
-    `).join('')
-  })
+    </div>
+
+    <div id="videosTab" class="hidden">
+      <div id="videosGrid" class="videos-grid">
+        <p class="empty-msg">Bado hakuna videos.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD9SvoHhndN-j-Sl59qcdcDwHwB22UupvU",
+  authDomain: "nova-ec213.firebaseapp.com",
+  databaseURL: "https://nova-ec213-default-rtdb.firebaseio.com",
+  projectId: "nova-ec213",
+  storageBucket: "nova-ec213.firebasestorage.app",
+  messagingSenderId: "978338235926",
+  appId: "1:978338235926:web:6193ea73d8fcc8ded89737",
+  measurementId: "G-211R5KP10J"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// NAMBA YAKO HAPA 255611378027
+const myWhatsApp = "255611378027";
+
+// FUNCTION YA WHATSAPP
+function askWhatsApp(){
+  const message = `Naomba code ya kuingia GAMES STORE`;
+  window.open(`https://wa.me/${myWhatsApp}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-// ===== ADMIN LOGIC =====
-if(document.getElementById('uploadForm')) {
-  loadCodes()
-  
-  // Badili form kama ni PPSSPP au PS2
-  document.getElementById('gameCategory').addEventListener('change', (e) => {
-    if(e.target.value === 'PPSSPP' || e.target.value === 'PS2') {
-      document.getElementById('singleLink').classList.add('hidden')
-      document.getElementById('multiLinks').classList.remove('hidden')
+// FUNCTION YA KUTOA MTU AKIWA HANA CODE FIREBASE
+function checkAccess(){
+  if(localStorage.getItem('siteAccess')){
+    const userCode = localStorage.getItem('userCode');
+    if(userCode){
+      db.ref('siteCodes/' + userCode).once('value', snap => {
+        if(!snap.exists()){
+          localStorage.removeItem('siteAccess');
+          localStorage.removeItem('userCode');
+          location.reload();
+        } else {
+          document.getElementById('lockScreen').style.display = 'none';
+          document.getElementById('mainContent').classList.remove('hidden');
+          loadGames();
+        }
+      });
     } else {
-      document.getElementById('singleLink').classList.remove('hidden')
-      document.getElementById('multiLinks').classList.add('hidden')
+      localStorage.removeItem('siteAccess');
+      location.reload();
     }
-  })
-  
-  document.getElementById('genCodeBtn').addEventListener('click', () => {
-    let newCode = document.getElementById('newCode').value.trim()
-    if(newCode === '') return alert('Andika code!')
-    db.ref('siteCodes/' + newCode).set(true)
-    document.getElementById('newCode').value = ''
-    alert('✅ Code imetengenezwa: ' + newCode)
-  })
-  
-  document.getElementById('uploadForm').addEventListener('submit', (e) => {
-    e.preventDefault()
-    let cat = document.getElementById('gameCategory').value
-    let newGame = {
-      id: Date.now(), 
-      name: document.getElementById('gameName').value, 
-      image: document.getElementById('gameImage').value, 
-      category: cat, 
-      desc: document.getElementById('gameDesc').value, 
-      links: []
-    }
-    if(cat === 'PPSSPP' || cat === 'PS2') {
-      let l1 = document.getElementById('gameUrl1').value.trim()
-      let l2 = document.getElementById('gameUrl2').value.trim()
-      let l3 = document.getElementById('gameUrl3').value.trim()
-      if(l1) newGame.links.push({url: l1, label: 'Download 1'})
-      if(l2) newGame.links.push({url: l2, label: 'Download 2'})
-      if(l3) newGame.links.push({url: l3, label: 'Download 3'})
-    } else {
-      newGame.links.push({url: document.getElementById('gameUrl').value, label: 'DOWNLOAD'})
-    }
-    db.ref('games/' + newGame.id).set(newGame)
-    alert('✅ Game imepandishwa!')
-    document.getElementById('uploadForm').reset()
-  })
-  
-  document.getElementById('videoForm').addEventListener('submit', (e) => {
-    e.preventDefault()
-    let link = document.getElementById('videoLink').value
-    let videoId = link.split('v=')[1]?.split('&')[0] || link.split('youtu.be/')[1]
-    
-    if(!videoId) return alert('Link ya YouTube si sahihi!')
-    
-    let newVideo = {
-      id: Date.now(),
-      title: document.getElementById('videoTitle').value,
-      desc: document.getElementById('videoDesc').value,
-      videoId: videoId,
-      createdAt: Date.now()
-    }
-    
-    db.ref('videos/' + newVideo.id).set(newVideo)
-    alert('✅ Video imepandishwa!')
-    document.getElementById('videoForm').reset()
-  })
-}
-
-function loadCodes() {
-  db.ref('siteCodes').on('value', snap => {
-    let codes = []
-    snap.forEach(child => codes.push(child.key))
-    document.getElementById('activeCodes').textContent = codes.length
-    document.getElementById('codesList').innerHTML = codes.map(c => 
-      `<div class="code-item"><span><b>${c}</b></span><button class="delete-btn" onclick="deleteCode('${c}')">🗑️ Futa</button></div>`
-    ).join('')
-  })
-  
-  db.ref('usedCodes').on('value', snap => {
-    let used = []
-    snap.forEach(child => used.push(child.key))
-    document.getElementById('usedCodes').textContent = used.length
-  })
-}
-
-window.deleteCode = (code) => {
-  if(confirm('Futa code hii? Mtu aliyetumia atatolewa!')) {
-    db.ref('siteCodes/' + code).remove()
-    db.ref('usedCodes/' + code).remove()
+  } else {
+    document.getElementById('lockScreen').style.display = 'flex';
   }
-                                   }
+}
+
+checkAccess();
+
+function checkCode(){
+  const code = document.getElementById('codeInput').value.trim().toUpperCase();
+  if(!code){
+    alert('❌ Weka code kwanza!');
+    return;
+  }
+
+  db.ref('siteCodes/' + code).once('value', snap => {
+    if(snap.exists()){
+      localStorage.setItem('siteAccess', 'true');
+      localStorage.setItem('userCode', code);
+      db.ref('usedCodes/' + code).set({usedAt: Date.now()});
+      db.ref('siteCodes/' + code).remove();
+      location.reload();
+    } else {
+      alert('❌ Code si sahihi au imetumika tayari!');
+      document.getElementById('codeInput').value = '';
+    }
+  });
+}
+
+document.getElementById('codeInput').addEventListener('keypress', function(e){
+  if(e.key === 'Enter') checkCode();
+});
+
+function showTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#gamesTab, #videosTab').forEach(t=>t.classList.add('hidden'));
+  if(tab==='games'){
+    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.getElementById('gamesTab').classList.remove('hidden');
+  } else {
+    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.getElementById('videosTab').classList.remove('hidden');
+    loadVideos();
+  }
+}
+
+const gamesGrid = document.getElementById('gamesGrid');
+const videosGrid = document.getElementById('videosGrid');
+
+function loadGames(){
+  db.ref('games').on('value', snap => {
+    const data = snap.val() || {};
+    gamesGrid.innerHTML = '';
+    if(Object.keys(data).length === 0){
+      gamesGrid.innerHTML = '<p class="empty-msg">📦 Hakuna games bado.</p>';
+      return;
+    }
+    Object.entries(data).reverse().forEach(([id, g]) => {
+      let linksHtml = '';
+      if(g.links && g.links.length > 0){
+        linksHtml = '<div style="margin-top:10px">';
+        g.links.forEach(link => {
+          linksHtml += `<a href="${link.url}" target="_blank" class="download-btn">⬇️ DOWNLOAD ${link.label.toUpperCase()}</a>`;
+        });
+        linksHtml += '</div>';
+      }
+      let settingHtml = '';
+      if(g.setting && g.setting.text){
+        settingHtml = `<div class="setting-box">🔐 <b>PASSWORD:</b> ${g.setting.text}</div>`;
+      }
+      gamesGrid.innerHTML += `
+        <div class="game-card">
+          <div class="game-img-wrap">
+            <img src="${g.img}" onerror="this.src='https://via.placeholder.com/400x160/111827/fff?text=NO+IMAGE'">
+            <div class="game-badge">${g.category}</div>
+          </div>
+          <div class="game-info">
+            <div class="game-name">${g.name}</div>
+            <div class="game-desc">${g.description || ''}</div>
+            ${linksHtml}
+            ${settingHtml}
+          </div>
+        </div>
+      `;
+    });
+  });
+}
+
+function loadVideos(){
+  db.ref('videos').on('value', snap => {
+    const data = snap.val() || {};
+    videosGrid.innerHTML = '';
+    if(Object.keys(data).length === 0){
+      videosGrid.innerHTML = '<p class="empty-msg">📺 Bado hakuna videos.</p>';
+      return;
+    }
+    Object.values(data).reverse().forEach(v => {
+      videosGrid.innerHTML += `
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/${v.videoId}" allowfullscreen></iframe>
+          <div class="video-info">
+            <div class="video-title">${v.title}</div>
+            <div class="video-game">🎮 ${v.gameName}</div>
+            <div class="video-desc">${v.description}</div>
+          </div>
+        </div>
+      `;
+    });
+  });
+}
+</script>
+</body>
+</html>
