@@ -3,99 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel Final</title>
+<title>GAMES STORE</title>
 <style>
-  body{background:#0a0a0a;color:#fff;font-family:Arial;padding:15px;max-width:900px;margin:auto}
-  .box{background:#1a1a1a;padding:15px;border-radius:12px;margin-bottom:15px;border:1px solid #333}
-  input,textarea,select{width:100%;padding:12px;margin:8px 0;background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:8px;box-sizing:border-box;font-size:16px}
-  button{background:#ff3333;color:#fff;border:none;padding:14px 20px;border-radius:8px;cursor:pointer;font-weight:bold;margin:5px 0;width:100%;font-size:16px}
-  button:hover{background:#ff5555}
-  .btn-edit{background:#ffaa00;width:auto;padding:8px 12px}
-  .btn-cancel{background:#666;width:auto;padding:8px 12px}
-  .link-box{background:#222;padding:12px;border-radius:8px;margin:8px 0;border-left:3px solid #ff3333}
-  .setting-box{background:#1a2a1a;padding:12px;border-radius:8px;margin:8px 0;border-left:3px solid #00ff88}
-  .game-item{background:#222;padding:12px;border-radius:8px;margin:8px 0;border:1px solid #333}
-  h2{color:#ff3333;margin-top:0}
-  .hidden{display:none}
-  small{color:#aaa}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',Arial,sans-serif}
+
+ .header{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:20px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,0.5)}
+ .header h1{color:#4d9fff;font-size:28px;font-weight:bold;letter-spacing:2px}
+
+ .tabs{display:flex;gap:10px;padding:15px;background:#0f0f1a;justify-content:center}
+ .tab{padding:12px 30px;background:#1a1a2e;border-radius:10px;cursor:pointer;font-weight:bold;border:2px solid transparent;transition:0.3s}
+ .tab.active{background:#4d9fff;border-color:#4d9fff;color:#fff}
+ .tab:hover{background:#2a2a4e}
+
+ .container{max-width:1200px;margin:20px auto;padding:0 15px}
+ .hidden{display:none}
+
+ .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+
+ .game-card{background:#1a1a2e;border-radius:15px;overflow:hidden;border:1px solid #2a2a4e;transition:0.3s}
+ .game-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(77,159,255,0.3);border-color:#4d9fff}
+
+ .game-card img{width:100%;height:200px;object-fit:cover;background:#0a0a0f}
+
+ .game-info{padding:15px}
+ .game-category{display:inline-block;background:#ff3333;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold;margin-bottom:8px;text-transform:uppercase}
+
+ .game-name{font-size:18px;font-weight:bold;color:#4d9fff;margin:8px 0;line-height:1.3}
+
+ .game-desc{color:#aaa;font-size:14px;margin:10px 0;line-height:1.5;min-height:40px}
+
+ .download-btn{display:block;width:100%;background:linear-gradient(135deg,#ff3333,#ff6666);color:#fff;padding:14px;margin:8px 0;border-radius:10px;text-decoration:none;font-weight:bold;text-align:center;border:none;cursor:pointer;transition:0.3s;font-size:15px;box-shadow:0 4px 15px rgba(255,51,51,0.3)}
+ .download-btn:hover{background:linear-gradient(135deg,#ff5555,#ff8888);transform:scale(1.02);box-shadow:0 6px 20px rgba(255,51,51,0.5)}
+ .download-btn:active{transform:scale(0.98)}
+
+ .setting-box{margin-top:12px;padding:12px;background:#1a2a1a;border-left:3px solid #00ff88;border-radius:8px;font-size:13px}
+ .setting-box b{color:#00ff88}
+ .setting-link{display:inline-block;margin-top:8px;color:#00ff88;text-decoration:underline;font-weight:bold}
+
+ .videos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+ .video-card{background:#1a1a2e;border-radius:15px;overflow:hidden;border:1px solid #2a2a4e}
+ .video-card iframe{width:100%;height:200px;border:none}
+ .video-info{padding:15px}
+ .video-title{font-size:16px;font-weight:bold;color:#4d9fff;margin-bottom:5px}
+ .video-game{color:#ffaa33;font-size:13px;margin-bottom:8px}
+ .video-desc{color:#aaa;font-size:13px;line-height:1.4}
+
+ .empty-msg{text-align:center;color:#666;padding:80px 20px;font-size:18px}
 </style>
 </head>
 <body>
 
-<h1>🎮 ADMIN PANEL</h1>
-
-<div class="box">
-  <h2>Tengeneza Code 1-Time</h2>
-  <input type="text" id="newCode" placeholder="Andika code: VANNY2026">
-  <button onclick="createCode()">Tengeneza Code</button>
-  <p>Codes Active: <span id="activeCount">0</span> | Zimetumika: <span id="usedCount">0</span></p>
+<div class="header">
+  <h1>GAMES STORE</h1>
 </div>
 
-<div class="box">
-  <h2>🎮 Ongeza/Edit Game</h2>
-  <input type="hidden" id="editId">
-  <input type="text" id="gName" placeholder="Jina la Game *">
-  <input type="text" id="gImg" placeholder="Link ya Picha *">
-  
-  <select id="gCat" onchange="checkOtherCat()">
-    <option value="">Chagua Category *</option>
-    <option value="ANDROID GAME">ANDROID GAME</option>
-    <option value="PC GAME">PC GAME</option>
-    <option value="PS4/PS5">PS4/PS5</option>
-    <option value="PPSSPP">PPSSPP</option>
-    <option value="other">Other - Andika Mwenyewe</option>
-  </select>
-  <input type="text" id="gCatOther" placeholder="Andika Category Mwenyewe" class="hidden">
-  
-  <textarea id="gDesc" placeholder="Maelezo ya Game * - Game Size: 1.7GB No Password" rows="3"></textarea>
-  
-  <h3 style="color:#ffaa33;margin-top:15px;font-size:16px">🔗 Links - Jaza Unazohitaji Tu</h3>
-  <small>*Hakuna lazima ujaze zote. Kama huna TEXTURES acha tupu</small>
-  
-  <div class="link-box">
-    <b>1. APK / GAME</b>
-    <input type="text" id="link1Label" value="APK">
-    <input type="text" id="link1Url" placeholder="Weka link ya APK">
-  </div>
-  
-  <div class="link-box">
-    <b>2. OBB / DATA</b>
-    <input type="text" id="link2Label" value="OBB">
-    <input type="text" id="link2Url" placeholder="Weka link ya OBB">
-  </div>
-  
-  <div class="link-box">
-    <b>3. DATA / SAVEDATA</b>
-    <input type="text" id="link3Label" value="DATA">
-    <input type="text" id="link3Url" placeholder="Weka link ya DATA">
-  </div>
-  
-  <div class="link-box">
-    <b>4. TEXTURES - Optional</b>
-    <input type="text" id="link4Label" value="TEXTURES">
-    <input type="text" id="link4Url" placeholder="Weka link - kama huna acha">
-  </div>
-  
-  <div class="link-box">
-    <b>5. CAMERA / NYINGINE - Optional</b>
-    <input type="text" id="link5Label" value="CAMERA">
-    <input type="text" id="link5Url" placeholder="Weka link - kama huna acha">
-  </div>
-
-  <h3 style="color:#00ff88;margin-top:20px;font-size:16px">⚙️ SETTING / KUSETTI - Optional</h3>
-  <div class="setting-box">
-    <input type="text" id="settingLabel" value="PASSWORD / SETTING">
-    <textarea id="settingText" placeholder="Password: JUMA2029" rows="2"></textarea>
-    <input type="text" id="settingLink" placeholder="Link ya Setting - kama huna acha tupu">
-  </div>
-  
-  <button onclick="saveGame()" id="saveBtn">Pandisha Game</button>
-  <button onclick="cancelEdit()" id="cancelBtn" class="btn-cancel hidden">Ghairi Edit</button>
+<div class="tabs">
+  <div class="tab active" onclick="showTab('games')">GAMES</div>
+  <div class="tab" onclick="showTab('videos')">VIDEOS</div>
 </div>
 
-<div class="box">
-  <h2>📋 Games Zote</h2>
-  <div id="gameList">Inapakia...</div>
+<div class="container">
+  <div id="gamesTab">
+    <div id="gamesGrid" class="games-grid">
+      <p class="empty-msg">Inapakia games...</p>
+    </div>
+  </div>
+
+  <div id="videosTab" class="hidden">
+    <div id="videosGrid" class="videos-grid">
+      <p class="empty-msg">Bado hakuna videos.</p>
+    </div>
+  </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -113,155 +92,112 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// PASSWORD
-if(sessionStorage.getItem('adminAuth') !== 'true'){
-  let key = prompt('Weka Admin Key:');
-  if(key === '2026mwena'){ sessionStorage.setItem('adminAuth','true'); }
-  else { alert('Key si sahihi!'); window.location = 'index.html'; }
-}
-
-function checkOtherCat(){
-  document.getElementById('gCatOther').classList.toggle('hidden', 
-    document.getElementById('gCat').value !== 'other');
-}
-
-// CODES
-function createCode(){
-  const code = document.getElementById('newCode').value.trim().toUpperCase();
-  if(!code){ alert('Andika code kwanza'); return; }
-  db.ref('siteCodes/' + code).set(true);
-  document.getElementById('newCode').value = '';
-  alert('Code ' + code + ' imetengenezwa!');
-}
-
-db.ref('siteCodes').on('value', snap => {
-  document.getElementById('activeCount').textContent = snap.numChildren();
-});
-db.ref('usedCodes').on('value', snap => {
-  document.getElementById('usedCount').textContent = snap.numChildren();
-});
-
-// SAVE GAME - HII NDIO ILIYOKUWA INAKOSEKA
-function saveGame(){
-  const id = document.getElementById('editId').value || Date.now();
-  const name = document.getElementById('gName').value.trim();
-  const img = document.getElementById('gImg').value.trim();
-  let cat = document.getElementById('gCat').value;
-  if(cat === 'other') cat = document.getElementById('gCatOther').value.trim();
-  const desc = document.getElementById('gDesc').value.trim();
-  
-  // VALIDATION: Vitu 4 tu ni lazima
-  if(!name || !img || !cat || !desc){
-    alert('Jaza hivi 4 tu: Jina, Picha, Category na Maelezo');
-    return;
-  }
-  
-  // Kusanya links - HAKUNA LAZIMA ZOTE 5
-  const links = [];
-  for(let i=1; i<=5; i++){
-    const label = document.getElementById('link' + i + 'Label').value.trim();
-    const url = document.getElementById('link' + i + 'Url').value.trim();
-    if(label && url){ // Kama kuna label NA url ndio tunaweka
-      links.push({label, url});
+// PASSWORD CHECK
+if(!localStorage.getItem('siteAccess')){
+  const code = prompt('Weka Code ya Ku ingia Site:');
+  db.ref('siteCodes/' + code).once('value', snap => {
+    if(snap.exists()){
+      localStorage.setItem('siteAccess', 'true');
+      db.ref('usedCodes/' + code).set(true);
+      db.ref('siteCodes/' + code).remove();
+      location.reload();
+    } else {
+      alert('Code si sahihi!');
+      window.location = 'https://google.com';
     }
-  }
-  
-  if(links.length < 1){
-    alert('Weka angalau link 1 ya APK au OBB');
-    return;
-  }
-  
-  // Setting - OPTIONAL kabisa
-  const setting = {
-    label: document.getElementById('settingLabel').value.trim(),
-    text: document.getElementById('settingText').value.trim(),
-    link: document.getElementById('settingLink').value.trim()
-  };
-  
-  // SAVE KWENYE FIREBASE
-  db.ref('games/' + id).set({
-    name, img, category: cat, description: desc, links, setting
-  }).then(() => {
-    alert(document.getElementById('editId').value ? '✅ Game ime-update!' : '✅ Game imepandishwa!');
-    clearForm();
-  }).catch(err => {
-    alert('Kuna shida: ' + err.message);
   });
 }
 
-function clearForm(){
-  document.getElementById('editId').value = '';
-  document.getElementById('gName').value = '';
-  document.getElementById('gImg').value = '';
-  document.getElementById('gCat').value = '';
-  document.getElementById('gCatOther').value = '';
-  document.getElementById('gDesc').value = '';
-  for(let i=1; i<=5; i++){
-    document.getElementById('link' + i + 'Url').value = '';
-  }
-  document.getElementById('settingText').value = '';
-  document.getElementById('settingLink').value = '';
-  document.getElementById('saveBtn').textContent = 'Pandisha Game';
-  document.getElementById('cancelBtn').classList.add('hidden');
-}
-
-function cancelEdit(){ clearForm(); }
-
-function editGame(id, game){
-  document.getElementById('editId').value = id;
-  document.getElementById('gName').value = game.name;
-  document.getElementById('gImg').value = game.img;
-  
-  if(['ANDROID GAME','PC GAME','PS4/PS5','PPSSPP'].includes(game.category)){
-    document.getElementById('gCat').value = game.category;
-    document.getElementById('gCatOther').classList.add('hidden');
+function showTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#gamesTab, #videosTab').forEach(t=>t.classList.add('hidden'));
+  if(tab==='games'){
+    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.getElementById('gamesTab').classList.remove('hidden');
   } else {
-    document.getElementById('gCat').value = 'other';
-    document.getElementById('gCatOther').classList.remove('hidden');
-    document.getElementById('gCatOther').value = game.category;
+    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.getElementById('videosTab').classList.remove('hidden');
+    loadVideos();
   }
-  
-  document.getElementById('gDesc').value = game.description;
-  
-  for(let i=1; i<=5; i++){
-    if(game.links && game.links[i-1]){
-      document.getElementById('link' + i + 'Label').value = game.links[i-1].label;
-      document.getElementById('link' + i + 'Url').value = game.links[i-1].url;
-    } else {
-      document.getElementById('link' + i + 'Url').value = '';
-    }
-  }
-  
-  if(game.setting){
-    document.getElementById('settingLabel').value = game.setting.label || 'PASSWORD / SETTING';
-    document.getElementById('settingText').value = game.setting.text || '';
-    document.getElementById('settingLink').value = game.setting.link || '';
-  }
-  
-  document.getElementById('saveBtn').textContent = 'Update Game';
-  document.getElementById('cancelBtn').classList.remove('hidden');
-  window.scrollTo(0,0);
 }
 
-// LIST GAMES
+const gamesGrid = document.getElementById('gamesGrid');
+const videosGrid = document.getElementById('videosGrid');
+
+// LOAD GAMES
 db.ref('games').on('value', snap => {
   const data = snap.val() || {};
-  let html = '';
+  gamesGrid.innerHTML = '';
+
   if(Object.keys(data).length === 0){
-    html = 'Hakuna games bado';
-  } else {
-    Object.entries(data).reverse().forEach(([id, g]) => {
-      const linkCount = g.links ? g.links.length : 0;
-      html += `<div class="game-item">
-        <b>${g.name}</b> - ${g.category}<br>
-        <small>Links: ${linkCount} | ${g.description.substring(0,40)}...</small><br>
-        <button class="btn-edit" onclick='editGame("${id}", ${JSON.stringify(g).replace(/'/g,"&#39;")})'>✏️ Edit</button>
-        <button class="btn-cancel" onclick="if(confirm('Futa game hii?')) db.ref('games/${id}').remove()">🗑️ Futa</button>
-      </div>`;
-    });
+    gamesGrid.innerHTML = '<p class="empty-msg">Hakuna games bado. Admin apandishe kwanza.</p>';
+    return;
   }
-  document.getElementById('gameList').innerHTML = html;
+
+  Object.entries(data).reverse().forEach(([id, g]) => {
+    // TENGENEZA BUTTONS ZA DOWNLOAD - DESIGN YA KISASA
+    let linksHtml = '';
+    if(g.links && g.links.length > 0){
+      linksHtml = '<div style="margin-top:12px">';
+      g.links.forEach(link => {
+        linksHtml += `<a href="${link.url}" target="_blank" rel="noopener" class="download-btn">
+          ⬇️ DOWNLOAD ${link.label.toUpperCase()}
+        </a>`;
+      });
+      linksHtml += '</div>';
+    }
+
+    // SETTING BOX
+    let settingHtml = '';
+    if(g.setting && g.setting.text){
+      settingHtml = `<div class="setting-box">
+        <b>${g.setting.label || 'PASSWORD / SETTING'}:</b> ${g.setting.text}
+        ${g.setting.link? `<br><a href="${g.setting.link}" target="_blank" class="setting-link">⬇️ Download Setting File</a>` : ''}
+      </div>`;
+    }
+
+    const div = document.createElement('div');
+    div.className = 'game-card';
+    div.innerHTML = `
+      <img src="${g.img}" alt="${g.name}" onerror="this.src='https://via.placeholder.com/400x200/1a1a2e/4d9fff?text=NO+IMAGE'">
+      <div class="game-info">
+        <div class="game-category">${g.category}</div>
+        <div class="game-name">${g.name}</div>
+        <div class="game-desc">${g.description || 'Hakuna maelezo'}</div>
+        ${linksHtml}
+        ${settingHtml}
+      </div>
+    `;
+    gamesGrid.appendChild(div);
+  });
 });
+
+// LOAD VIDEOS
+function loadVideos(){
+  db.ref('videos').on('value', snap => {
+    const data = snap.val() || {};
+    videosGrid.innerHTML = '';
+
+    if(Object.keys(data).length === 0){
+      videosGrid.innerHTML = '<p class="empty-msg">Bado hakuna videos.</p>';
+      return;
+    }
+
+    Object.values(data).reverse().forEach(v => {
+      const div = document.createElement('div');
+      div.className = 'video-card';
+      div.innerHTML = `
+        <iframe src="https://www.youtube.com/embed/${v.videoId}" allowfullscreen></iframe>
+        <div class="video-info">
+          <div class="video-title">${v.title}</div>
+          <div class="video-game">🎮 ${v.gameName}</div>
+          <div class="video-desc">${v.description}</div>
+        </div>
+      `;
+      videosGrid.appendChild(div);
+    });
+  });
+}
 </script>
 </body>
 </html>
