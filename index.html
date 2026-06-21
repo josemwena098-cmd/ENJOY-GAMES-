@@ -87,15 +87,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// PASSWORD SYSTEM - CODE 1 MTU TU
+// PASSWORD SYSTEM - CODE 1 MTU TU + FIX USIBADILI MUONEKANO
 if(!localStorage.getItem('siteAccess')){
-  const code = prompt('🔑 Weka Code ya Ku ingia Site:');
+  const code = prompt('🔑 Weka Code ya Ku ingia GAMES STORE:');
   db.ref('siteCodes/' + code).once('value', snap => {
     if(snap.exists()){
-      // Code ipo, itumike na ifutwe
       localStorage.setItem('siteAccess', 'true');
-      db.ref('usedCodes/' + code).set(true); // Peleka usedCodes
-      db.ref('siteCodes/' + code).remove(); // Futa kwenye siteCodes
+      // FIX: Hifadhi kwenye usedCodes kama object na timestamp
+      db.ref('usedCodes/' + code).set({
+        usedAt: Date.now()
+      });
+      // Futa kwenye siteCodes
+      db.ref('siteCodes/' + code).remove();
       location.reload();
     } else {
       alert('❌ Code si sahihi au imetumika tayari!');
